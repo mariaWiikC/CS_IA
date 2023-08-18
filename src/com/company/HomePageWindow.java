@@ -111,6 +111,7 @@ public class HomePageWindow extends JFrame implements ActionListener
         pCenter.add(toPhotosWindow);
         //</editor-fold>
 
+        //<editor-fold desc="Search Stuff">
         searchT = new JLabel("Search");
         searchT.setBounds(30, 150, 100, 35);
         pCenter.add(searchT);
@@ -128,6 +129,7 @@ public class HomePageWindow extends JFrame implements ActionListener
         JLabel searchIconLabel = new JLabel(new ImageIcon(searchIcon));
         searchIconLabel.setBounds(30, 200, 30, 30);
         pCenter.add(searchIconLabel);
+        //</editor-fold>
 
         //<editor-fold desc="Mood Stuff">
         selectYourMoodT = new JLabel("Select Your Mood");
