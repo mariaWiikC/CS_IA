@@ -1,22 +1,39 @@
 package com.company;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
 public class AddDeleteWindow extends JFrame
 {
     private JMenuBar menuBar;
     private JMenuItem menuSelect, menuPhotos, menuPlaylists, menuSongs, menuQueue, menuHome;
+    private JPanel pCenter;
+    private JLabel songsT, tagsT, instrumentsT, themesT;
+    private JTextField songSearchBox, instrumentsSearchBox, themesSearchBox;
+    private ImageIcon addSongIcon, deleteSongIcon, addInstrumentIcon, deleteInstrumentIcon,
+            addThemeIcon, deleteThemeIcon;
+    private JButton addSongButton, deleteSongButton, addInstrumentButton, deleteInstrumentButton,
+            addThemeButton, deleteThemeButton;
 
-    public AddDeleteWindow()
+    public AddDeleteWindow() throws IOException
     {
         super("Add/Delete");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLayout(new FlowLayout());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+        pCenter = new JPanel();
+        pCenter.setLayout(null);
+        pCenter.setPreferredSize(new Dimension(1260, 650));
+        // pCenter.setBorder(BorderFactory.createLineBorder(Color.black));
+        add(pCenter, BorderLayout.CENTER);
+
+        //<editor-fold desc="Menu Bar">
         menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("Add / Delete Page");
 
@@ -46,6 +63,92 @@ public class AddDeleteWindow extends JFrame
         fileMenu.add(menuPlaylists);
         menuBar.add(fileMenu);
         setJMenuBar(menuBar);
+        //</editor-fold>
+
+        // all locations are wronggggggggg
+        //<editor-fold desc="Some Labels">
+        songsT = new JLabel("Songs");
+        songsT.setBounds(30, 150, 100, 35);
+        pCenter.add(songsT);
+
+        tagsT = new JLabel("Tags");
+        tagsT.setBounds(130, 100, 100, 35);
+        pCenter.add(tagsT);
+
+        instrumentsT = new JLabel("Instruments");
+        instrumentsT.setBounds(130, 100, 100, 35);
+        pCenter.add(instrumentsT);
+
+        themesT = new JLabel("Themes");
+        themesT.setBounds(230, 150, 100, 35);
+        pCenter.add(themesT);
+        //</editor-fold>
+
+        // song search
+        //<editor-fold desc="Song Add/Delete">
+        BufferedImage songSearchIcon = ImageIO.read(new File("src/middleSectionHP/searchIcon.png"));
+        JLabel songSearchIconLabel = new JLabel(new ImageIcon(songSearchIcon));
+        songSearchIconLabel.setBounds(30, 200, 30, 30);
+        pCenter.add(songSearchIconLabel);
+
+        songSearchBox = new JTextField();
+        songSearchBox.setBounds(70, 200, 90, 30);
+        pCenter.add(songSearchBox);
+
+        addSongIcon = new ImageIcon("src/add-delete/addIcon.jpg");
+        addSongButton = new JButton(addSongIcon);
+        addSongButton.setBounds(100, 300, 50, 30);
+        pCenter.add(addSongButton);
+
+        deleteSongIcon = new ImageIcon("src/add-delete/deleteIcon.jpg");
+        deleteSongButton = new JButton(deleteSongIcon);
+        deleteSongButton.setBounds(100, 350, 50, 30);
+        pCenter.add(deleteSongButton);
+        //</editor-fold>
+
+        // instrument tag search
+        //<editor-fold desc="Instrument Tag Add/Delete">
+        BufferedImage instrumentSearchIcon = ImageIO.read(new File("src/middleSectionHP/searchIcon.png"));
+        JLabel instrumentSearchIconLabel = new JLabel(new ImageIcon(instrumentSearchIcon));
+        instrumentSearchIconLabel.setBounds(130, 200, 30, 30);
+        pCenter.add(instrumentSearchIconLabel);
+
+        instrumentsSearchBox = new JTextField();
+        instrumentsSearchBox.setBounds(180, 200, 90, 30);
+        pCenter.add(instrumentsSearchBox);
+
+        addInstrumentIcon = new ImageIcon("src/add-delete/addIcon.jpg");
+        addInstrumentButton = new JButton(addInstrumentIcon);
+        addInstrumentButton.setBounds(270, 300, 50, 30);
+        pCenter.add(addInstrumentButton);
+
+        deleteInstrumentIcon = new ImageIcon("src/add-delete/deleteIcon.jpg");
+        deleteInstrumentButton = new JButton(deleteInstrumentIcon);
+        deleteInstrumentButton.setBounds(270, 350, 50, 30);
+        pCenter.add(deleteInstrumentButton);
+        //</editor-fold>
+
+        // theme tag search
+        //<editor-fold desc="Theme Tag Add/Delete">
+        BufferedImage themeSearchIcon = ImageIO.read(new File("src/middleSectionHP/searchIcon.png"));
+        JLabel themeSearchIconLabel = new JLabel(new ImageIcon(themeSearchIcon));
+        themeSearchIconLabel.setBounds(330, 200, 30, 30);
+        pCenter.add(themeSearchIconLabel);
+
+        themesSearchBox = new JTextField();
+        themesSearchBox.setBounds(380, 200, 90, 30);
+        pCenter.add(themesSearchBox);
+
+        addThemeIcon = new ImageIcon("src/add-delete/addIcon.jpg");
+        addThemeButton = new JButton(addThemeIcon);
+        addThemeButton.setBounds(480, 100, 50, 30);
+        pCenter.add(addThemeButton);
+
+        deleteThemeIcon = new ImageIcon("src/add-delete/deleteIcon.jpg");
+        deleteThemeButton = new JButton(deleteThemeIcon);
+        deleteThemeButton.setBounds(480, 100, 50, 30);
+        pCenter.add(deleteThemeButton);
+        //</editor-fold>
 
         setVisible(true);
     }
@@ -80,7 +183,14 @@ public class AddDeleteWindow extends JFrame
 
     public void actionPerformed4(ActionEvent e)
     {
-        JFrame PlaylistsWindow = new PlaylistsWindow(); // open another JFrame
+        JFrame PlaylistsWindow = null; // open another JFrame
+        try
+        {
+            PlaylistsWindow = new PlaylistsWindow();
+        } catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
         PlaylistsWindow.setVisible(true); // display SelectPlayWindow
         dispose(); // close home page
     }

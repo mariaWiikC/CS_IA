@@ -1,22 +1,37 @@
 package com.company;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
 public class PlaylistsWindow extends JFrame
 {
     private JMenuBar menuBar;
     private JMenuItem menuSelect, menuAddDelete, menuPhotos, menuHome, menuSongs, menuQueue;
+    private JPanel pCenter;
+    private JLabel playlistsT;
+    private JTextField searchBox;
+    private ImageIcon addPlaylistIcon, deletePlaylistIcon;
+    private JButton addPlaylistButton, deletePlaylistButton;
 
-    public PlaylistsWindow()
+    public PlaylistsWindow() throws IOException
     {
         super("Playlists");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLayout(new FlowLayout());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+        pCenter = new JPanel();
+        pCenter.setLayout(null);
+        pCenter.setPreferredSize(new Dimension(1260, 650));
+        // pCenter.setBorder(BorderFactory.createLineBorder(Color.black));
+        add(pCenter, BorderLayout.CENTER);
+
+        //<editor-fold desc="Menu Bar">
         menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("Playlists");
 
@@ -46,6 +61,30 @@ public class PlaylistsWindow extends JFrame
         fileMenu.add(menuHome);
         menuBar.add(fileMenu);
         setJMenuBar(menuBar);
+        //</editor-fold>
+
+        playlistsT = new JLabel("Playlists");
+        playlistsT.setBounds(30, 150, 100, 35);
+        pCenter.add(playlistsT);
+
+        BufferedImage searchIcon = ImageIO.read(new File("src/middleSectionHP/searchIcon.png"));
+        JLabel searchIconLabel = new JLabel(new ImageIcon(searchIcon));
+        searchIconLabel.setBounds(30, 200, 30, 30);
+        pCenter.add(searchIconLabel);
+
+        searchBox = new JTextField();
+        searchBox.setBounds(70, 200, 90, 30);
+        pCenter.add(searchBox);
+
+        addPlaylistIcon = new ImageIcon("src/add-delete/addIcon.jpg");
+        addPlaylistButton = new JButton(addPlaylistIcon);
+        addPlaylistButton.setBounds(100, 300, 50, 30);
+        pCenter.add(addPlaylistButton);
+
+        deletePlaylistIcon = new ImageIcon("src/add-delete/deleteIcon.jpg");
+        deletePlaylistButton = new JButton(deletePlaylistIcon);
+        deletePlaylistButton.setBounds(100, 350, 50, 30);
+        pCenter.add(deletePlaylistButton);
 
         setVisible(true);
     }
@@ -59,7 +98,14 @@ public class PlaylistsWindow extends JFrame
 
     public void actionPerformed2(ActionEvent e)
     {
-        JFrame AddDeleteWindow = new AddDeleteWindow(); // open another JFrame
+        JFrame AddDeleteWindow = null; // open another JFrame
+        try
+        {
+            AddDeleteWindow = new AddDeleteWindow();
+        } catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
         AddDeleteWindow.setVisible(true); // display SelectPlayWindow
         dispose(); // close home page
     }

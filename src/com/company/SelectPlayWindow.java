@@ -18,7 +18,7 @@ public class SelectPlayWindow extends JFrame
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         menuBar = new JMenuBar();
-        JMenu fileMenu = new JMenu("Select What to PLay");
+        JMenu fileMenu = new JMenu("Select What to Play");
 
         menuSelect = new JMenuItem("Select What to Play");
         menuSelect.addActionListener(this::actionPerformed);
@@ -59,7 +59,14 @@ public class SelectPlayWindow extends JFrame
 
     public void actionPerformed2(ActionEvent e)
     {
-        JFrame AddDeleteWindow = new AddDeleteWindow(); // open another JFrame
+        JFrame AddDeleteWindow = null; // open another JFrame
+        try
+        {
+            AddDeleteWindow = new AddDeleteWindow();
+        } catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
         AddDeleteWindow.setVisible(true); // display SelectPlayWindow
         dispose(); // close home page
     }
@@ -73,7 +80,14 @@ public class SelectPlayWindow extends JFrame
 
     public void actionPerformed4(ActionEvent e)
     {
-        JFrame PlaylistsWindow = new PlaylistsWindow(); // open another JFrame
+        JFrame PlaylistsWindow = null; // open another JFrame
+        try
+        {
+            PlaylistsWindow = new PlaylistsWindow();
+        } catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
         PlaylistsWindow.setVisible(true); // display SelectPlayWindow
         dispose(); // close home page
     }

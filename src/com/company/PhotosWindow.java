@@ -59,7 +59,14 @@ public class PhotosWindow extends JFrame
 
     public void actionPerformed2(ActionEvent e)
     {
-        JFrame AddDeleteWindow = new AddDeleteWindow(); // open another JFrame
+        JFrame AddDeleteWindow = null; // open another JFrame
+        try
+        {
+            AddDeleteWindow = new AddDeleteWindow();
+        } catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
         AddDeleteWindow.setVisible(true); // display SelectPlayWindow
         dispose(); // close home page
     }
@@ -73,7 +80,14 @@ public class PhotosWindow extends JFrame
 
     public void actionPerformed4(ActionEvent e)
     {
-        JFrame PlaylistsWindow = new PlaylistsWindow(); // open another JFrame
+        JFrame PlaylistsWindow = null; // open another JFrame
+        try
+        {
+            PlaylistsWindow = new PlaylistsWindow();
+        } catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
         PlaylistsWindow.setVisible(true); // display SelectPlayWindow
         dispose(); // close home page
     }

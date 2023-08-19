@@ -26,6 +26,7 @@ public class HomePageWindow extends JFrame implements ActionListener
     private ImageIcon filterIcon, loopIcon, nextSongIcon, pauseIcon, playIcon, previousSongIcon,
             randomIcon, tenBackIcon, tenForwardIcon;
     private JTextField searchBox;
+    private JProgressBar pB;
 
     // nameOfPlaylistT, nameOfSongT -> these two change according to what is playingggg
 
@@ -72,7 +73,7 @@ public class HomePageWindow extends JFrame implements ActionListener
         // i think the layout is too small and not positioned correctly
         // i need to move it so my buttons show up
 
-        //<editor-fold desc="Main Buttons">
+        //<editor-fold desc="Main Stuff">
         pCenter = new JPanel();
         pCenter.setLayout(null);
         pCenter.setPreferredSize(new Dimension(1260, 650));
@@ -202,10 +203,16 @@ public class HomePageWindow extends JFrame implements ActionListener
         tenForwardButton = new JButton(tenForwardIcon);
         tenForwardButton.setBounds(700, 400, 50, 30);
         pCenter.add(tenForwardButton);
+
+        // progress bar that moves with musicccc
+        pB = new JProgressBar();
+        pB.setValue(0);
+        pB.setStringPainted(true);
+        pB.setBounds(400, 500, 300, 20);
+        pCenter.add(pB);
         //</editor-fold>
 
         // is the search thingy where the user writes a "text field"?
-        // progress bar for songggg
 
         setVisible(true);
     }
@@ -221,7 +228,14 @@ public class HomePageWindow extends JFrame implements ActionListener
 
     public void actionPerformed2(ActionEvent e)
     {
-        JFrame AddDeleteWindow = new AddDeleteWindow(); // open another JFrame
+        JFrame AddDeleteWindow = null; // open another JFrame
+        try
+        {
+            AddDeleteWindow = new AddDeleteWindow();
+        } catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
         AddDeleteWindow.setVisible(true); // display SelectPlayWindow
         dispose(); // close home page
     }
@@ -235,7 +249,14 @@ public class HomePageWindow extends JFrame implements ActionListener
 
     public void actionPerformed4(ActionEvent e)
     {
-        JFrame PlaylistsWindow = new PlaylistsWindow(); // open another JFrame
+        JFrame PlaylistsWindow = null; // open another JFrame
+        try
+        {
+            PlaylistsWindow = new PlaylistsWindow();
+        } catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
         PlaylistsWindow.setVisible(true); // display SelectPlayWindow
         dispose(); // close home page
     }
