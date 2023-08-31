@@ -74,6 +74,7 @@ public class HomePageWindow extends JFrame implements ActionListener
         // i need to move it so my buttons show up
 
         //<editor-fold desc="Main Stuff">
+        // is it possible to make the panel full screen?
         pCenter = new JPanel();
         pCenter.setLayout(null);
         pCenter.setPreferredSize(new Dimension(1260, 650));
@@ -120,6 +121,7 @@ public class HomePageWindow extends JFrame implements ActionListener
         filterIcon = new ImageIcon("src/middleSectionHP/filterIcon.png");
         filterButton = new JButton(filterIcon);
         filterButton.setBounds(110, 200, 50, 30);
+        filterButton.addActionListener(this::actionPerformed7);
         pCenter.add(filterButton);
 
         searchBox = new JTextField();
@@ -272,6 +274,13 @@ public class HomePageWindow extends JFrame implements ActionListener
     {
         JFrame QueuePreviewWindow = new QueuePreviewWindow(); // open another JFrame
         QueuePreviewWindow.setVisible(true); // display SelectPlayWindow
+        dispose(); // close home page
+    }
+
+    public void actionPerformed7(ActionEvent e)
+    {
+        JFrame SearchWindow = new SearchWindow(); // open another JFrame
+        SearchWindow.setVisible(true); // display SelectPlayWindow
         dispose(); // close home page
     }
 }

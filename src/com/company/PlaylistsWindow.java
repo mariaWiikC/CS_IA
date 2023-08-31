@@ -63,6 +63,7 @@ public class PlaylistsWindow extends JFrame
         setJMenuBar(menuBar);
         //</editor-fold>
 
+        //<editor-fold desc="Add/Delete">
         playlistsT = new JLabel("Playlists");
         playlistsT.setBounds(30, 150, 100, 35);
         pCenter.add(playlistsT);
@@ -85,6 +86,10 @@ public class PlaylistsWindow extends JFrame
         deletePlaylistButton = new JButton(deletePlaylistIcon);
         deletePlaylistButton.setBounds(100, 350, 50, 30);
         pCenter.add(deletePlaylistButton);
+        //</editor-fold>
+
+        // I'm gonna need another subwindow here... One if the user is creating a new playlist
+        // another one if the user is editing a pre-existing playlist
 
         setVisible(true);
     }

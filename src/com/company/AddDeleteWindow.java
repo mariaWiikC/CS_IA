@@ -1,12 +1,18 @@
 package com.company;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 public class AddDeleteWindow extends JFrame
 {
@@ -19,6 +25,7 @@ public class AddDeleteWindow extends JFrame
             addThemeIcon, deleteThemeIcon;
     private JButton addSongButton, deleteSongButton, addInstrumentButton, deleteInstrumentButton,
             addThemeButton, deleteThemeButton;
+    private AudioInputStream audioInputStream;
 
     public AddDeleteWindow() throws IOException
     {
@@ -98,6 +105,7 @@ public class AddDeleteWindow extends JFrame
         addSongIcon = new ImageIcon("src/add-delete/addIcon.jpg");
         addSongButton = new JButton(addSongIcon);
         addSongButton.setBounds(100, 300, 50, 30);
+        addSongButton.addActionListener(this::actionPerformedAddSong);
         pCenter.add(addSongButton);
 
         deleteSongIcon = new ImageIcon("src/add-delete/deleteIcon.jpg");
@@ -207,5 +215,57 @@ public class AddDeleteWindow extends JFrame
         JFrame QueuePreviewWindow = new QueuePreviewWindow(); // open another JFrame
         QueuePreviewWindow.setVisible(true); // display SelectPlayWindow
         dispose(); // close home page
+    }
+
+    public void actionPerformedAddSong(ActionEvent e)
+    {
+        JFileChooser songUpload = new JFileChooser();
+        //songUpload.setCurrentDirectory(new File("."));
+        // int res = songUpload.showOpenDialog(null);
+        int res2 = songUpload.showSaveDialog(null);
+
+        if (res2 == JFileChooser.APPROVE_OPTION)
+        {
+            File songPath = new File(songUpload.getSelectedFile().getAbsolutePath());
+            // System.out.println(songPath);
+
+            Path sourcePath = Path.of(songUpload.getSelectedFile().getAbsolutePath());
+            String targetPath = "src/newSong";
+            File recentSong;
+
+            try
+            {
+                Files.copy(sourcePath, Path.of(targetPath), new StandardCopyOption[]{StandardCopyOption.REPLACE_EXISTING});
+            } catch (IOException ex)
+            {
+                ex.printStackTrace();
+            }
+
+            String directoryFilePath = "src";
+
+            File directory = new File(directoryFilePath);
+            File[] files = directory.listFiles(File::isFile);
+            long lastModifiedTime = Long.MIN_VALUE;
+            File chosenFile = null;
+
+            if (files != null)
+            {
+                for (File file : files)
+                {
+                    if (file.lastModified() > lastModifiedTime)
+                    {
+                        chosenFile = file;
+                        lastModifiedTime = file.lastModified();
+                    }
+                }
+            }
+
+            // I need to get the user's input as a string and substitute in place of "NewName"
+
+            File rename = new File("src/songsFiles/NewName");
+
+            System.out.println(chosenFile.renameTo(rename));
+
+        }
     }
 }
