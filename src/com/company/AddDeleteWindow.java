@@ -7,6 +7,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
@@ -25,20 +26,41 @@ public class AddDeleteWindow extends JFrame
             addThemeIcon, deleteThemeIcon;
     private JButton addSongButton, deleteSongButton, addInstrumentButton, deleteInstrumentButton,
             addThemeButton, deleteThemeButton;
-    private AudioInputStream audioInputStream;
+    private JTextField inputField;
+    private JButton validateButton;
+    private JPanel newNamePanel;
+    private String[] newNameArr = new String[1];
+    private File chosenFile;
 
     public AddDeleteWindow() throws IOException
     {
+        // NEXT STEP IS TO MAKE SONGS VISIBLE
         super("Add/Delete");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLayout(new FlowLayout());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         pCenter = new JPanel();
-        pCenter.setLayout(null);
+        //pCenter.setLayout(null);
         pCenter.setPreferredSize(new Dimension(1260, 650));
         // pCenter.setBorder(BorderFactory.createLineBorder(Color.black));
         add(pCenter, BorderLayout.CENTER);
+
+        newNamePanel = new JPanel();
+        newNamePanel.setPreferredSize(new Dimension(300, 100));
+        newNamePanel.setLayout(new FlowLayout());
+
+        // the text field I'm doing this with can be the specific for each type of element
+        // use the specific one for song, instrument, wtv
+        inputField = new JTextField(15);
+        validateButton = new JButton("Confirm");
+
+        newNamePanel.add(inputField);
+        newNamePanel.add(validateButton);
+        pCenter.add(newNamePanel, BorderLayout.SOUTH);
+        inputField.setEnabled(false);
+        validateButton.setEnabled(false);
+
 
         //<editor-fold desc="Menu Bar">
         menuBar = new JMenuBar();
@@ -111,6 +133,7 @@ public class AddDeleteWindow extends JFrame
         deleteSongIcon = new ImageIcon("src/add-delete/deleteIcon.jpg");
         deleteSongButton = new JButton(deleteSongIcon);
         deleteSongButton.setBounds(100, 350, 50, 30);
+        deleteSongButton.addActionListener(this::actionPerformedDeleteSong);
         pCenter.add(deleteSongButton);
         //</editor-fold>
 
@@ -220,14 +243,12 @@ public class AddDeleteWindow extends JFrame
     public void actionPerformedAddSong(ActionEvent e)
     {
         JFileChooser songUpload = new JFileChooser();
-        //songUpload.setCurrentDirectory(new File("."));
-        // int res = songUpload.showOpenDialog(null);
         int res2 = songUpload.showSaveDialog(null);
 
+        // copying the file
         if (res2 == JFileChooser.APPROVE_OPTION)
         {
             File songPath = new File(songUpload.getSelectedFile().getAbsolutePath());
-            // System.out.println(songPath);
 
             Path sourcePath = Path.of(songUpload.getSelectedFile().getAbsolutePath());
             String targetPath = "src/newSong";
@@ -241,12 +262,13 @@ public class AddDeleteWindow extends JFrame
                 ex.printStackTrace();
             }
 
+            // find most recently edited file
             String directoryFilePath = "src";
 
             File directory = new File(directoryFilePath);
             File[] files = directory.listFiles(File::isFile);
             long lastModifiedTime = Long.MIN_VALUE;
-            File chosenFile = null;
+            chosenFile = null;
 
             if (files != null)
             {
@@ -261,11 +283,56 @@ public class AddDeleteWindow extends JFrame
             }
 
             // I need to get the user's input as a string and substitute in place of "NewName"
+            inputField.setEnabled(true);
+            validateButton.setEnabled(true);
 
-            File rename = new File("src/songsFiles/NewName");
+            validateButton.addActionListener(new ActionListener()
+            {
+                @Override
+                public void actionPerformed(ActionEvent e)
+                {
+                    newNameArr[0] = inputField.getText();
+                    JOptionPane.showMessageDialog(null, "File information saved");
+                    String newName = "src/songsFiles/" + newNameArr[0];
+                    System.out.println(newName);
+                    File rename = new File(newName);
 
-            System.out.println(chosenFile.renameTo(rename));
+                    System.out.println(chosenFile.renameTo(rename));
+                    inputField.setEnabled(false);
+                    validateButton.setEnabled(false);
+                }
+            });
 
         }
+    }
+
+    public void actionPerformedDeleteSong(ActionEvent e)
+    {
+        // When they click the delete button, make them type the name of the file to be deleted
+        // say it's fore security, we want the user to be sure of the deletion, not just an accident
+        inputField.setEnabled(true);
+        validateButton.setEnabled(true);
+
+        validateButton.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                newNameArr[0] = inputField.getText();
+                JOptionPane.showMessageDialog(null, "File deleted");
+                String nameFile = "src/songsFiles/" + newNameArr[0];
+                try
+                {
+                    Files.deleteIfExists(Path.of(nameFile));
+                } catch (IOException ex)
+                {
+                    ex.printStackTrace();
+                }
+
+                inputField.setEnabled(false);
+                validateButton.setEnabled(false);
+            }
+        });
+
     }
 }
