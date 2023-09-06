@@ -28,38 +28,49 @@ public class AddDeleteWindow extends JFrame
             addThemeButton, deleteThemeButton;
     private JTextField inputField;
     private JButton validateButton;
-    private JPanel newNamePanel;
     private String[] newNameArr = new String[1];
     private File chosenFile;
+    private JLabel filler1, filler2, filler3;
 
     public AddDeleteWindow() throws IOException
     {
         // NEXT STEP IS TO MAKE SONGS VISIBLE
+        // When they click the buttons, a message can appear on the screen and be like, "do this", with the instructions
+        // position the labels better
+        // why is it showing two messages when I delete a song
         super("Add/Delete");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLayout(new FlowLayout());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         pCenter = new JPanel();
-        //pCenter.setLayout(null);
         pCenter.setPreferredSize(new Dimension(1260, 650));
         // pCenter.setBorder(BorderFactory.createLineBorder(Color.black));
         add(pCenter, BorderLayout.CENTER);
 
-        newNamePanel = new JPanel();
-        newNamePanel.setPreferredSize(new Dimension(300, 100));
-        newNamePanel.setLayout(new FlowLayout());
+        GroupLayout layout = new GroupLayout(pCenter);
+        pCenter.setLayout(layout);
+        layout.setAutoCreateGaps(true);
+        layout.setAutoCreateContainerGaps(true);
 
         // the text field I'm doing this with can be the specific for each type of element
         // use the specific one for song, instrument, wtv
-        inputField = new JTextField(15);
+        // what does the column number mean
+        inputField = new JTextField(5);
         validateButton = new JButton("Confirm");
 
-        newNamePanel.add(inputField);
-        newNamePanel.add(validateButton);
-        pCenter.add(newNamePanel, BorderLayout.SOUTH);
+        pCenter.add(inputField);
+        pCenter.add(validateButton);
         inputField.setEnabled(false);
         validateButton.setEnabled(false);
+
+        // PLACE FILLERS FOR WHERE THE LIST OF SONGS WILL BE
+        filler1 = new JLabel("filler1");
+        filler2 = new JLabel("filler2");
+        filler3 = new JLabel("filler3");
+        pCenter.add(filler1);
+        pCenter.add(filler2);
+        pCenter.add(filler3);
 
 
         //<editor-fold desc="Menu Bar">
@@ -97,88 +108,145 @@ public class AddDeleteWindow extends JFrame
         // all locations are wronggggggggg
         //<editor-fold desc="Some Labels">
         songsT = new JLabel("Songs");
-        songsT.setBounds(30, 150, 100, 35);
-        pCenter.add(songsT);
+        // pCenter.add(songsT);
 
         tagsT = new JLabel("Tags");
-        tagsT.setBounds(130, 100, 100, 35);
-        pCenter.add(tagsT);
+        // pCenter.add(tagsT);
 
         instrumentsT = new JLabel("Instruments");
-        instrumentsT.setBounds(130, 100, 100, 35);
-        pCenter.add(instrumentsT);
+        //pCenter.add(instrumentsT);
 
         themesT = new JLabel("Themes");
-        themesT.setBounds(230, 150, 100, 35);
-        pCenter.add(themesT);
+        // pCenter.add(themesT);
         //</editor-fold>
 
         // song search
         //<editor-fold desc="Song Add/Delete">
         BufferedImage songSearchIcon = ImageIO.read(new File("src/middleSectionHP/searchIcon.png"));
         JLabel songSearchIconLabel = new JLabel(new ImageIcon(songSearchIcon));
-        songSearchIconLabel.setBounds(30, 200, 30, 30);
-        pCenter.add(songSearchIconLabel);
+        // pCenter.add(songSearchIconLabel);
 
         songSearchBox = new JTextField();
-        songSearchBox.setBounds(70, 200, 90, 30);
-        pCenter.add(songSearchBox);
+        // pCenter.add(songSearchBox);
 
         addSongIcon = new ImageIcon("src/add-delete/addIcon.jpg");
         addSongButton = new JButton(addSongIcon);
-        addSongButton.setBounds(100, 300, 50, 30);
         addSongButton.addActionListener(this::actionPerformedAddSong);
-        pCenter.add(addSongButton);
+        // pCenter.add(addSongButton);
 
         deleteSongIcon = new ImageIcon("src/add-delete/deleteIcon.jpg");
         deleteSongButton = new JButton(deleteSongIcon);
-        deleteSongButton.setBounds(100, 350, 50, 30);
         deleteSongButton.addActionListener(this::actionPerformedDeleteSong);
-        pCenter.add(deleteSongButton);
+        // pCenter.add(deleteSongButton);
         //</editor-fold>
 
         // instrument tag search
         //<editor-fold desc="Instrument Tag Add/Delete">
         BufferedImage instrumentSearchIcon = ImageIO.read(new File("src/middleSectionHP/searchIcon.png"));
         JLabel instrumentSearchIconLabel = new JLabel(new ImageIcon(instrumentSearchIcon));
-        instrumentSearchIconLabel.setBounds(130, 200, 30, 30);
-        pCenter.add(instrumentSearchIconLabel);
+        // pCenter.add(instrumentSearchIconLabel);
 
         instrumentsSearchBox = new JTextField();
-        instrumentsSearchBox.setBounds(180, 200, 90, 30);
-        pCenter.add(instrumentsSearchBox);
+        // pCenter.add(instrumentsSearchBox);
 
         addInstrumentIcon = new ImageIcon("src/add-delete/addIcon.jpg");
         addInstrumentButton = new JButton(addInstrumentIcon);
-        addInstrumentButton.setBounds(270, 300, 50, 30);
-        pCenter.add(addInstrumentButton);
+        // pCenter.add(addInstrumentButton);
 
         deleteInstrumentIcon = new ImageIcon("src/add-delete/deleteIcon.jpg");
         deleteInstrumentButton = new JButton(deleteInstrumentIcon);
-        deleteInstrumentButton.setBounds(270, 350, 50, 30);
-        pCenter.add(deleteInstrumentButton);
+        // pCenter.add(deleteInstrumentButton);
         //</editor-fold>
 
         // theme tag search
         //<editor-fold desc="Theme Tag Add/Delete">
         BufferedImage themeSearchIcon = ImageIO.read(new File("src/middleSectionHP/searchIcon.png"));
         JLabel themeSearchIconLabel = new JLabel(new ImageIcon(themeSearchIcon));
-        themeSearchIconLabel.setBounds(330, 200, 30, 30);
-        pCenter.add(themeSearchIconLabel);
+        // pCenter.add(themeSearchIconLabel);
 
         themesSearchBox = new JTextField();
-        themesSearchBox.setBounds(380, 200, 90, 30);
-        pCenter.add(themesSearchBox);
+        // pCenter.add(themesSearchBox);
 
         addThemeIcon = new ImageIcon("src/add-delete/addIcon.jpg");
         addThemeButton = new JButton(addThemeIcon);
-        addThemeButton.setBounds(480, 100, 50, 30);
-        pCenter.add(addThemeButton);
+        // pCenter.add(addThemeButton);
 
         deleteThemeIcon = new ImageIcon("src/add-delete/deleteIcon.jpg");
         deleteThemeButton = new JButton(deleteThemeIcon);
-        deleteThemeButton.setBounds(480, 100, 50, 30);
-        pCenter.add(deleteThemeButton);
+        // pCenter.add(deleteThemeButton);
+        //</editor-fold>
+
+        // I want to display all the uploaded songs
+
+        //<editor-fold desc="LAYOUT">
+        layout.setHorizontalGroup(
+                layout.createParallelGroup()
+                        .addComponent(tagsT) // move to left
+                        .addGroup(layout.createSequentialGroup()
+                                .addComponent(songsT)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED,
+                                        GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(instrumentsT)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED,
+                                        GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(themesT))
+                        .addGroup(layout.createSequentialGroup()
+                                .addComponent(songSearchIconLabel)
+                                .addComponent(inputField/*, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+                                        GroupLayout.PREFERRED_SIZE*/)
+                                .addComponent(validateButton)
+                                .addGroup(layout.createParallelGroup()
+                                        .addComponent(addSongButton)
+                                        .addComponent(deleteSongButton))
+
+                                .addComponent(instrumentSearchIconLabel)
+                                .addComponent(instrumentsSearchBox)
+                                .addGroup(layout.createParallelGroup()
+                                        .addComponent(addInstrumentButton)
+                                        .addComponent(deleteInstrumentButton))
+
+                                .addComponent(themeSearchIconLabel)
+                                .addComponent(themesSearchBox)
+                                .addGroup(layout.createParallelGroup()
+                                        .addComponent(addThemeButton)
+                                        .addComponent(deleteThemeButton)))
+                        .addGroup(layout.createSequentialGroup()
+                                .addComponent(filler1)
+                                .addComponent(filler2)
+                                .addComponent(filler3))
+                        );
+        layout.setVerticalGroup(
+                layout.createSequentialGroup()
+                        .addComponent(tagsT)
+                        .addGroup(layout.createParallelGroup()
+                                .addComponent(songsT)
+                                .addComponent(instrumentsT)
+                                .addComponent(themesT))
+                        .addGroup(layout.createParallelGroup()
+                                .addComponent(songSearchIconLabel)
+                                .addComponent(inputField)
+                                .addComponent(validateButton)
+                                .addGroup(layout.createSequentialGroup()
+                                        .addComponent(addSongButton)
+                                        .addComponent(deleteSongButton))
+
+
+                                .addComponent(instrumentSearchIconLabel)
+                                .addComponent(instrumentsSearchBox)
+                                .addGroup(layout.createSequentialGroup()
+                                        .addComponent(addInstrumentButton)
+                                        .addComponent(deleteInstrumentButton))
+
+                                .addComponent(themeSearchIconLabel)
+                                .addComponent(themesSearchBox)
+                                .addGroup(layout.createSequentialGroup()
+                                        .addComponent(addThemeButton)
+                                        .addComponent(deleteThemeButton)))
+                        .addGroup(layout.createParallelGroup()
+                                .addComponent(filler1)
+                                .addComponent(filler2)
+                                .addComponent(filler3))
+        );
         //</editor-fold>
 
         setVisible(true);
