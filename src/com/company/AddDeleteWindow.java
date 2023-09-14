@@ -32,6 +32,9 @@ public class AddDeleteWindow extends JFrame
     private String[] newNameArr = new String[1];
     private File chosenFile;
     private JLabel filler1, filler2, filler3;
+    private JList listSongs;
+    private DefaultListModel listModel;
+    private JScrollPane listScroller;
 
     public AddDeleteWindow() throws IOException
     {
@@ -185,24 +188,23 @@ public class AddDeleteWindow extends JFrame
         // I want to display all the uploaded songs
         String directorySongsFilePath = "src/songsFiles";
 
+        //<editor-fold desc="Setting up the list of songs">
         File directorySongs = new File(directorySongsFilePath);
         File[] filesSongs = directorySongs.listFiles(File::isFile);
 
-        ArrayList<JLabel> allSongsLabels = new ArrayList<>();
-        if (filesSongs != null)
+        listModel = new DefaultListModel();
+        for (File f : filesSongs)
         {
-            for (File file : filesSongs)
-            {
-                JLabel s = new JLabel(file.getName());
-                allSongsLabels.add(s);
-            }
+            listModel.addElement(f.getName());
         }
-        // now how do I add these to the beautiful layout
-        for (JLabel jL : allSongsLabels)
-        {
-            pCenter.add(jL);
-            System.out.println(jL);
-        }
+        listSongs = new JList(listModel);
+        listSongs.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listSongs.setLayoutOrientation(JList.VERTICAL);
+        listSongs.setVisibleRowCount(-1);
+
+        listScroller = new JScrollPane(listSongs);
+        listScroller.setPreferredSize(new Dimension(250, 80));
+        //</editor-fold>
 
         //<editor-fold desc="LAYOUT">
         layout.setHorizontalGroup(
@@ -218,8 +220,11 @@ public class AddDeleteWindow extends JFrame
                                 .addComponent(themesT))
                         .addGroup(layout.createSequentialGroup()
                                 .addComponent(songSearchIconLabel)
-                                .addComponent(inputField/*, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-                                        GroupLayout.PREFERRED_SIZE*/)
+                                .addGroup(layout.createParallelGroup()
+                                        .addComponent(inputField)
+                                        .addComponent(listScroller)
+                                )
+
                                 .addComponent(validateButton)
                                 .addGroup(layout.createParallelGroup()
                                         .addComponent(addSongButton)
@@ -236,10 +241,6 @@ public class AddDeleteWindow extends JFrame
                                 .addGroup(layout.createParallelGroup()
                                         .addComponent(addThemeButton)
                                         .addComponent(deleteThemeButton)))
-                        .addGroup(layout.createSequentialGroup()
-                                .addComponent(filler1)
-                                .addComponent(filler2)
-                                .addComponent(filler3))
         );
         layout.setVerticalGroup(
                 layout.createSequentialGroup()
@@ -250,7 +251,10 @@ public class AddDeleteWindow extends JFrame
                                 .addComponent(themesT))
                         .addGroup(layout.createParallelGroup()
                                 .addComponent(songSearchIconLabel)
-                                .addComponent(inputField)
+                                .addGroup(layout.createSequentialGroup()
+                                        .addComponent(inputField)
+                                        .addComponent(listScroller)
+                                )
                                 .addComponent(validateButton)
                                 .addGroup(layout.createSequentialGroup()
                                         .addComponent(addSongButton)
@@ -268,10 +272,6 @@ public class AddDeleteWindow extends JFrame
                                 .addGroup(layout.createSequentialGroup()
                                         .addComponent(addThemeButton)
                                         .addComponent(deleteThemeButton)))
-                        .addGroup(layout.createParallelGroup()
-                                .addComponent(filler1)
-                                .addComponent(filler2)
-                                .addComponent(filler3))
         );
         //</editor-fold>
 
@@ -390,6 +390,7 @@ public class AddDeleteWindow extends JFrame
                     String newName = "src/songsFiles/" + newNameArr[0];
                     System.out.println(newName);
                     File rename = new File(newName);
+                    listModel.addElement(newNameArr[0]);
 
                     System.out.println(chosenFile.renameTo(rename));
                     inputField.setEnabled(false);
