@@ -203,7 +203,7 @@ public class AddDeleteWindow extends JFrame
         listSongs.setVisibleRowCount(-1);
 
         listScroller = new JScrollPane(listSongs);
-        listScroller.setPreferredSize(new Dimension(250, 80));
+        listScroller.setMaximumSize(new Dimension(250, 300));
         //</editor-fold>
 
         //<editor-fold desc="LAYOUT">
@@ -403,31 +403,22 @@ public class AddDeleteWindow extends JFrame
 
     public void actionPerformedDeleteSong(ActionEvent e)
     {
-        // When they click the delete button, make them type the name of the file to be deleted
-        // say it's fore security, we want the user to be sure of the deletion, not just an accident
-        inputField.setEnabled(true);
-        validateButton.setEnabled(true);
-
-        validateButton.addActionListener(new ActionListener()
+        String nameWritten = null;
+        if (listSongs.getSelectedIndex() != -1)
         {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                newNameArr[0] = inputField.getText();
-                JOptionPane.showMessageDialog(null, "File deleted");
-                String nameFile = "src/songsFiles/" + newNameArr[0];
-                try
-                {
-                    Files.deleteIfExists(Path.of(nameFile));
-                } catch (IOException ex)
-                {
-                    ex.printStackTrace();
-                }
+            nameWritten = (String) listSongs.getSelectedValue();
+        }
+        String nameFile = "src/songsFiles/" + nameWritten;
+        int index = listSongs.getSelectedIndex();
+        listModel.remove(index);
+        JOptionPane.showMessageDialog(null, "File deleted");
 
-                inputField.setEnabled(false);
-                validateButton.setEnabled(false);
-            }
-        });
-
+        try
+        {
+            Files.deleteIfExists(Path.of(nameFile));
+        } catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
     }
 }
