@@ -20,7 +20,9 @@ public class AddDeleteWindow extends JFrame
 {
     private JMenuBar menuBar;
     private JMenuItem menuSelect, menuPhotos, menuPlaylists, menuSongs, menuQueue, menuHome;
-    private JPanel pCenter, pAddDeleteSongs, pAddDeleteInstruments, pAddDeleteThemes;
+    private JPanel pCenter, pTop, pRest, pSongs, pInputList, pConfirmButtons, pInSongs, pInstruments,
+        pInInstruments, pInputListInstrument, pConfirmButtonsInstrument, pThemes, pInThemes, pInputListTheme, pConfirmButtonsTheme,
+            pJustTextField, pJustTextField2, pJustTextField3;
     private JLabel songsT, tagsT, instrumentsT, themesT;
     private JTextField songSearchBox, instrumentsSearchBox, themesSearchBox;
     private ImageIcon addSongIcon, deleteSongIcon, addInstrumentIcon, deleteInstrumentIcon,
@@ -59,9 +61,60 @@ public class AddDeleteWindow extends JFrame
 
         pCenter.setLayout(new BoxLayout(pCenter, BoxLayout.PAGE_AXIS));
 
-        pAddDeleteSongs = new JPanel();
-        pAddDeleteInstruments = new JPanel();
-        pAddDeleteThemes = new JPanel();
+        pTop = new JPanel();
+        pTop.setLayout(new BoxLayout(pTop, BoxLayout.LINE_AXIS));
+
+        pRest = new JPanel();
+        pRest.setLayout(new BoxLayout(pRest, BoxLayout.LINE_AXIS));
+
+        // panels songs
+        pSongs = new JPanel();
+        pSongs.setLayout(new BoxLayout(pSongs, BoxLayout.PAGE_AXIS));
+
+        pInSongs = new JPanel();
+        pInSongs.setLayout(new BoxLayout(pInSongs, BoxLayout.LINE_AXIS));
+
+        pInputList = new JPanel();
+        pInputList.setLayout(new BoxLayout(pInputList, BoxLayout.PAGE_AXIS));
+
+        pConfirmButtons = new JPanel();
+        pConfirmButtons.setLayout(new BoxLayout(pConfirmButtons, BoxLayout.PAGE_AXIS));
+
+        // panels instruments
+        pInstruments = new JPanel();
+        pInstruments.setLayout(new BoxLayout(pInstruments, BoxLayout.PAGE_AXIS));
+
+        pInInstruments = new JPanel();
+        pInInstruments.setLayout(new BoxLayout(pInInstruments, BoxLayout.LINE_AXIS));
+
+        pInputListInstrument = new JPanel();
+        pInputListInstrument.setLayout(new BoxLayout(pInputListInstrument, BoxLayout.PAGE_AXIS));
+
+        pConfirmButtonsInstrument = new JPanel();
+        pConfirmButtonsInstrument.setLayout(new BoxLayout(pConfirmButtonsInstrument, BoxLayout.PAGE_AXIS));
+
+        // panels themes
+        pThemes = new JPanel();
+        pThemes.setLayout(new BoxLayout(pThemes, BoxLayout.PAGE_AXIS));
+
+        pInThemes = new JPanel();
+        pInThemes.setLayout(new BoxLayout(pInThemes, BoxLayout.LINE_AXIS));
+
+        pInputListTheme = new JPanel();
+        pInputListTheme.setLayout(new BoxLayout(pInputListTheme, BoxLayout.PAGE_AXIS));
+
+        pConfirmButtonsTheme = new JPanel();
+        pConfirmButtonsTheme.setLayout(new BoxLayout(pConfirmButtonsTheme, BoxLayout.PAGE_AXIS));
+
+        pJustTextField = new JPanel();
+        pJustTextField.setPreferredSize(new Dimension(70, 20));
+
+        pCenter.add(pTop);
+        pCenter.add(pRest);
+        pRest.add(pSongs);
+        pRest.add(pInstruments);
+        pRest.add(pThemes);
+
         // Do I need to add the elements in a certain order? -> i think so
 
         // the text field I'm doing this with can be the specific for each type of element
@@ -71,8 +124,6 @@ public class AddDeleteWindow extends JFrame
         inputField = new JTextField(5);
         validateButton = new JButton("Confirm");
 
-        pCenter.add(inputField);
-        pCenter.add(validateButton);
         inputField.setEnabled(false);
         validateButton.setEnabled(false);
         //</editor-fold>
@@ -82,9 +133,7 @@ public class AddDeleteWindow extends JFrame
         filler1 = new JLabel("filler1");
         filler2 = new JLabel("filler2");
         filler3 = new JLabel("filler3");
-        pCenter.add(filler1);
-        pCenter.add(filler2);
-        pCenter.add(filler3);
+
         //</editor-fold>
 
 
@@ -122,74 +171,75 @@ public class AddDeleteWindow extends JFrame
 
         //<editor-fold desc="Some Labels">
         songsT = new JLabel("Songs");
-        // pCenter.add(songsT);
+
 
         tagsT = new JLabel("Tags");
-        // pCenter.add(tagsT);
+        pTop.add(tagsT);
 
         instrumentsT = new JLabel("Instruments");
-        //pCenter.add(instrumentsT);
+        // pLabels.add(instrumentsT);
 
         themesT = new JLabel("Themes");
-        // pCenter.add(themesT);
+        // pLabels.add(themesT);
         //</editor-fold>
 
         // song search
         //<editor-fold desc="Song Add/Delete">
         BufferedImage songSearchIcon = ImageIO.read(new File("src/middleSectionHP/searchIcon.png"));
         JLabel songSearchIconLabel = new JLabel(new ImageIcon(songSearchIcon));
-        // pCenter.add(songSearchIconLabel);
+
 
         songSearchBox = new JTextField();
-        // pCenter.add(songSearchBox);
+        // pAddDeleteSongs.add(songSearchBox);
 
         addSongIcon = new ImageIcon("src/add-delete/addIcon.jpg");
         addSongButton = new JButton(addSongIcon);
         addSongButton.addActionListener(this::actionPerformedAddSong);
         // pCenter.add(addSongButton);
-        pAddDeleteSongs.add(addSongButton);
 
         deleteSongIcon = new ImageIcon("src/add-delete/deleteIcon.jpg");
         deleteSongButton = new JButton(deleteSongIcon);
         deleteSongButton.addActionListener(this::actionPerformedDeleteSong);
         // pCenter.add(deleteSongButton);
-        pAddDeleteSongs.add(deleteSongButton);
         //</editor-fold>
 
         // instrument tag search
         //<editor-fold desc="Instrument Tag Add/Delete">
         BufferedImage instrumentSearchIcon = ImageIO.read(new File("src/middleSectionHP/searchIcon.png"));
         JLabel instrumentSearchIconLabel = new JLabel(new ImageIcon(instrumentSearchIcon));
-        // pCenter.add(instrumentSearchIconLabel);
+        // pTextFields.add(instrumentSearchIconLabel);
 
         instrumentsSearchBox = new JTextField();
-        // pCenter.add(instrumentsSearchBox);
+        // pFitTextField2.add(instrumentsSearchBox);
+        // pTextFields.add(pFitTextField2);
 
         addInstrumentIcon = new ImageIcon("src/add-delete/addIcon.jpg");
         addInstrumentButton = new JButton(addInstrumentIcon);
-        // pCenter.add(addInstrumentButton);
+        // pInstrumentB.add(addInstrumentButton);
 
         deleteInstrumentIcon = new ImageIcon("src/add-delete/deleteIcon.jpg");
         deleteInstrumentButton = new JButton(deleteInstrumentIcon);
-        // pCenter.add(deleteInstrumentButton);
+        // pInstrumentB.add(deleteInstrumentButton);
         //</editor-fold>
 
         // theme tag search
         //<editor-fold desc="Theme Tag Add/Delete">
         BufferedImage themeSearchIcon = ImageIO.read(new File("src/middleSectionHP/searchIcon.png"));
         JLabel themeSearchIconLabel = new JLabel(new ImageIcon(themeSearchIcon));
-        // pCenter.add(themeSearchIconLabel);
+        // pTextFields.add(themeSearchIconLabel);
 
         themesSearchBox = new JTextField();
-        // pCenter.add(themesSearchBox);
+        // pFitTextField3.add(themesSearchBox);
+        // pTextFields.add(pFitTextField3);
+        // pTextFields.add(themesSearchBox);
 
         addThemeIcon = new ImageIcon("src/add-delete/addIcon.jpg");
         addThemeButton = new JButton(addThemeIcon);
-        // pCenter.add(addThemeButton);
+        // pThemeB.add(addThemeButton);
 
         deleteThemeIcon = new ImageIcon("src/add-delete/deleteIcon.jpg");
         deleteThemeButton = new JButton(deleteThemeIcon);
-        // pCenter.add(deleteThemeButton);
+        // pThemeB.add(deleteThemeButton);
         //</editor-fold>
 
         // I want to display all the uploaded songs
@@ -200,6 +250,55 @@ public class AddDeleteWindow extends JFrame
         File[] filesSongs = directorySongs.listFiles(File::isFile);
 
         // now how do I add these to the beautiful layout
+
+        //<editor-fold desc="Adding song stuff to panels">
+        pSongs.add(songsT);
+        pSongs.add(pInSongs);
+        pInSongs.add(songSearchIconLabel);
+        pInSongs.add(pInputList);
+
+        pJustTextField.add(inputField);
+        pInputList.add(pJustTextField);
+        pInputList.add(filler1);
+
+        pInSongs.add(pConfirmButtons);
+
+        pConfirmButtons.add(validateButton);
+        pConfirmButtons.add(addSongButton);
+        pConfirmButtons.add(deleteSongButton);
+        //</editor-fold>
+
+        //<editor-fold desc="adding instruments panels">
+        pInstruments.add(instrumentsT);
+        pInstruments.add(pInInstruments);
+        pInInstruments.add(instrumentSearchIconLabel);
+        pInInstruments.add(pInputListInstrument);
+
+        pInputListInstrument.add(instrumentsSearchBox);
+        pInputListInstrument.add(filler2);
+
+        pInInstruments.add(pConfirmButtonsInstrument);
+
+        // pConfirmButtons.add(validateButton);
+        pConfirmButtonsInstrument.add(addInstrumentButton);
+        pConfirmButtonsInstrument.add(deleteInstrumentButton);
+        //</editor-fold>
+
+        //<editor-fold desc="adding themes panels">
+        pThemes.add(themesT);
+        pThemes.add(pInInstruments);
+        pInInstruments.add(instrumentSearchIconLabel);
+        pInInstruments.add(pInputListInstrument);
+
+        pInputListInstrument.add(instrumentsSearchBox);
+        pInputListInstrument.add(filler3);
+
+        pInInstruments.add(pConfirmButtonsInstrument);
+
+        // pConfirmButtons.add(validateButton);
+        pConfirmButtonsInstrument.add(addInstrumentButton);
+        pConfirmButtonsInstrument.add(deleteInstrumentButton);
+        //</editor-fold>
 
         setVisible(true);
     }
