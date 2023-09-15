@@ -1,6 +1,10 @@
 package com.company;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,6 +12,9 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 public class HomePageWindow extends JFrame implements ActionListener
 {
@@ -27,6 +34,7 @@ public class HomePageWindow extends JFrame implements ActionListener
             randomIcon, tenBackIcon, tenForwardIcon;
     private JTextField searchBox;
     private JProgressBar pB;
+    private AudioInputStream audioInputStream;
 
     // nameOfPlaylistT, nameOfSongT -> these two change according to what is playingggg
 
@@ -42,7 +50,22 @@ public class HomePageWindow extends JFrame implements ActionListener
         JMenu fileMenu = new JMenu("Home Page");
 
         menuSelect = new JMenuItem("Select What to Play");
-        menuSelect.addActionListener(this::actionPerformed);
+        menuSelect.addActionListener(e ->
+        {
+            try
+            {
+                actionPerformedSelectSongPlay(e);
+            } catch (UnsupportedAudioFileException ex)
+            {
+                ex.printStackTrace();
+            } catch (IOException ex)
+            {
+                ex.printStackTrace();
+            } catch (LineUnavailableException ex)
+            {
+                ex.printStackTrace();
+            }
+        });
 
         menuAddDelete = new JMenuItem("Add / Delete");
         menuAddDelete.addActionListener(this::actionPerformed2);
@@ -84,7 +107,22 @@ public class HomePageWindow extends JFrame implements ActionListener
         // get the positions right
         toSelectPlayWindow = new JButton("Select a Song or Playlist");
         toSelectPlayWindow.setBounds(550, 50, 225, 35);
-        toSelectPlayWindow.addActionListener(this::actionPerformed);
+        toSelectPlayWindow.addActionListener(e ->
+        {
+            try
+            {
+                actionPerformedSelectSongPlay(e);
+            } catch (UnsupportedAudioFileException ex)
+            {
+                ex.printStackTrace();
+            } catch (IOException ex)
+            {
+                ex.printStackTrace();
+            } catch (LineUnavailableException ex)
+            {
+                ex.printStackTrace();
+            }
+        });
         pCenter.add(toSelectPlayWindow);
 
         toAddDeleteWindow = new JButton("Add / Delete");
@@ -215,8 +253,35 @@ public class HomePageWindow extends JFrame implements ActionListener
         //</editor-fold>
 
         // is the search thingy where the user writes a "text field"?
+        // for the song selection part, my idea is the following:
+        // I open the file chooser on the folder songsFiles (the one here) and I get it to play it
+
 
         setVisible(true);
+    }
+
+    public void actionPerformedSelectSongPlay(ActionEvent e) throws UnsupportedAudioFileException,
+            IOException, LineUnavailableException
+    {
+        JFileChooser songUpload = new JFileChooser(new File("src/songsFiles"));
+        int res2 = songUpload.showSaveDialog(null);
+        String songPath = null;
+        String actualPath = null;
+
+        if (res2 == JFileChooser.APPROVE_OPTION)
+        {
+            File song = new File(songUpload.getSelectedFile().getAbsolutePath());
+            // ok, so I only want the last word from the path (so the name of the song)
+            // and then i just add the two strings
+            songPath = song.getAbsolutePath();
+            System.out.println(songPath);
+            actualPath = songPath.substring(songPath.lastIndexOf("songsFiles") + 11);
+            System.out.println(actualPath);
+            String realPath = "src/songsFiles/" + actualPath;
+            System.out.println(realPath);
+            songStuff songObject = new songStuff();
+            songObject.playMusic(realPath);
+        }
     }
 
     @Override
