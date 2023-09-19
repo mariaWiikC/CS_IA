@@ -265,17 +265,15 @@ public class HomePageWindow extends JFrame implements ActionListener
     {
         JFileChooser songUpload = new JFileChooser(new File("src/songsFiles"));
         int res2 = songUpload.showSaveDialog(null);
-        String songPath = null;
-        String actualPath = null;
 
         if (res2 == JFileChooser.APPROVE_OPTION)
         {
             File song = new File(songUpload.getSelectedFile().getAbsolutePath());
             // ok, so I only want the last word from the path (so the name of the song)
-            // and then i just add the two strings
-            songPath = song.getAbsolutePath();
+            // and then I just add the two strings
+            String songPath = song.getAbsolutePath();
             System.out.println(songPath);
-            actualPath = songPath.substring(songPath.lastIndexOf("songsFiles") + 11);
+            String actualPath = songPath.substring(songPath.lastIndexOf("songsFiles") + 11);
             System.out.println(actualPath);
             String realPath = "src/songsFiles/" + actualPath;
             System.out.println(realPath);

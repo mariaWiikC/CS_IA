@@ -3,12 +3,18 @@ package com.company;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.File;
 import java.io.IOException;
 
 public class SongsWindow extends JFrame
 {
     private JMenuBar menuBar;
     private JMenuItem menuSelect, menuAddDelete, menuPhotos, menuPlaylists, menuSongs, menuHome;
+    private JLabel songsT;
+    private JPanel pCenter;
+    private JList listSongs;
+    private DefaultListModel listModel;
+    private JScrollPane listScroller;
 
     public SongsWindow()
     {
@@ -17,6 +23,9 @@ public class SongsWindow extends JFrame
         setLayout(new FlowLayout());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+        pCenter = new JPanel();
+
+        //<editor-fold desc="Menu Bar">
         menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("Songs");
 
@@ -46,6 +55,34 @@ public class SongsWindow extends JFrame
         fileMenu.add(menuPlaylists);
         menuBar.add(fileMenu);
         setJMenuBar(menuBar);
+        //</editor-fold>
+
+        // WHAT I WANT NOW:
+        // When the user selects one of the songs from the list, they can see the info of the song
+        // on the side
+        // I'm assuming this means I need to create a class Songs, and then I'll have a bunch of stuff here
+        // like have a method .addMoodTags, and then I add the mood
+
+        // I want to display all the uploaded songs
+        String directorySongsFilePath = "src/songsFiles";
+
+        //<editor-fold desc="Setting up the list of songs">
+        File directorySongs = new File(directorySongsFilePath);
+        File[] filesSongs = directorySongs.listFiles(File::isFile);
+
+        listModel = new DefaultListModel();
+        for (File f : filesSongs)
+        {
+            listModel.addElement(f.getName());
+        }
+        listSongs = new JList(listModel);
+        listSongs.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listSongs.setLayoutOrientation(JList.VERTICAL);
+        listSongs.setVisibleRowCount(-1);
+
+        listScroller = new JScrollPane(listSongs);
+        listScroller.setMaximumSize(new Dimension(250, 300));
+        //</editor-fold>
 
         setVisible(true);
     }

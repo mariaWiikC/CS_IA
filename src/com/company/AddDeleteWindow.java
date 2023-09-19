@@ -31,7 +31,6 @@ public class AddDeleteWindow extends JFrame
     private JButton validateButton;
     private String[] newNameArr = new String[1];
     private File chosenFile;
-    private JLabel filler1, filler2, filler3;
     private JList listSongs;
     private DefaultListModel listModel;
     private JScrollPane listScroller;
@@ -70,14 +69,6 @@ public class AddDeleteWindow extends JFrame
         // pCenter.add(validateButton);
         inputField.setEnabled(false);
         validateButton.setEnabled(false);
-
-        // PLACE FILLERS FOR WHERE THE LIST OF SONGS WILL BE
-        filler1 = new JLabel("filler1");
-        filler2 = new JLabel("filler2");
-        filler3 = new JLabel("filler3");
-        pCenter.add(filler1);
-        pCenter.add(filler2);
-        pCenter.add(filler3);
 
 
         //<editor-fold desc="Menu Bar">
@@ -387,7 +378,7 @@ public class AddDeleteWindow extends JFrame
                 {
                     newNameArr[0] = inputField.getText();
                     JOptionPane.showMessageDialog(null, "File information saved");
-                    String newName = "src/songsFiles/" + newNameArr[0];
+                    String newName = "src/songsFiles/" + newNameArr[0] + ".wav";
                     System.out.println(newName);
                     File rename = new File(newName);
                     listModel.addElement(newNameArr[0]);
@@ -408,7 +399,7 @@ public class AddDeleteWindow extends JFrame
         {
             nameWritten = (String) listSongs.getSelectedValue();
         }
-        String nameFile = "src/songsFiles/" + nameWritten;
+        String nameFile = "src/songsFiles/" + nameWritten + ".wav";
         int index = listSongs.getSelectedIndex();
         listModel.remove(index);
         JOptionPane.showMessageDialog(null, "File deleted");
