@@ -24,6 +24,10 @@ public class SongsWindow extends JFrame
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         pCenter = new JPanel();
+        pCenter.setPreferredSize(new Dimension(1260, 650));
+        // pCenter.setBorder(BorderFactory.createLineBorder(Color.black));
+        add(pCenter, BorderLayout.CENTER);
+        pCenter.setLayout(new FlowLayout());
 
         //<editor-fold desc="Menu Bar">
         menuBar = new JMenuBar();
@@ -83,6 +87,9 @@ public class SongsWindow extends JFrame
         listScroller = new JScrollPane(listSongs);
         listScroller.setMaximumSize(new Dimension(250, 300));
         //</editor-fold>
+
+        // WHY CAN'T I SEE THE LIST?????
+        pCenter.add(listScroller);
 
         setVisible(true);
     }

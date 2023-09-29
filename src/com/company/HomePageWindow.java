@@ -28,15 +28,18 @@ public class HomePageWindow extends JFrame implements ActionListener
     private JMenuItem menuSelect, menuAddDelete, menuPhotos, menuPlaylists, menuSongs, menuQueue;
     private ImageIcon sadIcon, chillIcon, happyIcon, veryHappyIcon;
     private JButton filterButton, loopButton, nextSongButton, pauseButton, playButton, previousSongButton,
-    randomButton, tenBackButton, tenForwardButton;
+            randomButton, tenBackButton, tenForwardButton;
     // Do I need a search button? Or will the search happen when the user presses enter
     private ImageIcon filterIcon, loopIcon, nextSongIcon, pauseIcon, playIcon, previousSongIcon,
             randomIcon, tenBackIcon, tenForwardIcon;
     private JTextField searchBox;
     private JProgressBar pB;
     private AudioInputStream audioInputStream;
+    private SongStuff songObject;
+    private boolean isPlaying;
 
     // nameOfPlaylistT, nameOfSongT -> these two change according to what is playingggg
+    // DECREASE THE SAMPLE RATE OF THE SONGS AND TRY AGAIN -> IT WORKEDDDDDDD
 
     public HomePageWindow() throws IOException
     {
@@ -105,6 +108,7 @@ public class HomePageWindow extends JFrame implements ActionListener
         add(pCenter, BorderLayout.CENTER);
 
         // get the positions right
+        // this is not actually to the window, it just opens the file chooser
         toSelectPlayWindow = new JButton("Select a Song or Playlist");
         toSelectPlayWindow.setBounds(550, 50, 225, 35);
         toSelectPlayWindow.addActionListener(e ->
@@ -206,13 +210,15 @@ public class HomePageWindow extends JFrame implements ActionListener
         pauseIcon = new ImageIcon("src/middleSectionHP/pauseIcon.jpg");
         pauseButton = new JButton(pauseIcon);
         pauseButton.setBounds(600, 300, 90, 70);
+        pauseButton.addActionListener(this::actionPerformedPauseSong);
         pCenter.add(pauseButton);
 
         // i have to somehow leave this hidden until the pause button is clicked
         playIcon = new ImageIcon("src/middleSectionHP/playIcon.jpg");
         playButton = new JButton(playIcon);
-        playButton.setBounds(600, 300, 90, 70);
-        // pCenter.add(playButton);
+        playButton.setBounds(700, 300, 90, 70);
+        playButton.addActionListener(this::actionPerformedUnpauseSong);
+        pCenter.add(playButton);
 
         previousSongIcon = new ImageIcon("src/middleSectionHP/previousSongIcon.jpg");
         previousSongButton = new JButton(previousSongIcon);
@@ -227,6 +233,7 @@ public class HomePageWindow extends JFrame implements ActionListener
         loopIcon = new ImageIcon("src/middleSectionHP/loopIcon.jpg");
         loopButton = new JButton(loopIcon);
         loopButton.setBounds(460, 400, 80, 70);
+        loopButton.addActionListener(this::actionPerformedLoopSong);
         pCenter.add(loopButton);
 
         randomIcon = new ImageIcon("src/middleSectionHP/randomIcon.jpg");
@@ -237,19 +244,30 @@ public class HomePageWindow extends JFrame implements ActionListener
         tenBackIcon = new ImageIcon("src/middleSectionHP/tenBackIcon.jpg");
         tenBackButton = new JButton(tenBackIcon);
         tenBackButton.setBounds(310, 400, 50, 30);
+        tenBackButton.addActionListener(this::actionPerformedTenSecBack);
         pCenter.add(tenBackButton);
 
         tenForwardIcon = new ImageIcon("src/middleSectionHP/tenForwardIcon.jpg");
         tenForwardButton = new JButton(tenForwardIcon);
         tenForwardButton.setBounds(700, 400, 50, 30);
+        tenForwardButton.addActionListener(this::actionPerformedTenSecForward);
         pCenter.add(tenForwardButton);
 
-        // progress bar that moves with musicccc
+        // progress bar that moves with music
         pB = new JProgressBar();
         pB.setValue(0);
         pB.setStringPainted(true);
         pB.setBounds(400, 500, 300, 20);
         pCenter.add(pB);
+        //while (isPlaying)
+        //{
+            // I FORGOT HOW THIS IS DONE :/ HOW DO I GET A VALUE FROM ANOTHER CLASS?
+
+            //pB.setValue((int) (100 * songObject.clip.getMicrosecondPosition() / songObject.clip.getMicrosecondLength()));
+            // pB.setString((int)(clip.getMicrosecondPosition()/(1e6*60)) + ":" +
+            // (int)((clip.getMicrosecondPosition()/1e6)%60) + " / " +
+            // (int)(clip.getMicrosecondLength()/(1e6*60)) + ":" + (int)((clip.getMicrosecondLength()/1e6)%60));
+        //}
         //</editor-fold>
 
         // is the search thingy where the user writes a "text field"?
@@ -277,9 +295,36 @@ public class HomePageWindow extends JFrame implements ActionListener
             System.out.println(actualPath);
             String realPath = "src/songsFiles/" + actualPath;
             System.out.println(realPath);
-            songStuff songObject = new songStuff();
+            songObject = new SongStuff();
             songObject.playMusic(realPath);
+            isPlaying = true;
         }
+    }
+
+    public void actionPerformedPauseSong(ActionEvent e)
+    {
+        // I should combine it into one button, the pause and unpause methods
+        songObject.pauseMusic();
+    }
+
+    public void actionPerformedUnpauseSong(ActionEvent e)
+    {
+        songObject.unpauseMusic();
+    }
+
+    public void actionPerformedLoopSong(ActionEvent e)
+    {
+        songObject.loopMusic();
+    }
+
+    public void actionPerformedTenSecForward(ActionEvent e)
+    {
+        songObject.tenSecForward();
+    }
+
+    public void actionPerformedTenSecBack(ActionEvent e)
+    {
+        songObject.tenSecBack();
     }
 
     @Override
