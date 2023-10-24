@@ -10,7 +10,14 @@ public class SongStuff
 {
     AudioInputStream audioInput;
     protected Clip clip;
-    protected long clipTimePosition, tenSec = 10000000;
+    protected long clipTimePosition, tenSec = 10000000, clipLength;
+    protected boolean paused = false, isLooped = false;
+    public boolean isPlaying = false;
+
+    public SongStuff()
+    {
+
+    }
 
     void playMusic(String musicLocation)
     {
@@ -20,10 +27,12 @@ public class SongStuff
 
             if(musicPath.exists())
             {
+                isPlaying = true;
                 audioInput = AudioSystem.getAudioInputStream(musicPath);
                 clip = AudioSystem.getClip();
                 clip.open(audioInput);
                 clip.start();
+                clipLength = clip.getMicrosecondLength();
             }
             else
                 System.out.println("Can't find file");
@@ -34,37 +43,52 @@ public class SongStuff
         }
     }
 
-    void pauseMusic()
+    void pauseUnpauseMusic()
     {
-        clipTimePosition = clip.getMicrosecondPosition();
-        clip.stop();
-    }
+        if (!paused)
+        {
+            clipTimePosition = clip.getMicrosecondPosition();
+            clip.stop();
+            paused = !paused;
+        }
+        else if (paused)
+        {
+            clip.setMicrosecondPosition(clipTimePosition);
+            clip.start();
+            paused = !paused;
+        }
 
-    void unpauseMusic()
-    {
-        clip.setMicrosecondPosition(clipTimePosition);
-        clip.start();
     }
 
     void tenSecForward()
     {
-        // it's only doing this once. After I click it again, it goes back to the time when I first clicked the button
+        clipTimePosition = clip.getMicrosecondPosition();
         clip.setMicrosecondPosition(clipTimePosition + tenSec);
     }
 
     void tenSecBack()
     {
+        clipTimePosition = clip.getMicrosecondPosition();
         clip.setMicrosecondPosition(clipTimePosition - tenSec);
     }
 
-    // I need to create a method to break the loop
     void loopMusic()
     {
-        clip.loop(Clip.LOOP_CONTINUOUSLY);
+        if(!isLooped)
+        {
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+            isLooped = !isLooped;
+        }
+        else if(isLooped)
+        {
+            clip.loop(0);
+            isLooped = !isLooped;
+        }
     }
 
-    void stopLoopMusic()
+    // need to add a button to stop playing the song!!! like, a square thing you know
+    void stopPlaying()
     {
-        clip.loop(0);
+        isPlaying = false;
     }
 }

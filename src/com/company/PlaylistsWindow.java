@@ -35,9 +35,6 @@ public class PlaylistsWindow extends JFrame
         menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("Playlists");
 
-        menuSelect = new JMenuItem("Select What to Play");
-        menuSelect.addActionListener(this::actionPerformed);
-
         menuAddDelete = new JMenuItem("Add / Delete");
         menuAddDelete.addActionListener(this::actionPerformed2);
 
@@ -57,7 +54,6 @@ public class PlaylistsWindow extends JFrame
         fileMenu.add(menuPhotos);
         fileMenu.add(menuQueue);
         fileMenu.add(menuSongs);
-        fileMenu.add(menuSelect);
         fileMenu.add(menuHome);
         menuBar.add(fileMenu);
         setJMenuBar(menuBar);
@@ -92,13 +88,6 @@ public class PlaylistsWindow extends JFrame
         // another one if the user is editing a pre-existing playlist
 
         setVisible(true);
-    }
-
-    public void actionPerformed(ActionEvent e)
-    {
-        JFrame SelectPlayWindow = new SelectPlayWindow(); // open another JFrame
-        SelectPlayWindow.setVisible(true); // display SelectPlayWindow
-        dispose(); // close home page
     }
 
     public void actionPerformed2(ActionEvent e)

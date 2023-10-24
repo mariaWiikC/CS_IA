@@ -3,16 +3,18 @@ package com.company;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.time.LocalTime;
 
 public class SearchWindow extends JFrame
 {
     private JMenuBar menuBar;
-    private JMenuItem menuSelect, menuAddDelete, menuPhotos, menuPlaylists, menuSongs, menuQueue;
+    private JMenuItem menuSelect, menuAddDelete, menuPhotos, menuPlaylists, menuSongs, menuQueue, menuHome;
     private JPanel pCenter;
     private JLabel searchT, moodT, timeT, instrumentT, themeT, timeLabel;
     private JCheckBox sadBox, energeticBox, happyBox, relaxedBox, morningBox, afternoonBox, eveningBox,
             guitarBox, pianoBox, vocalBox, christmasBox, independenceDayBox, easterBox, realTimeBox;
+    private Timer timer;
 
     public SearchWindow()
     {
@@ -28,6 +30,34 @@ public class SearchWindow extends JFrame
         pCenter.setPreferredSize(new Dimension(1260, 650));
         // pCenter.setBorder(BorderFactory.createLineBorder(Color.black));
         add(pCenter, BorderLayout.CENTER);
+
+        //<editor-fold desc="Menu Bar">
+        menuBar = new JMenuBar();
+        JMenu fileMenu = new JMenu("Search page");
+
+        menuHome = new JMenuItem("Home Page");
+        menuHome.addActionListener(this::actionPerformed2);
+
+        menuPhotos = new JMenuItem("Photos");
+        menuPhotos.addActionListener(this::actionPerformed5);
+
+        menuPlaylists = new JMenuItem("Playlists");
+        menuPlaylists.addActionListener(this::actionPerformed4);
+
+        menuSongs = new JMenuItem("Songs");
+        menuSongs.addActionListener(this::actionPerformed3);
+
+        menuQueue = new JMenuItem("Queue");
+        menuQueue.addActionListener(this::actionPerformed6);
+
+        fileMenu.add(menuHome);
+        fileMenu.add(menuPhotos);
+        fileMenu.add(menuQueue);
+        fileMenu.add(menuSongs);
+        fileMenu.add(menuPlaylists);
+        menuBar.add(fileMenu);
+        setJMenuBar(menuBar);
+        //</editor-fold>
 
         // I want this to be kinda the filters (tags here) - so it's like what should appear when
         // the user clicks the filter button
@@ -61,11 +91,16 @@ public class SearchWindow extends JFrame
         realTimeBox = new JCheckBox("Real Time");
         pCenter.add(realTimeBox);
 
-        timeLabel = new JLabel();
+        timeLabel = new JLabel(); // not updating in real time
         showTime();
+        // System.out.println(showTime());
         pCenter.add(timeLabel);
         //</editor-fold>
-        
+
+        timer = new Timer (1000, (ActionEvent e) -> showTime ());
+        timer.start ();
+
+
         // add the bounds to everything hereeee
         // got them from here: https://www.javatpoint.com/java-jcheckbox
         //<editor-fold desc="Mood tags">
@@ -157,6 +192,55 @@ public class SearchWindow extends JFrame
     private String formatInt(int i)
     {
         return String.format("%02d", i);
+    }
+
+    public void actionPerformed2(ActionEvent e)
+    {
+        JFrame HomePageWindow = null; // open another JFrame
+        try
+        {
+            HomePageWindow = new HomePageWindow();
+        } catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
+        HomePageWindow.setVisible(true); // display SelectPlayWindow
+        dispose(); // close home page
+    }
+
+    public void actionPerformed3(ActionEvent e)
+    {
+        JFrame SongsWindow = new SongsWindow(); // open another JFrame
+        SongsWindow.setVisible(true); // display SelectPlayWindow
+        dispose(); // close home page
+    }
+
+    public void actionPerformed4(ActionEvent e)
+    {
+        JFrame PlaylistsWindow = null; // open another JFrame
+        try
+        {
+            PlaylistsWindow = new PlaylistsWindow();
+        } catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
+        PlaylistsWindow.setVisible(true); // display SelectPlayWindow
+        dispose(); // close home page
+    }
+
+    public void actionPerformed5(ActionEvent e)
+    {
+        JFrame PhotosWindow = new PhotosWindow(); // open another JFrame
+        PhotosWindow.setVisible(true); // display SelectPlayWindow
+        dispose(); // close home page
+    }
+
+    public void actionPerformed6(ActionEvent e)
+    {
+        JFrame QueuePreviewWindow = new QueuePreviewWindow(); // open another JFrame
+        QueuePreviewWindow.setVisible(true); // display SelectPlayWindow
+        dispose(); // close home page
     }
 
 }

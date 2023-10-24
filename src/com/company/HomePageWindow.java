@@ -35,8 +35,8 @@ public class HomePageWindow extends JFrame implements ActionListener
     private JTextField searchBox;
     private JProgressBar pB;
     private AudioInputStream audioInputStream;
-    private SongStuff songObject;
-    private boolean isPlaying;
+    private SongStuff songObject = new SongStuff();
+    boolean isPlaying;
 
     // nameOfPlaylistT, nameOfSongT -> these two change according to what is playingggg
     // DECREASE THE SAMPLE RATE OF THE SONGS AND TRY AGAIN -> IT WORKEDDDDDDD
@@ -217,8 +217,6 @@ public class HomePageWindow extends JFrame implements ActionListener
         playIcon = new ImageIcon("src/middleSectionHP/playIcon.jpg");
         playButton = new JButton(playIcon);
         playButton.setBounds(700, 300, 90, 70);
-        playButton.addActionListener(this::actionPerformedUnpauseSong);
-        pCenter.add(playButton);
 
         previousSongIcon = new ImageIcon("src/middleSectionHP/previousSongIcon.jpg");
         previousSongButton = new JButton(previousSongIcon);
@@ -259,21 +257,20 @@ public class HomePageWindow extends JFrame implements ActionListener
         pB.setStringPainted(true);
         pB.setBounds(400, 500, 300, 20);
         pCenter.add(pB);
-        //while (isPlaying)
-        //{
-            // I FORGOT HOW THIS IS DONE :/ HOW DO I GET A VALUE FROM ANOTHER CLASS?
-
-            //pB.setValue((int) (100 * songObject.clip.getMicrosecondPosition() / songObject.clip.getMicrosecondLength()));
-            // pB.setString((int)(clip.getMicrosecondPosition()/(1e6*60)) + ":" +
-            // (int)((clip.getMicrosecondPosition()/1e6)%60) + " / " +
-            // (int)(clip.getMicrosecondLength()/(1e6*60)) + ":" + (int)((clip.getMicrosecondLength()/1e6)%60));
-        //}
+        // isPlaying = songObject.isPlaying;
+        // PROGRESS BAR STUFF IS NOT WORKING
+        // use a timer!!!!!!!!!!!!!
+        System.out.println("is Playing: " + isPlaying);
+        while (isPlaying)
+        {
+            pB.setValue((int) (100 * songObject.clipTimePosition / songObject.clipLength));
+            pB.setString((int)(songObject.clipTimePosition/(1e6*60)) + ":" +
+                    (int)((songObject.clipTimePosition/1e6)%60) + " / " +
+                    (int)(songObject.clipLength/(1e6*60)) + ":" + (int)((songObject.clipLength/1e6)%60));
+        }
         //</editor-fold>
 
         // is the search thingy where the user writes a "text field"?
-        // for the song selection part, my idea is the following:
-        // I open the file chooser on the folder songsFiles (the one here) and I get it to play it
-
 
         setVisible(true);
     }
@@ -295,21 +292,15 @@ public class HomePageWindow extends JFrame implements ActionListener
             System.out.println(actualPath);
             String realPath = "src/songsFiles/" + actualPath;
             System.out.println(realPath);
-            songObject = new SongStuff();
             songObject.playMusic(realPath);
-            isPlaying = true;
+            isPlaying = songObject.isPlaying;
         }
     }
 
     public void actionPerformedPauseSong(ActionEvent e)
     {
         // I should combine it into one button, the pause and unpause methods
-        songObject.pauseMusic();
-    }
-
-    public void actionPerformedUnpauseSong(ActionEvent e)
-    {
-        songObject.unpauseMusic();
+        songObject.pauseUnpauseMusic();
     }
 
     public void actionPerformedLoopSong(ActionEvent e)
@@ -327,14 +318,7 @@ public class HomePageWindow extends JFrame implements ActionListener
         songObject.tenSecBack();
     }
 
-    @Override
     // i found this here: https://stackoverflow.com/questions/9569700/java-call-method-via-jbutton
-    public void actionPerformed(ActionEvent e)
-    {
-        JFrame SelectPlayWindow = new SelectPlayWindow(); // open another JFrame
-        SelectPlayWindow.setVisible(true); // display SelectPlayWindow
-        dispose(); // close home page
-    }
 
     public void actionPerformed2(ActionEvent e)
     {
@@ -390,5 +374,11 @@ public class HomePageWindow extends JFrame implements ActionListener
         JFrame SearchWindow = new SearchWindow(); // open another JFrame
         SearchWindow.setVisible(true); // display SelectPlayWindow
         dispose(); // close home page
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+
     }
 }

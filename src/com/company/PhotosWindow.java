@@ -20,9 +20,6 @@ public class PhotosWindow extends JFrame
         menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("Photos");
 
-        menuSelect = new JMenuItem("Select What to Play");
-        menuSelect.addActionListener(this::actionPerformed);
-
         menuAddDelete = new JMenuItem("Add / Delete");
         menuAddDelete.addActionListener(this::actionPerformed2);
 
@@ -42,19 +39,11 @@ public class PhotosWindow extends JFrame
         fileMenu.add(menuHome);
         fileMenu.add(menuQueue);
         fileMenu.add(menuSongs);
-        fileMenu.add(menuSelect);
         fileMenu.add(menuPlaylists);
         menuBar.add(fileMenu);
         setJMenuBar(menuBar);
 
         setVisible(true);
-    }
-
-    public void actionPerformed(ActionEvent e)
-    {
-        JFrame SelectPlayWindow = new SelectPlayWindow(); // open another JFrame
-        SelectPlayWindow.setVisible(true); // display SelectPlayWindow
-        dispose(); // close home page
     }
 
     public void actionPerformed2(ActionEvent e)

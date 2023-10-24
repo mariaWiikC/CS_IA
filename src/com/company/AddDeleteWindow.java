@@ -15,6 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class AddDeleteWindow extends JFrame
 {
@@ -26,19 +27,17 @@ public class AddDeleteWindow extends JFrame
     private ImageIcon addSongIcon, deleteSongIcon, addInstrumentIcon, deleteInstrumentIcon,
             addThemeIcon, deleteThemeIcon;
     private JButton addSongButton, deleteSongButton, addInstrumentButton, deleteInstrumentButton,
-            addThemeButton, deleteThemeButton;
+            addThemeButton, deleteThemeButton, validateButton;
     private JTextField inputField;
-    private JButton validateButton;
     private String[] newNameArr = new String[1];
     private File chosenFile;
     private JList listSongs;
     private DefaultListModel listModel;
     private JScrollPane listScroller;
+    public File songsAndTagsFile;
 
     public AddDeleteWindow() throws IOException
     {
-        // NEXT STEP IS TO MAKE SONGS VISIBLE
-        // When they click the buttons, a message can appear on the screen and be like, "do this", with the instructions
         // position the labels better
         // why is it showing two messages when I delete a song
         super("Add/Delete");
@@ -58,15 +57,10 @@ public class AddDeleteWindow extends JFrame
 
         // the text field I'm doing this with can be the specific for each type of element
         // use the specific one for song, instrument, wtv
-        // what does the column number mean
         inputField = new JTextField(5);
-        // inputField.setMinimumSize(new Dimension(100, 20));
         inputField.setMaximumSize(new Dimension(200, 30));
-        // inputField.setPreferredSize(new Dimension(100, 20));
         validateButton = new JButton("Confirm");
 
-        // pCenter.add(inputField);
-        // pCenter.add(validateButton);
         inputField.setEnabled(false);
         validateButton.setEnabled(false);
 
@@ -74,9 +68,6 @@ public class AddDeleteWindow extends JFrame
         //<editor-fold desc="Menu Bar">
         menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("Add / Delete Page");
-
-        menuSelect = new JMenuItem("Select What to Play");
-        menuSelect.addActionListener(this::actionPerformed);
 
         menuHome = new JMenuItem("Home Page");
         menuHome.addActionListener(this::actionPerformed2);
@@ -97,7 +88,6 @@ public class AddDeleteWindow extends JFrame
         fileMenu.add(menuPhotos);
         fileMenu.add(menuQueue);
         fileMenu.add(menuSongs);
-        fileMenu.add(menuSelect);
         fileMenu.add(menuPlaylists);
         menuBar.add(fileMenu);
         setJMenuBar(menuBar);
@@ -197,6 +187,12 @@ public class AddDeleteWindow extends JFrame
         listScroller.setMaximumSize(new Dimension(250, 300));
         //</editor-fold>
 
+        // where is this file
+        songsAndTagsFile = new File("src\\SongsWithTags.txt");
+        if (!songsAndTagsFile.exists())
+            songsAndTagsFile.createNewFile();
+
+
         //<editor-fold desc="LAYOUT">
         layout.setHorizontalGroup(
                 layout.createParallelGroup()
@@ -267,13 +263,6 @@ public class AddDeleteWindow extends JFrame
         //</editor-fold>
 
         setVisible(true);
-    }
-
-    public void actionPerformed(ActionEvent e)
-    {
-        JFrame SelectPlayWindow = new SelectPlayWindow(); // open another JFrame
-        SelectPlayWindow.setVisible(true); // display SelectPlayWindow
-        dispose(); // close home page
     }
 
     public void actionPerformed2(ActionEvent e)
@@ -384,14 +373,30 @@ public class AddDeleteWindow extends JFrame
                     listModel.addElement(newNameArr[0]);
 
                     System.out.println(chosenFile.renameTo(rename));
+                    // ADDING SONG TO TEXT FILE
+                    String str = newNameArr[0];
+                    try (FileWriter fw = new FileWriter(songsAndTagsFile.getAbsoluteFile()); BufferedWriter bw = new BufferedWriter(fw))
+                    {
+                        bw.write(str);
+                        bw.write(" ");
+                        bw.newLine();
+                    } catch (IOException exc)
+                    {
+                        exc.printStackTrace();
+                        System.out.println("Got exception: " + exc);
+                        System.exit(1);
+                    }
                     inputField.setEnabled(false);
                     validateButton.setEnabled(false);
                 }
             });
 
+            // WHY IS IT ADDING TO SONGS AT ONCE???????????
         }
+
     }
 
+    // WHEN I DELETE THE SONG, I MUST ALSO DELETE IT FROM THE TEXT FILE
     public void actionPerformedDeleteSong(ActionEvent e)
     {
         String nameWritten = null;
