@@ -187,7 +187,7 @@ public class AddDeleteWindow extends JFrame
         listScroller.setMaximumSize(new Dimension(250, 300));
         //</editor-fold>
 
-        // where is this file
+        // creation of the songs and tags file
         songsAndTagsFile = new File("src\\SongsWithTags.txt");
         if (!songsAndTagsFile.exists())
             songsAndTagsFile.createNewFile();

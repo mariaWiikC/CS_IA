@@ -11,10 +11,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class HomePageWindow extends JFrame implements ActionListener
 {
@@ -28,15 +32,24 @@ public class HomePageWindow extends JFrame implements ActionListener
     private JMenuItem menuSelect, menuAddDelete, menuPhotos, menuPlaylists, menuSongs, menuQueue;
     private ImageIcon sadIcon, chillIcon, happyIcon, veryHappyIcon;
     private JButton filterButton, loopButton, nextSongButton, pauseButton, playButton, previousSongButton,
-            randomButton, tenBackButton, tenForwardButton;
+            randomButton, tenBackButton, tenForwardButton, searchButton;
     // Do I need a search button? Or will the search happen when the user presses enter
     private ImageIcon filterIcon, loopIcon, nextSongIcon, pauseIcon, playIcon, previousSongIcon,
-            randomIcon, tenBackIcon, tenForwardIcon;
+            randomIcon, tenBackIcon, tenForwardIcon, searchIcon;
     private JTextField searchBox;
     private JProgressBar pB;
     private AudioInputStream audioInputStream;
     private SongStuff songObject = new SongStuff();
     boolean isPlaying;
+    private SearchWindow searchObject;
+    ArrayList<ArrayList> allTags, allSongsAndTags;
+    private AddDeleteWindow addDeleteObject;
+    private String songsAndTagsFilePath;
+    private boolean allMatch;
+    protected ArrayList<String> allSearchResults = new ArrayList<>(), fileContent;
+    protected ArrayList<Integer> lineNums = new ArrayList<>();
+    JFrame SearchResultsWindow;
+    protected File searchResultsFile;
 
     // nameOfPlaylistT, nameOfSongT -> these two change according to what is playingggg
     // DECREASE THE SAMPLE RATE OF THE SONGS AND TRY AGAIN -> IT WORKEDDDDDDD
@@ -170,10 +183,11 @@ public class HomePageWindow extends JFrame implements ActionListener
         searchBox.setBounds(50, 200, 100, 30);
         pCenter.add(searchBox);
 
-        BufferedImage searchIcon = ImageIO.read(new File("src/middleSectionHP/searchIcon.png"));
-        JLabel searchIconLabel = new JLabel(new ImageIcon(searchIcon));
-        searchIconLabel.setBounds(30, 200, 30, 30);
-        pCenter.add(searchIconLabel);
+        searchIcon = new ImageIcon("src/middleSectionHP/searchIcon.png");
+        searchButton = new JButton(searchIcon);
+        searchButton.setBounds(30, 200, 30, 30);
+        searchButton.addActionListener(this::search);
+        pCenter.add(searchButton);
         //</editor-fold>
 
         //<editor-fold desc="Mood Stuff">
@@ -264,15 +278,156 @@ public class HomePageWindow extends JFrame implements ActionListener
         while (isPlaying)
         {
             pB.setValue((int) (100 * songObject.clipTimePosition / songObject.clipLength));
-            pB.setString((int)(songObject.clipTimePosition/(1e6*60)) + ":" +
-                    (int)((songObject.clipTimePosition/1e6)%60) + " / " +
-                    (int)(songObject.clipLength/(1e6*60)) + ":" + (int)((songObject.clipLength/1e6)%60));
+            pB.setString((int) (songObject.clipTimePosition / (1e6 * 60)) + ":" +
+                    (int) ((songObject.clipTimePosition / 1e6) % 60) + " / " +
+                    (int) (songObject.clipLength / (1e6 * 60)) + ":" + (int) ((songObject.clipLength / 1e6) % 60));
         }
         //</editor-fold>
 
-        // is the search thingy where the user writes a "text field"?
+        searchObject = new SearchWindow();
+        searchObject.dispose();
+
+        try
+        {
+            addDeleteObject = new AddDeleteWindow();
+            addDeleteObject.dispose();
+        } catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
+        songsAndTagsFilePath = String.valueOf(addDeleteObject.songsAndTagsFile);
+
+        searchResultsFile = new File("src\\SearchResults.txt");
+        if (!searchResultsFile.exists())
+            searchResultsFile.createNewFile();
 
         setVisible(true);
+    }
+
+    public void search(ActionEvent e)
+    {
+        // first I want to be able to search just with tags, then I'll add the song name to it
+        // I'm gonna add the songs to it now
+        // first I read the search tags file
+        allSearchResults.clear();
+
+        allTags = new ArrayList<>();
+        try
+        {
+            // reading the txt file
+            Scanner scanner = new Scanner(searchObject.searchTagsFile);
+            ArrayList<String> searchTags = new ArrayList<>();
+
+            while (scanner.hasNextLine())
+            {
+                searchTags.add(scanner.nextLine());
+            }
+            for (String s : searchTags)
+            {
+                ArrayList<String> toAdd = new ArrayList<>();
+                String[] sArray = s.split(" ");
+                for (String str : sArray)
+                {
+                    toAdd.add(str);
+                }
+                allTags.add(toAdd);
+            }
+        } catch (FileNotFoundException c)
+        {
+            c.printStackTrace();
+        }
+
+        // adding searchBox text to the search tags array
+        if (searchBox.getText().length() > 0)
+            allTags.get(0).add(searchBox.getText());
+
+        // now, I'll read the songs with tags file
+        allSongsAndTags = new ArrayList<>();
+        try
+        {
+            Scanner scanner = new Scanner(addDeleteObject.songsAndTagsFile);
+            ArrayList<String> songsAndTags = new ArrayList<>();
+
+            while (scanner.hasNextLine())
+            {
+                songsAndTags.add(scanner.nextLine());
+            }
+            for (String s : songsAndTags)
+            {
+                ArrayList<String> toAdd = new ArrayList<>();
+                String[] sArray = s.split(" ");
+                for (String str : sArray)
+                {
+                    toAdd.add(str);
+                }
+                allSongsAndTags.add(toAdd);
+            }
+        } catch (FileNotFoundException c)
+        {
+            c.printStackTrace();
+        }
+
+        // now I need to see which lines match - e.g. the tags file has "sad" and "morning"
+        // i checks which lines of the songs file has those tags
+        int numMatches = 0;
+        allMatch = false;
+        for (ArrayList<String> arrTags : allTags)
+        {
+            for (ArrayList<String> arrSongs : allSongsAndTags)
+            {
+                // I just realized this might not work when I have more lines on the songs file
+                // fixing ittttt
+                for (String tag : arrTags)
+                {
+                    if (arrSongs.contains(tag))
+                        numMatches++;
+                }
+                if (numMatches == arrTags.size())
+                    allMatch = true;
+                // add the song name to an array, so I can display it (as a list?) in the SearchResultsWindow
+                if (allMatch)
+                {
+                    System.out.println(arrSongs.get(0));
+                    allSearchResults.add(arrSongs.get(0));
+                }
+            }
+
+        }
+
+        editingSearchTxtFile(allSearchResults);
+
+        try
+        {
+            SearchResultsWindow = new SearchResultsWindow();
+        } catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
+        SearchResultsWindow.setVisible(true); // display SelectPlayWindow
+        dispose(); // close home page
+        // now I need to display all the songs that match the search -> use the SearchResultsWindow
+
+    }
+
+    public void editingSearchTxtFile(ArrayList<String> allSearchResults)
+    {
+        StringBuffer sb = new StringBuffer();
+        for (String s : allSearchResults)
+        {
+            sb.append(s);
+            sb.append(" ");
+        }
+        String sA = String.valueOf(sb);
+
+        try
+        {
+            fileContent = new ArrayList<>();
+            fileContent.add(sA);
+            Files.write(Path.of(String.valueOf(searchResultsFile)), fileContent, StandardCharsets.UTF_8);
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public void actionPerformedSelectSongPlay(ActionEvent e) throws UnsupportedAudioFileException,

@@ -238,8 +238,9 @@ public class SongsWindow extends JFrame
 
         try
         {
-            // THIS IS NOT IDEALLLLLL CAUSE IT'S CREATING A NEW WINDOW :/
+            // THIS IS NOT IDEALLLLLL CAUSE IT'S CREATING A NEW WINDOW :/ -> i think the dispose solved it
             addDeleteObject = new AddDeleteWindow();
+            addDeleteObject.dispose();
         } catch (IOException e)
         {
             e.printStackTrace();
