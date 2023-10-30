@@ -23,7 +23,8 @@ public class SearchResultsWindow extends JFrame
         super("Search Results");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLayout(new FlowLayout());
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(EXIT_ON_CLOSE); // IT SHOULD NOT EXIT THE ENTIRE PROGRAM, JUST GO BACK
+        // TO THE HOME PAGE
 
         pCenter = new JPanel();
         pCenter.setPreferredSize(new Dimension(1260, 650));

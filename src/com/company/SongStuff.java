@@ -5,6 +5,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.io.File;
+import java.util.ArrayList;
 
 public class SongStuff
 {
@@ -19,12 +20,11 @@ public class SongStuff
 
     }
 
-    void playMusic(String musicLocation)
+    Clip playMusic(String musicLocation)
     {
         try
         {
             File musicPath = new File(musicLocation);
-
             if(musicPath.exists())
             {
                 isPlaying = true;
@@ -33,6 +33,7 @@ public class SongStuff
                 clip.open(audioInput);
                 clip.start();
                 clipLength = clip.getMicrosecondLength();
+                return clip;
             }
             else
                 System.out.println("Can't find file");
@@ -40,6 +41,27 @@ public class SongStuff
         catch (Exception ex)
         {
             ex.printStackTrace();
+        }
+        return clip;
+    }
+
+    void playPlaylist(ArrayList<String> playlistName)
+    {
+        // THE BUTTONS ARE NOT WORKING
+        // THE PROGRAM IS BASICALLY PAUSED HERE WHILE THE PLAYLIST IS PLAYING
+        try
+        {
+            for (int i = 0; i < playlistName.size(); i++)
+            {
+                Clip currentClip = playMusic(playlistName.get(i));
+                while (currentClip.getMicrosecondLength() != currentClip.getMicrosecondPosition())
+                {
+                }
+            }
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
         }
     }
 
@@ -86,9 +108,9 @@ public class SongStuff
         }
     }
 
-    // need to add a button to stop playing the song!!! like, a square thing you know
     void stopPlaying()
     {
         isPlaying = false;
+        clip.stop();
     }
 }

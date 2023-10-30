@@ -91,6 +91,8 @@ public class SongsWindow extends JFrame
         // I'm assuming this means I need to create a class Songs, and then I'll have a bunch of stuff here
         // like have a method .addMoodTags, and then I add the mood
 
+        // AFTER I CLICK CONFIRM, IT'S NOT CLEANING THE BOXES FOR ANOTHER SONG
+
         directorySongsFilePath = "src/songsFiles";
 
         //LIST OF ALL CHECK BOXES
@@ -238,7 +240,6 @@ public class SongsWindow extends JFrame
 
         try
         {
-            // THIS IS NOT IDEALLLLLL CAUSE IT'S CREATING A NEW WINDOW :/ -> i think the dispose solved it
             addDeleteObject = new AddDeleteWindow();
             addDeleteObject.dispose();
         } catch (IOException e)
@@ -428,6 +429,7 @@ public class SongsWindow extends JFrame
         }
     }
 
+    //<editor-fold desc="Menu bar actions">
     public void actionPerformed2(ActionEvent e)
     {
         JFrame AddDeleteWindow = null; // open another JFrame
@@ -483,4 +485,5 @@ public class SongsWindow extends JFrame
         HomePageWindow.setVisible(true); // display SelectPlayWindow
         dispose(); // close home page
     }
+    //</editor-fold>
 }

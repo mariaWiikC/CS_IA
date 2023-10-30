@@ -433,6 +433,7 @@ public class SearchWindow extends JFrame
         return String.format("%02d", i);
     }
 
+    //<editor-fold desc="Menu bar actions">
     public void actionPerformed2(ActionEvent e)
     {
         JFrame HomePageWindow = null; // open another JFrame
@@ -481,5 +482,6 @@ public class SearchWindow extends JFrame
         QueuePreviewWindow.setVisible(true); // display SelectPlayWindow
         dispose(); // close home page
     }
+    //</editor-fold>
 
 }

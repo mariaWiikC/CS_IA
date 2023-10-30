@@ -46,6 +46,7 @@ public class QueuePreviewWindow extends JFrame
         setVisible(true);
     }
 
+    //<editor-fold desc="Menu bar actions">
     public void actionPerformed2(ActionEvent e)
     {
         JFrame AddDeleteWindow = null; // open another JFrame
@@ -101,4 +102,5 @@ public class QueuePreviewWindow extends JFrame
         HomePageWindow.setVisible(true); // display SelectPlayWindow
         dispose(); // close home page
     }
+    //</editor-fold>
 }

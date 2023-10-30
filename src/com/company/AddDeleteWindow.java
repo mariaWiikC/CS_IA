@@ -39,7 +39,12 @@ public class AddDeleteWindow extends JFrame
     public AddDeleteWindow() throws IOException
     {
         // position the labels better
-        // why is it showing two messages when I delete a song
+        // if i add three songs in a row, it adds the same to the list three times
+        // If I add more than one song, the following ones are not added as wav files -> whenever there
+        // is this newSong file, why is it not goneeeee
+        // WHAT IS GOING ON WITH THE AUDIO FILES????????????????????????????????
+        // now Wrecked isn't working? And when I try to add songs they are added weirdly??
+        // clean the input field after using it
         super("Add/Delete");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLayout(new FlowLayout());
@@ -176,7 +181,11 @@ public class AddDeleteWindow extends JFrame
         listModel = new DefaultListModel();
         for (File f : filesSongs)
         {
-            listModel.addElement(f.getName());
+            StringBuffer sb = new StringBuffer();
+            sb.append(f.getName());
+            sb.delete(sb.length() - 4, sb.length());
+            String addNow = String.valueOf(sb);
+            listModel.addElement(addNow);
         }
         listSongs = new JList(listModel);
         listSongs.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -209,8 +218,7 @@ public class AddDeleteWindow extends JFrame
                                 .addComponent(songSearchIconLabel)
                                 .addGroup(layout.createParallelGroup()
                                         .addComponent(inputField)
-                                        .addComponent(listScroller)
-                                )
+                                        .addComponent(listScroller))
 
                                 .addComponent(validateButton)
                                 .addGroup(layout.createParallelGroup()
@@ -265,6 +273,7 @@ public class AddDeleteWindow extends JFrame
         setVisible(true);
     }
 
+    //<editor-fold desc="Menu bar actions">
     public void actionPerformed2(ActionEvent e)
     {
         JFrame HomePageWindow = null; // open another JFrame
@@ -313,6 +322,7 @@ public class AddDeleteWindow extends JFrame
         QueuePreviewWindow.setVisible(true); // display SelectPlayWindow
         dispose(); // close home page
     }
+    //</editor-fold>
 
     public void actionPerformedAddSong(ActionEvent e)
     {
@@ -360,7 +370,7 @@ public class AddDeleteWindow extends JFrame
             inputField.setEnabled(true);
             validateButton.setEnabled(true);
 
-            validateButton.addActionListener(new ActionListener()
+            validateButton.addActionListener(new ActionListener() // FIX THIS
             {
                 @Override
                 public void actionPerformed(ActionEvent e)
@@ -374,6 +384,7 @@ public class AddDeleteWindow extends JFrame
 
                     System.out.println(chosenFile.renameTo(rename));
                     // ADDING SONG TO TEXT FILE
+                    // THIS IS DELETING ALL THE OTHER SONGS FROM THE TXT FILE
                     String str = newNameArr[0];
                     try (FileWriter fw = new FileWriter(songsAndTagsFile.getAbsoluteFile()); BufferedWriter bw = new BufferedWriter(fw))
                     {
