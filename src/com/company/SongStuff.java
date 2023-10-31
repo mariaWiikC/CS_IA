@@ -5,6 +5,10 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class SongStuff
@@ -14,6 +18,7 @@ public class SongStuff
     protected long clipTimePosition, tenSec = 10000000, clipLength;
     protected boolean paused = false, isLooped = false;
     public boolean isPlaying = false;
+    private ArrayList<String> fileContent;
 
     public SongStuff()
     {
@@ -25,8 +30,9 @@ public class SongStuff
         try
         {
             File musicPath = new File(musicLocation);
-            if(musicPath.exists())
+            if (musicPath.exists())
             {
+                addingNumOfPlays(musicLocation);
                 isPlaying = true;
                 audioInput = AudioSystem.getAudioInputStream(musicPath);
                 clip = AudioSystem.getClip();
@@ -37,12 +43,58 @@ public class SongStuff
             }
             else
                 System.out.println("Can't find file");
-        }
-        catch (Exception ex)
+        } catch (Exception ex)
         {
             ex.printStackTrace();
         }
         return clip;
+    }
+
+    public void addingNumOfPlays(String musicLocation) // IS THIS NOT BEING EXECUTED??????
+    {
+        StringBuffer songName = new StringBuffer(musicLocation);
+        songName.delete(songName.length() - 4, songName.length());
+        songName.delete(0, songName.lastIndexOf("/") + 1);
+        System.out.println(songName);
+
+        AddDeleteWindow addDeleteObject = null;
+        try
+        {
+            addDeleteObject = new AddDeleteWindow();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        addDeleteObject.dispose();
+
+        // open the songsWithTags file, find the line with the song, get the last element
+        // add one to the last element, and substitute it
+        try
+        {
+            fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(addDeleteObject.songsAndTagsFile)), StandardCharsets.UTF_8));
+            for (int i = 0; i < fileContent.size(); i++)
+            {
+                String[] sArray = fileContent.get(i).split(" ");
+                if (sArray[0].equals(String.valueOf(songName)))
+                {
+                    int newNum = Integer.parseInt(sArray[sArray.length - 1]) + 1;
+                    sArray[sArray.length - 1] = String.valueOf(newNum);
+                    fileContent.remove(i);
+                    // build a string with all the elements from the array
+                    StringBuffer sb = new StringBuffer();
+                    for (String s : sArray)
+                    {
+                        sb.append(s + " ");
+                    }
+                    fileContent.add(String.valueOf(sb));
+                    break;
+                }
+            }
+            Files.write(Path.of(String.valueOf(addDeleteObject.songsAndTagsFile)), fileContent, StandardCharsets.UTF_8);
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     void playPlaylist(ArrayList<String> playlistName)
@@ -58,8 +110,7 @@ public class SongStuff
                 {
                 }
             }
-        }
-        catch(Exception e)
+        } catch (Exception e)
         {
             System.out.println(e);
         }
@@ -96,12 +147,12 @@ public class SongStuff
 
     void loopMusic()
     {
-        if(!isLooped)
+        if (!isLooped)
         {
             clip.loop(Clip.LOOP_CONTINUOUSLY);
             isLooped = !isLooped;
         }
-        else if(isLooped)
+        else if (isLooped)
         {
             clip.loop(0);
             isLooped = !isLooped;

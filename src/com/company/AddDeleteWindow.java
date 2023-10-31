@@ -376,7 +376,7 @@ public class AddDeleteWindow extends JFrame
                     try
                     {
                         fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(songsAndTagsFile)), StandardCharsets.UTF_8));
-                        fileContent.add(newNameStr + " ");
+                        fileContent.add(newNameStr + " 0 ");
                         Files.write(Path.of(String.valueOf(songsAndTagsFile)), fileContent, StandardCharsets.UTF_8);
                     } catch (IOException ex)
                     {

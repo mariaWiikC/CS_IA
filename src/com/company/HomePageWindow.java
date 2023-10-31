@@ -517,7 +517,7 @@ public class HomePageWindow extends JFrame implements ActionListener
             for (int i = 0; i < fileContent2.size(); i++)
             {
                 String[] sArray = fileContent2.get(i).split(" ");
-                if (Integer.valueOf(sArray[sArray.length - 1]) < min)
+                if (Integer.valueOf(sArray[sArray.length - 1]) < min && Integer.valueOf(sArray[sArray.length - 1]) > 0)
                 {
                     min = Integer.valueOf(sArray[sArray.length - 1]);
                     minIndex = i;

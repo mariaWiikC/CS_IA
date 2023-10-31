@@ -33,6 +33,7 @@ public class SongsWindow extends JFrame
     ArrayList<String> fileContent;
     String nameWritten, songsAndTagsFilePath;
     private JButton editButton;
+    String numOfPlays;
 
     public SongsWindow()
     {
@@ -374,10 +375,38 @@ public class SongsWindow extends JFrame
             sbO.append(" ");
         }
 
+        boolean integerLast = false;
+        // checking if last item is an int
+        // checking if the line has more than just the name of the song there
+        if (sbO.lastIndexOf(" ",sbO.lastIndexOf(" ") - 1) > -1)
+        {
+            StringBuffer sb = new StringBuffer(sbO);
+            System.out.println(sb.lastIndexOf(" "));
+            System.out.println("Length: " + sb.length());
+            sb.delete(0, sb.lastIndexOf(" ", sb.lastIndexOf(" ") - 1));
+            System.out.println(sb);
+            sb.delete(sb.length() - 1, sb.length());
+            sb.delete(0, 1);
+            System.out.println(sb);
+
+            // deleting the integer
+            if (Integer.parseInt(String.valueOf(sb)) % 1 == 0)
+            {
+                numOfPlays = String.valueOf(sb);
+                sbO.delete(sbO.lastIndexOf(numOfPlays) - numOfPlays.length(), sbO.lastIndexOf(numOfPlays) + numOfPlays.length());
+                System.out.println(sbO);
+                integerLast = true;
+            }
+        }
+
         StringBuffer sbA = new StringBuffer();
         sbA.append(sbO);
         sbA.append(nameTag);
         sbA.append(" ");
+        if (integerLast)
+        {
+          sbA.append(numOfPlays + " ");
+        }
 
         String sA = String.valueOf(sbA);
 
@@ -398,7 +427,6 @@ public class SongsWindow extends JFrame
         StringBuffer sbA = new StringBuffer();
         sbA.append(sbO);
         sbA.delete(sbA.indexOf(nameTag), sbA.indexOf(nameTag) + nameTag.length() + 1);
-
         String sA = String.valueOf(sbA);
 
         editingTagTxtFile(songName, sA, songsAndTagsFilePath);
@@ -413,8 +441,6 @@ public class SongsWindow extends JFrame
             fileContent = new ArrayList<>(Files.readAllLines(Path.of(songsAndTagsFilePath), StandardCharsets.UTF_8));
             for (int i = 0; i < fileContent.size(); i++)
             {
-                // the problem here is that now the element in fileContent = "nameSong tag1"
-                // I need to make it just nameSong
                 String[] sArray = fileContent.get(i).split(" ");
                 if (sArray[0].equals(songName))
                 {
