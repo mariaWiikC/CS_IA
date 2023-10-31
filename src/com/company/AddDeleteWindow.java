@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -35,6 +36,7 @@ public class AddDeleteWindow extends JFrame
     private DefaultListModel listModel;
     private JScrollPane listScroller;
     public File songsAndTagsFile;
+    private ArrayList<String> fileContent;
 
     public AddDeleteWindow() throws IOException
     {
@@ -201,7 +203,6 @@ public class AddDeleteWindow extends JFrame
         if (!songsAndTagsFile.exists())
             songsAndTagsFile.createNewFile();
 
-
         //<editor-fold desc="LAYOUT">
         layout.setHorizontalGroup(
                 layout.createParallelGroup()
@@ -335,8 +336,7 @@ public class AddDeleteWindow extends JFrame
             File songPath = new File(songUpload.getSelectedFile().getAbsolutePath());
 
             Path sourcePath = Path.of(songUpload.getSelectedFile().getAbsolutePath());
-            String targetPath = "src/newSong";
-            File recentSong;
+            String targetPath = "src/songsFiles/newSong";
 
             try
             {
@@ -346,56 +346,41 @@ public class AddDeleteWindow extends JFrame
                 ex.printStackTrace();
             }
 
-            // find most recently edited file
-            String directoryFilePath = "src";
-
-            File directory = new File(directoryFilePath);
-            File[] files = directory.listFiles(File::isFile);
-            long lastModifiedTime = Long.MIN_VALUE;
-            chosenFile = null;
-
-            if (files != null)
-            {
-                for (File file : files)
-                {
-                    if (file.lastModified() > lastModifiedTime)
-                    {
-                        chosenFile = file;
-                        lastModifiedTime = file.lastModified();
-                    }
-                }
-            }
-
             // I need to get the user's input as a string and substitute in place of "NewName"
             inputField.setEnabled(true);
             validateButton.setEnabled(true);
 
-            validateButton.addActionListener(new ActionListener() // FIX THIS
+            validateButton.addActionListener(new ActionListener()
             {
                 @Override
                 public void actionPerformed(ActionEvent e)
                 {
-                    newNameArr[0] = inputField.getText();
+                    String newNameStr = inputField.getText();
                     JOptionPane.showMessageDialog(null, "File information saved");
-                    String newName = "src/songsFiles/" + newNameArr[0] + ".wav";
+                    String newName = "src/songsFiles/" + newNameStr + ".wav";
                     System.out.println(newName);
-                    File rename = new File(newName);
-                    listModel.addElement(newNameArr[0]);
+                    listModel.addElement(newNameStr);
 
-                    System.out.println(chosenFile.renameTo(rename));
-                    // ADDING SONG TO TEXT FILE
-                    // THIS IS DELETING ALL THE OTHER SONGS FROM THE TXT FILE
-                    String str = newNameArr[0];
-                    try (FileWriter fw = new FileWriter(songsAndTagsFile.getAbsoluteFile()); BufferedWriter bw = new BufferedWriter(fw))
+                    try
                     {
-                        bw.write(str);
-                        bw.write(" ");
-                        bw.newLine();
-                    } catch (IOException exc)
+                        Files.copy(Path.of(targetPath), Path.of(newName), new StandardCopyOption[]{StandardCopyOption.REPLACE_EXISTING});
+                    } catch (IOException ex)
                     {
-                        exc.printStackTrace();
-                        System.out.println("Got exception: " + exc);
-                        System.exit(1);
+                        ex.printStackTrace();
+                    }
+
+                    File toDelete = new File(targetPath);
+                    toDelete.delete();
+
+                    // ADDING SONG TO TXT FILE
+                    try
+                    {
+                        fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(songsAndTagsFile)), StandardCharsets.UTF_8));
+                        fileContent.add(newNameStr + " ");
+                        Files.write(Path.of(String.valueOf(songsAndTagsFile)), fileContent, StandardCharsets.UTF_8);
+                    } catch (IOException ex)
+                    {
+                        ex.printStackTrace();
                     }
                     inputField.setEnabled(false);
                     validateButton.setEnabled(false);

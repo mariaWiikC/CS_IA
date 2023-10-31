@@ -389,7 +389,7 @@ public class HomePageWindow extends JFrame implements ActionListener
         setVisible(true);
     }
 
-    public void displayPhotos(ActionEvent e)
+    public void displayPhotos(ActionEvent e) // FIX THIS
     {
         if (display)
         {
