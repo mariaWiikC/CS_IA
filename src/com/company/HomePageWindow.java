@@ -394,15 +394,15 @@ public class HomePageWindow extends JFrame implements ActionListener
 
     public void displayPhotos(ActionEvent e) // FIX THIS
     {
-        if (display)
-        {
-            PhotosWindow = new PhotosWindow();
-        }
-        else
-        {
-            PhotosWindow.dispose();
-        }
-        display = !display;
+            EventQueue.invokeLater(new Runnable()
+            {
+
+                @Override
+                public void run()
+                {
+                    new PhotosWindow().display();
+                }
+            });
     }
 
     //<editor-fold desc="Editing mood on queue txt file">

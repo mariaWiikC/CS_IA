@@ -24,7 +24,7 @@ public class QueuePreviewWindow extends JFrame
         menuAddDelete.addActionListener(this::actionPerformed2);
 
         menuPhotos = new JMenuItem("Photos");
-        menuPhotos.addActionListener(this::actionPerformed5);
+        // menuPhotos.addActionListener(this::actionPerformed5);
 
         menuPlaylists = new JMenuItem("Playlists");
         menuPlaylists.addActionListener(this::actionPerformed4);
@@ -82,12 +82,15 @@ public class QueuePreviewWindow extends JFrame
         dispose(); // close home page
     }
 
+    /*
     public void actionPerformed5(ActionEvent e)
     {
         JFrame PhotosWindow = new PhotosWindow(); // open another JFrame
         PhotosWindow.setVisible(true); // display SelectPlayWindow
         dispose(); // close home page
     }
+
+     */
 
     public void actionPerformed6(ActionEvent e)
     {

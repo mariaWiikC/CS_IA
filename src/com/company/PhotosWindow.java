@@ -4,54 +4,77 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
-public class PhotosWindow extends JFrame
+public class PhotosWindow extends JPanel
 {
     private JMenuBar menuBar;
     private JMenuItem menuSelect, menuAddDelete, menuHome, menuPlaylists, menuSongs, menuQueue;
+    PhotosStuff photoStuffObject = new PhotosStuff();
+    private ArrayList<Icon> list = new ArrayList<>();
+    // private ArrayList<JLabel> labels = new ArrayList<>();
+    JLabel label;
+
+    private Timer timer = new Timer(10000, new ActionListener() // this is ten seconds
+    {
+
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            update();
+        }
+    });
 
     public PhotosWindow()
     {
-        // I CAN'T CLICK ON ANYTHING ELSE WHILE THIS IS BEING EXECUTED
-        // IT IS ONLY SHOWING ONE IMAGE, AND ONLY AFTER IT EXECUTES THE BLOCK
-        super("Photos");
-        setLayout(new FlowLayout());
-        setSize(200, 300);
-
-        setVisible(true);
-
+        this.setLayout(new GridLayout(1, 0));
         String directoryPhotosFilePath = "src/Photos";
         File directoryPhotos = new File(directoryPhotosFilePath);
         File[] filesPhotos = directoryPhotos.listFiles(File::isFile);
-
-        for (File f : filesPhotos)
+        for (File file : filesPhotos)
         {
-            BufferedImage img = null;
+            String actualPath = directoryPhotosFilePath + "/" + file.getName();
             try
             {
-                System.out.println(f.getName());
-                String actualPath = directoryPhotosFilePath + "/" + f.getName();
+                BufferedImage img = ImageIO.read(new File(actualPath));
+                ImageIcon icon = new ImageIcon(img);
+                list.add(icon);
                 System.out.println(actualPath);
-                img = ImageIO.read(new File(actualPath));
             } catch (IOException e)
             {
                 e.printStackTrace();
             }
-            ImageIcon icon = new ImageIcon(img);
-            JLabel lbl = new JLabel();
-            lbl.setIcon(icon);
-            add(lbl);
-            try
-            {
-                TimeUnit.SECONDS.sleep(10);
-            } catch (InterruptedException e)
-            {
-                e.printStackTrace();
-            }
+
         }
+
+        label = new JLabel(list.get(0));
+        this.add(label);
+
+        timer.start();
     }
+
+    private void update()
+    {
+        Collections.shuffle(list);
+        label.setIcon(list.get(0));
+    }
+
+    public void display()
+    {
+        JFrame f = new JFrame("ImageShuffle");
+        // i don't want to exit the program, just the JFrame
+        // f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.add(this);
+        //f.setSize(new Dimension(400, 400));
+        f.pack(); // not this, make it full screen
+        f.setLocationRelativeTo(null);
+        f.setVisible(true);
+    }
+
 }

@@ -10,7 +10,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 public class SongStuff
 {
@@ -102,25 +101,6 @@ public class SongStuff
         } catch (IOException e)
         {
             e.printStackTrace();
-        }
-    }
-
-    void playPlaylist(ArrayList<String> playlistName)
-    {
-        // THE BUTTONS ARE NOT WORKING
-        // THE PROGRAM IS BASICALLY PAUSED HERE WHILE THE PLAYLIST IS PLAYING
-        try
-        {
-            for (int i = 0; i < playlistName.size(); i++)
-            {
-                Clip currentClip = playMusic(playlistName.get(i));
-                while (currentClip.getMicrosecondLength() != currentClip.getMicrosecondPosition())
-                {
-                }
-            }
-        } catch (Exception e)
-        {
-            System.out.println(e);
         }
     }
 

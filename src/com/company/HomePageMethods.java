@@ -19,6 +19,5 @@ public class HomePageMethods extends Thread
 
         System.out.println("Printing the thingy now");
         System.out.println(songsToPlay);
-        songObject.playPlaylist(songsToPlay);
     }
 }
