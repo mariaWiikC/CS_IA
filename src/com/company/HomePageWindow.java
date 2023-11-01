@@ -43,7 +43,6 @@ public class HomePageWindow extends JFrame implements ActionListener
     private boolean allMatch;
     protected ArrayList<String> allSearchResults = new ArrayList<>(), fileContent, fileContent3;
     JFrame SearchResultsWindow;
-    protected File searchResultsFile, queueFile, queueSongsFile;
     PlaylistMethods playlistsObject;
     HomePageMethods homePageObject;
 
@@ -62,6 +61,7 @@ public class HomePageWindow extends JFrame implements ActionListener
     boolean playingPlaylist, random = false;
     String playlistNamePlaying;
     ArrayList<Integer> numberOfSongsInPlaylist = new ArrayList<>(), alreadyPlayed = new ArrayList<>();
+    HomePageMethods homePageMethodsObject = new HomePageMethods();
 
     // nameOfPlaylistT, nameOfSongT -> these two change according to what is playingggg
 
@@ -364,30 +364,6 @@ public class HomePageWindow extends JFrame implements ActionListener
         {
             ex.printStackTrace();
         }
-        searchResultsFile = new File("src\\SearchResults.txt");
-        if (!searchResultsFile.exists())
-            searchResultsFile.createNewFile();
-
-        queueFile = new File("src\\Queue.txt");
-        if (!queueFile.exists())
-        {
-            queueFile.createNewFile();
-            try (FileWriter fw = new FileWriter(queueFile.getAbsoluteFile()); BufferedWriter bw = new BufferedWriter(fw))
-            {
-                bw.write("mood");
-                bw.write(" ");
-                bw.newLine();
-            } catch (IOException exc)
-            {
-                exc.printStackTrace();
-                System.out.println("Got exception: " + exc);
-                System.exit(1);
-            }
-        }
-
-        queueSongsFile = new File("src\\QueueSongs.txt");
-        if (!queueSongsFile.exists())
-            queueSongsFile.createNewFile();
 
         setVisible(true);
     }
@@ -410,9 +386,9 @@ public class HomePageWindow extends JFrame implements ActionListener
     {
         try
         {
-            fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(queueFile)), StandardCharsets.UTF_8));
+            fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(homePageMethodsObject.queueFile)), StandardCharsets.UTF_8));
             fileContent.set(0, "sad ");
-            Files.write(Path.of(String.valueOf(queueFile)), fileContent, StandardCharsets.UTF_8);
+            Files.write(Path.of(String.valueOf(homePageMethodsObject.queueFile)), fileContent, StandardCharsets.UTF_8);
         } catch (IOException a)
         {
             a.printStackTrace();
@@ -423,9 +399,9 @@ public class HomePageWindow extends JFrame implements ActionListener
     {
         try
         {
-            fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(queueFile)), StandardCharsets.UTF_8));
+            fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(homePageMethodsObject.queueFile)), StandardCharsets.UTF_8));
             fileContent.set(0, "energetic ");
-            Files.write(Path.of(String.valueOf(queueFile)), fileContent, StandardCharsets.UTF_8);
+            Files.write(Path.of(String.valueOf(homePageMethodsObject.queueFile)), fileContent, StandardCharsets.UTF_8);
         } catch (IOException a)
         {
             a.printStackTrace();
@@ -436,9 +412,9 @@ public class HomePageWindow extends JFrame implements ActionListener
     {
         try
         {
-            fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(queueFile)), StandardCharsets.UTF_8));
+            fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(homePageMethodsObject.queueFile)), StandardCharsets.UTF_8));
             fileContent.set(0, "happy ");
-            Files.write(Path.of(String.valueOf(queueFile)), fileContent, StandardCharsets.UTF_8);
+            Files.write(Path.of(String.valueOf(homePageMethodsObject.queueFile)), fileContent, StandardCharsets.UTF_8);
         } catch (IOException a)
         {
             a.printStackTrace();
@@ -449,9 +425,9 @@ public class HomePageWindow extends JFrame implements ActionListener
     {
         try
         {
-            fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(queueFile)), StandardCharsets.UTF_8));
+            fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(homePageMethodsObject.queueFile)), StandardCharsets.UTF_8));
             fileContent.set(0, "relaxed ");
-            Files.write(Path.of(String.valueOf(queueFile)), fileContent, StandardCharsets.UTF_8);
+            Files.write(Path.of(String.valueOf(homePageMethodsObject.queueFile)), fileContent, StandardCharsets.UTF_8);
         } catch (IOException a)
         {
             a.printStackTrace();
@@ -469,7 +445,7 @@ public class HomePageWindow extends JFrame implements ActionListener
         {
             try
             {
-                fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(queueFile)), StandardCharsets.UTF_8));
+                fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(homePageMethodsObject.queueFile)), StandardCharsets.UTF_8));
                 int numReps = fileContent.size();
                 for (int i = 0; i < numReps; i++)
                 {
@@ -480,7 +456,7 @@ public class HomePageWindow extends JFrame implements ActionListener
                 }
                 fileContent.add("Christmas ");
                 fileContent.add("Independence ");
-                Files.write(Path.of(String.valueOf(queueFile)), fileContent, StandardCharsets.UTF_8);
+                Files.write(Path.of(String.valueOf(homePageMethodsObject.queueFile)), fileContent, StandardCharsets.UTF_8);
             } catch (IOException a)
             {
                 a.printStackTrace();
@@ -491,7 +467,7 @@ public class HomePageWindow extends JFrame implements ActionListener
         {
             try
             {
-                fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(queueFile)), StandardCharsets.UTF_8));
+                fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(homePageMethodsObject.queueFile)), StandardCharsets.UTF_8));
                 for (int i = 0; i < fileContent.size(); i++)
                 {
                     if (i > 0)
@@ -500,7 +476,7 @@ public class HomePageWindow extends JFrame implements ActionListener
                     }
                 }
                 fileContent.add("Easter ");
-                Files.write(Path.of(String.valueOf(queueFile)), fileContent, StandardCharsets.UTF_8);
+                Files.write(Path.of(String.valueOf(homePageMethodsObject.queueFile)), fileContent, StandardCharsets.UTF_8);
             } catch (IOException a)
             {
                 a.printStackTrace();
@@ -532,13 +508,13 @@ public class HomePageWindow extends JFrame implements ActionListener
                 }
             }
 
-            fileContent3 = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(queueSongsFile)), StandardCharsets.UTF_8));
+            fileContent3 = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(homePageMethodsObject.queueSongsFile)), StandardCharsets.UTF_8));
             int numReps = fileContent3.size();
             for (int i = 0; i < numReps; i++)
             {
                 fileContent3.remove(fileContent3.get(0));
             }
-            Files.write(Path.of(String.valueOf(queueSongsFile)), fileContent3, StandardCharsets.UTF_8);
+            Files.write(Path.of(String.valueOf(homePageMethodsObject.queueSongsFile)), fileContent3, StandardCharsets.UTF_8);
 
 
             // adding the most and least played songs
@@ -578,7 +554,7 @@ public class HomePageWindow extends JFrame implements ActionListener
                 }
             }
 
-            Files.write(Path.of(String.valueOf(queueSongsFile)), fileContent3, StandardCharsets.UTF_8);
+            Files.write(Path.of(String.valueOf(homePageMethodsObject.queueSongsFile)), fileContent3, StandardCharsets.UTF_8);
         } catch (IOException a)
         {
             a.printStackTrace();
@@ -705,7 +681,7 @@ public class HomePageWindow extends JFrame implements ActionListener
         {
             fileContent = new ArrayList<>();
             fileContent.add(sA);
-            Files.write(Path.of(String.valueOf(searchResultsFile)), fileContent, StandardCharsets.UTF_8);
+            Files.write(Path.of(String.valueOf(homePageMethodsObject.searchResultsFile)), fileContent, StandardCharsets.UTF_8);
         } catch (IOException e)
         {
             e.printStackTrace();

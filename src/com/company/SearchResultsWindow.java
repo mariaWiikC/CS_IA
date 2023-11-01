@@ -12,7 +12,7 @@ public class SearchResultsWindow extends JFrame
 {
     private JList listSongs;
     private JPanel pCenter;
-    private HomePageWindow homePageObject;
+    private HomePageMethods homePageObject;
     private DefaultListModel listModel;
     private JScrollPane listScroller;
     private String searchResults;
@@ -23,7 +23,6 @@ public class SearchResultsWindow extends JFrame
         super("Search Results");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLayout(new FlowLayout());
-        setDefaultCloseOperation(EXIT_ON_CLOSE); // IT SHOULD NOT EXIT THE ENTIRE PROGRAM, JUST GO BACK
         // TO THE HOME PAGE
 
         pCenter = new JPanel();
@@ -37,8 +36,7 @@ public class SearchResultsWindow extends JFrame
         layout.setAutoCreateContainerGaps(true);
 
         // CREATE A LIST WITH ALL THE SEARCH RESULTS
-        homePageObject = new HomePageWindow();
-        homePageObject.dispose();
+        homePageObject = new HomePageMethods();
 
         //<editor-fold desc="Reading txt file">
         searchResultsArr = new ArrayList<>();

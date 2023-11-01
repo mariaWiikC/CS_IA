@@ -36,7 +36,10 @@ public class AddDeleteWindow extends JFrame
     private DefaultListModel listModel;
     private JScrollPane listScroller;
     public File songsAndTagsFile;
-    private ArrayList<String> fileContent;
+    private ArrayList<String> fileContent, fileContent2;
+    private String nameWritten;
+    PlaylistsWindow playlistObject;
+    HomePageMethods homePageMethodsObject;
 
     public AddDeleteWindow() throws IOException
     {
@@ -71,6 +74,10 @@ public class AddDeleteWindow extends JFrame
         inputField.setEnabled(false);
         validateButton.setEnabled(false);
 
+        playlistObject = new PlaylistsWindow();
+        playlistObject.dispose();
+
+        homePageMethodsObject = new HomePageMethods();
 
         //<editor-fold desc="Menu Bar">
         menuBar = new JMenuBar();
@@ -398,7 +405,6 @@ public class AddDeleteWindow extends JFrame
     // WHEN I DELETE THE SONG, I MUST ALSO DELETE IT FROM ALL TEXT FILES
     public void actionPerformedDeleteSong(ActionEvent e)
     {
-        String nameWritten = null;
         if (listSongs.getSelectedIndex() != -1)
         {
             nameWritten = (String) listSongs.getSelectedValue();
@@ -411,6 +417,61 @@ public class AddDeleteWindow extends JFrame
         try
         {
             Files.deleteIfExists(Path.of(nameFile));
+        } catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
+
+        deletingSong(songsAndTagsFile);
+        deletingSong(homePageMethodsObject.searchResultsFile);
+        deletingSong(homePageMethodsObject.queueSongsFile);
+
+        // go through each playlist on the playlistsFile
+        try
+        {
+            fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(playlistObject.playlistsFile)), StandardCharsets.UTF_8));
+            for (int i = 0; i < fileContent.size(); i++)
+            {
+                String playlistPath = "src/" + fileContent.get(i) + ".txt";
+                try
+                {
+                    fileContent2 = new ArrayList<>(Files.readAllLines(Path.of(playlistPath), StandardCharsets.UTF_8));
+                    for (int j = 0; j < fileContent.size(); j++)
+                    {
+                        String[] sArray = fileContent2.get(j).split(" ");
+                        if (sArray[0].equals(nameWritten))
+                        {
+                            fileContent2.remove(j);
+                            break;
+                        }
+                    }
+                    Files.write(Path.of(playlistPath), fileContent2, StandardCharsets.UTF_8);
+                } catch (IOException ex)
+                {
+                    ex.printStackTrace();
+                }
+            }
+        } catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void deletingSong(File fileName)
+    {
+        try
+        {
+            fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(fileName)), StandardCharsets.UTF_8));
+            for (int i = 0; i < fileContent.size(); i++)
+            {
+                String[] sArray = fileContent.get(i).split(" ");
+                if (sArray[0].equals(nameWritten))
+                {
+                    fileContent.remove(i);
+                    break;
+                }
+            }
+            Files.write(Path.of(String.valueOf(fileName)), fileContent, StandardCharsets.UTF_8);
         } catch (IOException ex)
         {
             ex.printStackTrace();
