@@ -15,10 +15,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.Date;
-import java.util.Calendar;
+import java.util.*;
 
 public class HomePageWindow extends JFrame implements ActionListener
 {
@@ -62,6 +59,9 @@ public class HomePageWindow extends JFrame implements ActionListener
     boolean display = true;
     PhotosWindow photosObject;
     JFrame PhotosWindow;
+    boolean playingPlaylist, random = false;
+    String playlistNamePlaying;
+    ArrayList<Integer> numberOfSongsInPlaylist = new ArrayList<>(), alreadyPlayed = new ArrayList<>();
 
     // nameOfPlaylistT, nameOfSongT -> these two change according to what is playingggg
 
@@ -300,11 +300,13 @@ public class HomePageWindow extends JFrame implements ActionListener
 
         previousSongIcon = new ImageIcon("src/middleSectionHP/previousSongIcon.jpg");
         previousSongButton = new JButton(previousSongIcon);
+        previousSongButton.addActionListener(this::goPreviousSong);
         previousSongButton.setBounds(400, 300, 75, 60);
         pCenter.add(previousSongButton);
 
         nextSongIcon = new ImageIcon("src/middleSectionHP/nextSongIcon.jpg");
         nextSongButton = new JButton(nextSongIcon);
+        nextSongButton.addActionListener(this::goNextSong);
         nextSongButton.setBounds(800, 300, 75, 60);
         pCenter.add(nextSongButton);
 
@@ -316,6 +318,7 @@ public class HomePageWindow extends JFrame implements ActionListener
 
         randomIcon = new ImageIcon("src/middleSectionHP/randomIcon.jpg");
         randomButton = new JButton(randomIcon);
+        randomButton.addActionListener(this::randomizePlaylist);
         randomButton.setBounds(560, 400, 80, 70);
         pCenter.add(randomButton);
 
@@ -734,6 +737,7 @@ public class HomePageWindow extends JFrame implements ActionListener
     public void stopMusic(ActionEvent e)
     {
         songObject.stopPlaying();
+        playingPlaylist = false;
     }
 
     public void actionPerformedPauseSong(ActionEvent e)
@@ -757,10 +761,16 @@ public class HomePageWindow extends JFrame implements ActionListener
         songObject.tenSecBack();
     }
 
-    public void selectPlaylist(ActionEvent e) // FIX THIS
+    public void randomizePlaylist(ActionEvent e) // HAVE SMT INDICATE RANDOM IS ACTIVATED
+    {
+        random = !random;
+    }
+
+    public void selectPlaylist(ActionEvent e)
     {
         if (listPlaylists.getSelectedValue() != null)
         {
+            alreadyPlayed.clear();
             String namePlaylist = String.valueOf(listPlaylists.getSelectedValue());
             String playlistPath;
             if (namePlaylist.equals("Queue"))
@@ -779,11 +789,10 @@ public class HomePageWindow extends JFrame implements ActionListener
                 {
                     songsPaths.add("src\\songsFiles\\" + songName + ".wav");
                 }
-                System.out.println(songsPaths);
-                songObject.playPlaylist(songsPaths);
+                songObject.playMusic(songsPaths.get(0));
+                alreadyPlayed.add(0);
+                playingPlaylist = true;
 
-                // THE BUTTONS ARE NOT WORKING
-                // THE PROGRAM IS BASICALLY PAUSE HERE WHILE THE PLAYLIST IS PLAYING
             } catch (IOException ex)
             {
                 ex.printStackTrace();
@@ -791,7 +800,55 @@ public class HomePageWindow extends JFrame implements ActionListener
         }
     }
 
-    public void addingPhotos(ActionEvent e)
+    public void goPreviousSong(ActionEvent e)
+    {
+        if (playingPlaylist)
+        {
+            String songPlayingNow = "src\\songsFiles\\" + songObject.whichPlayingNow();
+            songObject.stopPlaying();
+            if (songsPaths.indexOf(songPlayingNow) - 1 >= 0)
+            {
+                songObject.playMusic(songsPaths.get(songsPaths.indexOf(songPlayingNow) - 1));
+            }
+            else
+            {
+                songObject.playMusic(songsPaths.get(songsPaths.size() - 1));
+            }
+        }
+    }
+
+    public void goNextSong(ActionEvent e)
+    {
+        if (playingPlaylist)
+        {
+            if (!random)
+            {
+                String songPlayingNow = "src\\songsFiles\\" + songObject.whichPlayingNow();
+                songObject.stopPlaying();
+                if (songsPaths.indexOf(songPlayingNow) + 1 < songsPaths.size())
+                {
+                    songObject.playMusic(songsPaths.get(songsPaths.indexOf(songPlayingNow) + 1));
+                }
+                else
+                {
+                    songObject.playMusic(songsPaths.get(0));
+                }
+            }
+            else
+            {
+                int rnd = 0;
+                while (alreadyPlayed.contains(rnd))
+                {
+                    rnd = new Random().nextInt(songsPaths.size());
+                }
+                System.out.println(rnd);
+                alreadyPlayed.add(rnd);
+                songObject.playMusic(songsPaths.get(rnd));
+            }
+        }
+    }
+
+    public void addingPhotos(ActionEvent e) // FIX THIS
     {
         JFileChooser imageUpload = new JFileChooser();
         int res2 = imageUpload.showSaveDialog(null);

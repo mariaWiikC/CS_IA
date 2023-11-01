@@ -392,7 +392,7 @@ public class AddDeleteWindow extends JFrame
 
     }
 
-    // WHEN I DELETE THE SONG, I MUST ALSO DELETE IT FROM THE TEXT FILE
+    // WHEN I DELETE THE SONG, I MUST ALSO DELETE IT FROM ALL TEXT FILES
     public void actionPerformedDeleteSong(ActionEvent e)
     {
         String nameWritten = null;

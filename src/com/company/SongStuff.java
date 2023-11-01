@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class SongStuff
 {
@@ -19,6 +20,7 @@ public class SongStuff
     protected boolean paused = false, isLooped = false;
     public boolean isPlaying = false;
     private ArrayList<String> fileContent;
+    File musicPath;
 
     public SongStuff()
     {
@@ -29,7 +31,7 @@ public class SongStuff
     {
         try
         {
-            File musicPath = new File(musicLocation);
+            musicPath = new File(musicLocation);
             if (musicPath.exists())
             {
                 addingNumOfPlays(musicLocation);
@@ -50,7 +52,13 @@ public class SongStuff
         return clip;
     }
 
-    public void addingNumOfPlays(String musicLocation) // IS THIS NOT BEING EXECUTED??????
+    public String whichPlayingNow()
+    {
+        System.out.println(musicPath.getName());
+        return musicPath.getName();
+    }
+
+    public void addingNumOfPlays(String musicLocation)
     {
         StringBuffer songName = new StringBuffer(musicLocation);
         songName.delete(songName.length() - 4, songName.length());
