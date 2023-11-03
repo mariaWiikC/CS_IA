@@ -37,18 +37,14 @@ public class AddDeleteWindow extends JFrame
     private JScrollPane listScroller;
     public File songsAndTagsFile;
     private ArrayList<String> fileContent, fileContent2;
-    private String nameWritten;
+    private String nameWritten, targetPath;
     PlaylistsWindow playlistObject;
     HomePageMethods homePageMethodsObject;
 
     public AddDeleteWindow() throws IOException
     {
-        // position the labels better
         // if i add three songs in a row, it adds the same to the list three times
         // If I add more than one song, the following ones are not added as wav files -> whenever there
-        // is this newSong file, why is it not goneeeee
-        // WHAT IS GOING ON WITH THE AUDIO FILES????????????????????????????????
-        // now Wrecked isn't working? And when I try to add songs they are added weirdly??
         // clean the input field after using it
         super("Add/Delete");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -70,6 +66,7 @@ public class AddDeleteWindow extends JFrame
         inputField = new JTextField(5);
         inputField.setMaximumSize(new Dimension(200, 30));
         validateButton = new JButton("Confirm");
+        validateButton.addActionListener(this::validateButtonAction);
 
         inputField.setEnabled(false);
         validateButton.setEnabled(false);
@@ -346,7 +343,7 @@ public class AddDeleteWindow extends JFrame
             File songPath = new File(songUpload.getSelectedFile().getAbsolutePath());
 
             Path sourcePath = Path.of(songUpload.getSelectedFile().getAbsolutePath());
-            String targetPath = "src/songsFiles/newSong";
+            targetPath = "src/songsFiles/newSong";
 
             try
             {
@@ -359,50 +356,44 @@ public class AddDeleteWindow extends JFrame
             // I need to get the user's input as a string and substitute in place of "NewName"
             inputField.setEnabled(true);
             validateButton.setEnabled(true);
-
-            validateButton.addActionListener(new ActionListener()
-            {
-                @Override
-                public void actionPerformed(ActionEvent e)
-                {
-                    String newNameStr = inputField.getText();
-                    JOptionPane.showMessageDialog(null, "File information saved");
-                    String newName = "src/songsFiles/" + newNameStr + ".wav";
-                    System.out.println(newName);
-                    listModel.addElement(newNameStr);
-
-                    try
-                    {
-                        Files.copy(Path.of(targetPath), Path.of(newName), new StandardCopyOption[]{StandardCopyOption.REPLACE_EXISTING});
-                    } catch (IOException ex)
-                    {
-                        ex.printStackTrace();
-                    }
-
-                    File toDelete = new File(targetPath);
-                    toDelete.delete();
-
-                    // ADDING SONG TO TXT FILE
-                    try
-                    {
-                        fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(songsAndTagsFile)), StandardCharsets.UTF_8));
-                        fileContent.add(newNameStr + " 0 ");
-                        Files.write(Path.of(String.valueOf(songsAndTagsFile)), fileContent, StandardCharsets.UTF_8);
-                    } catch (IOException ex)
-                    {
-                        ex.printStackTrace();
-                    }
-                    inputField.setEnabled(false);
-                    validateButton.setEnabled(false);
-                }
-            });
-
-            // WHY IS IT ADDING TO SONGS AT ONCE???????????
         }
 
     }
 
-    // WHEN I DELETE THE SONG, I MUST ALSO DELETE IT FROM ALL TEXT FILES
+    void validateButtonAction(ActionEvent e)
+    {
+        String newNameStr = inputField.getText();
+        JOptionPane.showMessageDialog(null, "File information saved");
+        String newName = "src/songsFiles/" + newNameStr + ".wav";
+        System.out.println(newName);
+        listModel.addElement(newNameStr);
+
+        try
+        {
+            Files.copy(Path.of(targetPath), Path.of(newName), new StandardCopyOption[]{StandardCopyOption.REPLACE_EXISTING});
+        } catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
+
+        File toDelete = new File(targetPath);
+        toDelete.delete();
+
+        // ADDING SONG TO TXT FILE
+        try
+        {
+            fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(songsAndTagsFile)), StandardCharsets.UTF_8));
+            fileContent.add(newNameStr + " 0 ");
+            Files.write(Path.of(String.valueOf(songsAndTagsFile)), fileContent, StandardCharsets.UTF_8);
+        } catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
+        inputField.setEnabled(false);
+        validateButton.setEnabled(false);
+        inputField.setText("");
+    }
+
     public void actionPerformedDeleteSong(ActionEvent e)
     {
         if (listSongs.getSelectedIndex() != -1)

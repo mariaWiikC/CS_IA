@@ -1,15 +1,11 @@
 package com.company;
 
-import javax.imageio.ImageIO;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -137,8 +133,8 @@ public class HomePageWindow extends JFrame implements ActionListener
 
         // get the positions right
         // this is not actually to the window, it just opens the file chooser
-        toSelectPlayWindow = new JButton("Select a Song or Playlist");
-        toSelectPlayWindow.setBounds(550, 50, 225, 35);
+        toSelectPlayWindow = new JButton("Select a Song");
+        toSelectPlayWindow.setBounds(300, 50, 225, 35);
         toSelectPlayWindow.addActionListener(e ->
         {
             try
@@ -158,7 +154,7 @@ public class HomePageWindow extends JFrame implements ActionListener
         pCenter.add(toSelectPlayWindow);
 
         toSelectPlaylistWindow = new JButton("Select Playlist");
-        toSelectPlaylistWindow.setBounds(700, 50, 205, 35);
+        toSelectPlaylistWindow.setBounds(565, 50, 205, 35);
         toSelectPlaylistWindow.addActionListener(this::selectPlaylist);
         pCenter.add(toSelectPlaylistWindow);
 
@@ -190,59 +186,59 @@ public class HomePageWindow extends JFrame implements ActionListener
 
         listScroller = new JScrollPane(listPlaylists);
         listScroller.setMaximumSize(new Dimension(250, 300));
-        listScroller.setBounds(850, 50, 200, 35);
+        listScroller.setBounds(800, 50, 200, 35);
         pCenter.add(listScroller);
         //</editor-fold>
 
         toAddDeleteWindow = new JButton("Add / Delete");
-        toAddDeleteWindow.setBounds(30, 90, 150, 35);
+        toAddDeleteWindow.setBounds(50, 90, 150, 35);
         toAddDeleteWindow.addActionListener(this::actionPerformed2);
         pCenter.add(toAddDeleteWindow);
 
         toSongsWindow = new JButton("Songs");
-        toSongsWindow.setBounds(30, 400, 100, 35);
+        toSongsWindow.setBounds(50, 400, 100, 35);
         toSongsWindow.addActionListener(this::actionPerformed3);
         pCenter.add(toSongsWindow);
 
         toPlaylistsWindow = new JButton("Playlists");
-        toPlaylistsWindow.setBounds(30, 500, 100, 35);
+        toPlaylistsWindow.setBounds(50, 500, 100, 35);
         toPlaylistsWindow.addActionListener(this::actionPerformed4);
         pCenter.add(toPlaylistsWindow);
 
         toQueuePreviewWindow = new JButton("Queue");
-        toQueuePreviewWindow.setBounds(1100, 150, 100, 35);
+        toQueuePreviewWindow.setBounds(1100, 300, 100, 35);
         toQueuePreviewWindow.addActionListener(this::updateQueue);
         pCenter.add(toQueuePreviewWindow);
 
         toPhotosWindow = new JButton("Photos");
-        toPhotosWindow.setBounds(1100, 90, 100, 35);
+        toPhotosWindow.setBounds(1100, 150, 100, 35);
         toPhotosWindow.addActionListener(this::displayPhotos);
         pCenter.add(toPhotosWindow);
         //</editor-fold>
 
         addPhotosButton = new JButton("Add Photo");
-        addPhotosButton.setBounds(1100, 50, 100, 35);
+        addPhotosButton.setBounds(1100, 100, 100, 35);
         addPhotosButton.addActionListener(this::addingPhotos);
         pCenter.add(addPhotosButton);
 
         //<editor-fold desc="Search Stuff">
         searchT = new JLabel("Search");
-        searchT.setBounds(30, 150, 100, 35);
+        searchT.setBounds(50, 150, 100, 35);
         pCenter.add(searchT);
 
         filterIcon = new ImageIcon("src/middleSectionHP/filterIcon.png");
         filterButton = new JButton(filterIcon);
-        filterButton.setBounds(110, 200, 50, 30);
+        filterButton.setBounds(250, 200, 50, 30);
         filterButton.addActionListener(this::actionPerformed7);
         pCenter.add(filterButton);
 
         searchBox = new JTextField();
-        searchBox.setBounds(50, 200, 100, 30);
+        searchBox.setBounds(100, 200, 100, 30);
         pCenter.add(searchBox);
 
         searchIcon = new ImageIcon("src/middleSectionHP/searchIcon.png");
         searchButton = new JButton(searchIcon);
-        searchButton.setBounds(30, 200, 30, 30);
+        searchButton.setBounds(50, 200, 30, 30);
         searchButton.addActionListener(this::search);
         pCenter.add(searchButton);
         //</editor-fold>
@@ -255,25 +251,25 @@ public class HomePageWindow extends JFrame implements ActionListener
         sadIcon = new ImageIcon("src/moodIcons/sadIcon.png");
         sadFaceButton = new JButton(sadIcon);
         sadFaceButton.addActionListener(this::addSadFace);
-        sadFaceButton.setBounds(800, 520, 100, 90);
+        sadFaceButton.setBounds(800, 450, 100, 90);
         pCenter.add(sadFaceButton);
 
         chillIcon = new ImageIcon("src/moodIcons/chillIcon.png");
         chillFaceButton = new JButton(chillIcon);
         chillFaceButton.addActionListener(this::addRelaxedFace);
-        chillFaceButton.setBounds(1100, 520, 100, 90);
+        chillFaceButton.setBounds(1100, 450, 100, 90);
         pCenter.add(chillFaceButton);
 
         happyIcon = new ImageIcon("src/moodIcons/happyIcon.png");
         happyFaceButton = new JButton(happyIcon);
         happyFaceButton.addActionListener(this::addHappyFace);
-        happyFaceButton.setBounds(900, 520, 100, 90);
+        happyFaceButton.setBounds(900, 450, 100, 90);
         pCenter.add(happyFaceButton);
 
         veryHappyIcon = new ImageIcon("src/moodIcons/veryHappyIcon.png");
         veryHappyButton = new JButton(veryHappyIcon);
         veryHappyButton.addActionListener(this::addEnergeticFace);
-        veryHappyButton.setBounds(1000, 520, 100, 90);
+        veryHappyButton.setBounds(1000, 450, 100, 90);
         pCenter.add(veryHappyButton);
         //</editor-fold>
 
@@ -284,53 +280,48 @@ public class HomePageWindow extends JFrame implements ActionListener
         //<editor-fold desc="Middle Stuff">
         pauseIcon = new ImageIcon("src/middleSectionHP/pauseIcon.jpg");
         pauseButton = new JButton(pauseIcon);
-        pauseButton.setBounds(600, 300, 90, 70);
+        pauseButton.setBounds(550, 200, 90, 70);
         pauseButton.addActionListener(this::actionPerformedPauseSong);
         pCenter.add(pauseButton);
 
-        // i have to somehow leave this hidden until the pause button is clicked
-        playIcon = new ImageIcon("src/middleSectionHP/playIcon.jpg");
-        playButton = new JButton(playIcon);
-        playButton.setBounds(700, 300, 90, 70);
-
         stopButton = new JButton("Stop");
-        stopButton.setBounds(730, 300, 75, 60);
+        stopButton.setBounds(680, 200, 75, 60);
         stopButton.addActionListener(this::stopMusic);
         pCenter.add(stopButton);
 
         previousSongIcon = new ImageIcon("src/middleSectionHP/previousSongIcon.jpg");
         previousSongButton = new JButton(previousSongIcon);
         previousSongButton.addActionListener(this::goPreviousSong);
-        previousSongButton.setBounds(400, 300, 75, 60);
+        previousSongButton.setBounds(400, 200, 75, 60);
         pCenter.add(previousSongButton);
 
         nextSongIcon = new ImageIcon("src/middleSectionHP/nextSongIcon.jpg");
         nextSongButton = new JButton(nextSongIcon);
         nextSongButton.addActionListener(this::goNextSong);
-        nextSongButton.setBounds(800, 300, 75, 60);
+        nextSongButton.setBounds(800, 200, 75, 60);
         pCenter.add(nextSongButton);
 
         loopIcon = new ImageIcon("src/middleSectionHP/loopIcon.jpg");
         loopButton = new JButton(loopIcon);
-        loopButton.setBounds(460, 400, 80, 70);
+        loopButton.setBounds(550, 300, 80, 70);
         loopButton.addActionListener(this::actionPerformedLoopSong);
         pCenter.add(loopButton);
 
         randomIcon = new ImageIcon("src/middleSectionHP/randomIcon.jpg");
         randomButton = new JButton(randomIcon);
         randomButton.addActionListener(this::randomizePlaylist);
-        randomButton.setBounds(560, 400, 80, 70);
+        randomButton.setBounds(650, 300, 80, 70);
         pCenter.add(randomButton);
 
         tenBackIcon = new ImageIcon("src/middleSectionHP/tenBackIcon.jpg");
         tenBackButton = new JButton(tenBackIcon);
-        tenBackButton.setBounds(310, 400, 50, 30);
+        tenBackButton.setBounds(410, 300, 50, 30);
         tenBackButton.addActionListener(this::actionPerformedTenSecBack);
         pCenter.add(tenBackButton);
 
         tenForwardIcon = new ImageIcon("src/middleSectionHP/tenForwardIcon.jpg");
         tenForwardButton = new JButton(tenForwardIcon);
-        tenForwardButton.setBounds(700, 400, 50, 30);
+        tenForwardButton.setBounds(800, 300, 50, 30);
         tenForwardButton.addActionListener(this::actionPerformedTenSecForward);
         pCenter.add(tenForwardButton);
 
@@ -338,7 +329,7 @@ public class HomePageWindow extends JFrame implements ActionListener
         pB = new JProgressBar();
         pB.setValue(0);
         pB.setStringPainted(true);
-        pB.setBounds(400, 500, 300, 20);
+        pB.setBounds(480, 400, 300, 20);
         pCenter.add(pB);
         // isPlaying = songObject.isPlaying;
         // PROGRESS BAR STUFF IS NOT WORKING
@@ -370,15 +361,15 @@ public class HomePageWindow extends JFrame implements ActionListener
 
     public void displayPhotos(ActionEvent e) // FIX THIS
     {
-            EventQueue.invokeLater(new Runnable()
-            {
+        EventQueue.invokeLater(new Runnable()
+        {
 
-                @Override
-                public void run()
-                {
-                    new PhotosWindow().display();
-                }
-            });
+            @Override
+            public void run()
+            {
+                new PhotosWindow().display();
+            }
+        });
     }
 
     //<editor-fold desc="Editing mood on queue txt file">
@@ -564,9 +555,11 @@ public class HomePageWindow extends JFrame implements ActionListener
 
     public void search(ActionEvent e)
     {
-        // first I want to be able to search just with tags, then I'll add the song name to it
-        // I'm gonna add the songs to it now
-        // first I read the search tags file
+        // can I have a search thing that if the user types only one letter, or a few, it shows all the
+        // songs that start like that
+
+        // i think I have to split the content of the text field, and each song name into individual char
+        // then i compare those one by one, if one char is different, break
         allSearchResults.clear();
 
         allTags = new ArrayList<>();
@@ -595,9 +588,19 @@ public class HomePageWindow extends JFrame implements ActionListener
             c.printStackTrace();
         }
 
+        ArrayList<Character> charsTxtFieldList = new ArrayList<>();
         // adding searchBox text to the search tags array
         if (searchBox.getText().length() > 0)
-            allTags.get(0).add(searchBox.getText());
+        {
+            // dividing the textField content into chars
+            char[] charsTextField = searchBox.getText().toCharArray();
+            for (char c : charsTextField)
+            {
+                System.out.println(c);
+                charsTxtFieldList.add(c);
+                allTags.get(0).add(c);
+            }
+        }
 
         // now, I'll read the songs with tags file
         allSongsAndTags = new ArrayList<>();
@@ -626,27 +629,39 @@ public class HomePageWindow extends JFrame implements ActionListener
         }
 
         // now I need to see which lines match - e.g. the tags file has "sad" and "morning"
-        // i checks which lines of the songs file has those tags
-        int numMatches = 0;
-        allMatch = false;
+        // I want a new search mechanism -> show all the songs with all the tags, or at least one of them
         for (ArrayList<String> arrTags : allTags)
         {
-            for (ArrayList<String> arrSongs : allSongsAndTags)
+            for (ArrayList<String> arrSong : allSongsAndTags)
             {
-                // I just realized this might not work when I have more lines on the songs file
-                // fixing ittttt
+                boolean theSame = true;
+                char[] songInChars = arrSong.get(0).toCharArray();
+                for (int i = 0; i < charsTxtFieldList.size(); i++)
+                {
+                    if (Character.compare(songInChars[i], charsTxtFieldList.get(i)) != 0)
+                    {
+                        theSame = false;
+                        break;
+                    }
+                }
+                if (theSame)
+                {
+                    allSearchResults.add(arrSong.get(0));
+                }
+            }
+            // don't add the song if it's already on the array
+            for (ArrayList<String> arrSong : allSongsAndTags)
+            {
                 for (String tag : arrTags)
                 {
-                    if (arrSongs.contains(tag))
-                        numMatches++;
-                }
-                if (numMatches == arrTags.size())
-                    allMatch = true;
-                // add the song name to an array, so I can display it (as a list?) in the SearchResultsWindow
-                if (allMatch)
-                {
-                    System.out.println(arrSongs.get(0));
-                    allSearchResults.add(arrSongs.get(0));
+                    if (arrSong.contains(tag))
+                    {
+                        // add the song name to an array, so I can display it in the SearchResultsWindow
+                        System.out.println(arrSong.get(0));
+                        if (!allSearchResults.contains(arrSong.get(0)))
+                            allSearchResults.add(arrSong.get(0));
+                        break;
+                    }
                 }
             }
 
@@ -662,9 +677,7 @@ public class HomePageWindow extends JFrame implements ActionListener
             ex.printStackTrace();
         }
         SearchResultsWindow.setVisible(true); // display SelectPlayWindow
-        dispose(); // close home page
         // now I need to display all the songs that match the search -> use the SearchResultsWindow
-
     }
 
     public void editingSearchTxtFile(ArrayList<String> allSearchResults)

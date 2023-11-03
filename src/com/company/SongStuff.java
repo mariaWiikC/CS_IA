@@ -61,7 +61,8 @@ public class SongStuff
     {
         StringBuffer songName = new StringBuffer(musicLocation);
         songName.delete(songName.length() - 4, songName.length());
-        songName.delete(0, songName.lastIndexOf("/") + 1);
+        // 15 is to delete src\songsFiles\
+        songName.delete(0, 15);
         System.out.println(songName);
 
         AddDeleteWindow addDeleteObject = null;

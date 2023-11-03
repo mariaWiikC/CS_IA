@@ -342,6 +342,7 @@ public class SongsWindow extends JFrame
     public void checkingTag(ArrayList<String> a, String nameTag, JCheckBox box)
     {
         // I need to create smt to delete the tag from the txt file if the box is unchecked
+        // WHY AM I ONLY ABLE TO ADD ONE TAG AT A TIME
         if (!editing)
         {
             if (a.contains(nameTag))
@@ -361,6 +362,7 @@ public class SongsWindow extends JFrame
                 if (a.contains(nameTag))
                     deletingStringsForTxtFile(a, nameTag);
             }
+            box.setSelected(false);
         }
     }
 
@@ -402,6 +404,7 @@ public class SongsWindow extends JFrame
         StringBuffer sbA = new StringBuffer();
         sbA.append(sbO);
         sbA.append(nameTag);
+        a.add(a.size() - 1, nameTag);
         sbA.append(" ");
         if (integerLast)
         {
@@ -427,6 +430,7 @@ public class SongsWindow extends JFrame
         StringBuffer sbA = new StringBuffer();
         sbA.append(sbO);
         sbA.delete(sbA.indexOf(nameTag), sbA.indexOf(nameTag) + nameTag.length() + 1);
+        a.remove(nameTag);
         String sA = String.valueOf(sbA);
 
         editingTagTxtFile(songName, sA, songsAndTagsFilePath);

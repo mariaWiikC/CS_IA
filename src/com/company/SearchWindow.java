@@ -354,6 +354,8 @@ public class SearchWindow extends JFrame
 
     public void creatingNewStringsForTxtFile(ArrayList<String> a, String nameTag)
     {
+        // Why am I getting the name of the song????????????????????????? -> I think it's
+        // the input in the textField
         String songName = a.get(0);
 
         StringBuffer sbO = new StringBuffer();
@@ -488,3 +490,5 @@ public class SearchWindow extends JFrame
     //</editor-fold>
 
 }
+
+// check the file thingy -> if the first element is a space, delete it
