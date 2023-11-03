@@ -4,6 +4,9 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -17,9 +20,32 @@ public class SongStuff
     protected Clip clip;
     protected long clipTimePosition, tenSec = 10000000, clipLength;
     protected boolean paused = false, isLooped = false;
-    public boolean isPlaying = false;
+    public boolean isPlaying;
     private ArrayList<String> fileContent;
     File musicPath;
+
+    protected JProgressBar pB;
+    int songPositionSec = 0, songPositionMin = 0, songLengthMin = 0, songLengthSec = 0;
+    protected JLabel timeSongNow, totalTimeSong;
+
+    public Timer timer = new Timer(1000, new ActionListener() // this is one seconds
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            clipTimePosition = clip.getMicrosecondPosition();
+            try
+            {
+                update();
+            } catch (NoSuchFieldException ex)
+            {
+                ex.printStackTrace();
+            } catch (IllegalAccessException ex)
+            {
+                ex.printStackTrace();
+            }
+        }
+    });
 
     public SongStuff()
     {
@@ -40,6 +66,18 @@ public class SongStuff
                 clip.open(audioInput);
                 clip.start();
                 clipLength = clip.getMicrosecondLength();
+                timer.start();
+
+                pB = new JProgressBar();
+                pB.setValue(0);
+                pB.setStringPainted(true);
+                pB.setPreferredSize(new Dimension(300, 20));
+                pB.setMaximumSize(new Dimension(300, 20));
+                pB.setMinimumSize(new Dimension(300, 20));
+
+                timeSongNow = new JLabel("00:00");
+                totalTimeSong = new JLabel("00:00");
+
                 return clip;
             }
             else
@@ -49,6 +87,27 @@ public class SongStuff
             ex.printStackTrace();
         }
         return clip;
+    }
+
+    private void update() throws NoSuchFieldException, IllegalAccessException
+    {
+        pB.setMaximum((int) clipLength / 1000);
+
+        long actualSongPosition = clipTimePosition;
+        // System.out.println(actualSongPosition);
+        songPositionMin = (int) (actualSongPosition / 1000000) / 60;
+        songPositionSec = (int) (actualSongPosition / 1000000) % 60;
+        System.out.println(songPositionMin + ":" + songPositionSec);
+        timeSongNow.setText(songPositionMin + ":" + songPositionSec);
+
+        songLengthMin = (int) (clipLength / 1000000) / 60;
+        songLengthSec = (int) (clipLength / 1000000) % 60;
+        System.out.println(songLengthMin + ":" + songLengthSec);
+        totalTimeSong.setText(songLengthMin + ":" + songLengthSec);
+
+        pB.setValue((int) (actualSongPosition / 1000));
+
+        System.out.println("playingggg");
     }
 
     public String whichPlayingNow()
@@ -152,5 +211,6 @@ public class SongStuff
     {
         isPlaying = false;
         clip.stop();
+        timer.stop();
     }
 }

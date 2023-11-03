@@ -30,7 +30,6 @@ public class HomePageWindow extends JFrame implements ActionListener
     private ImageIcon filterIcon, loopIcon, nextSongIcon, pauseIcon, playIcon, previousSongIcon,
             randomIcon, tenBackIcon, tenForwardIcon, searchIcon;
     private JTextField searchBox;
-    private JProgressBar pB;
     private SongStuff songObject = new SongStuff();
     boolean isPlaying;
     private SearchWindow searchObject;
@@ -58,6 +57,7 @@ public class HomePageWindow extends JFrame implements ActionListener
     String playlistNamePlaying;
     ArrayList<Integer> numberOfSongsInPlaylist = new ArrayList<>(), alreadyPlayed = new ArrayList<>();
     HomePageMethods homePageMethodsObject = new HomePageMethods();
+    // ProgressBarMethods progressBarObject = new ProgressBarMethods();
 
     // nameOfPlaylistT, nameOfSongT -> these two change according to what is playingggg
 
@@ -326,22 +326,8 @@ public class HomePageWindow extends JFrame implements ActionListener
         pCenter.add(tenForwardButton);
 
         // progress bar that moves with music
-        pB = new JProgressBar();
-        pB.setValue(0);
-        pB.setStringPainted(true);
-        pB.setBounds(480, 400, 300, 20);
-        pCenter.add(pB);
-        // isPlaying = songObject.isPlaying;
-        // PROGRESS BAR STUFF IS NOT WORKING
-        // use a timer!!!!!!!!!!!!!
-        System.out.println("is Playing: " + isPlaying);
-        while (isPlaying)
-        {
-            pB.setValue((int) (100 * songObject.clipTimePosition / songObject.clipLength));
-            pB.setString((int) (songObject.clipTimePosition / (1e6 * 60)) + ":" +
-                    (int) ((songObject.clipTimePosition / 1e6) % 60) + " / " +
-                    (int) (songObject.clipLength / (1e6 * 60)) + ":" + (int) ((songObject.clipLength / 1e6) % 60));
-        }
+        //progressBarObject.pB.setBounds(480, 400, 300, 20);
+        // pCenter.add(progressBarObject.pB);
         //</editor-fold>
 
         searchObject = new SearchWindow();
@@ -359,6 +345,21 @@ public class HomePageWindow extends JFrame implements ActionListener
         setVisible(true);
     }
 
+    /*
+    public void displayPB(ActionEvent e) // FIX THIS
+    {
+        EventQueue.invokeLater(new Runnable()
+        {
+
+            @Override
+            public void run()
+            {
+                new ProgressBarMethods().display();
+            }
+        });
+    }
+
+     */
     public void displayPhotos(ActionEvent e) // FIX THIS
     {
         EventQueue.invokeLater(new Runnable()
@@ -719,7 +720,8 @@ public class HomePageWindow extends JFrame implements ActionListener
             String realPath = "src/songsFiles/" + actualPath;
             System.out.println(realPath);
             songObject.playMusic(realPath);
-            isPlaying = songObject.isPlaying;
+            // songObject.isPlaying = true;
+            // progressBarObject.timer.start();
         }
     }
 
@@ -727,11 +729,12 @@ public class HomePageWindow extends JFrame implements ActionListener
     {
         songObject.stopPlaying();
         playingPlaylist = false;
+        //progressBarObject.timer.stop();
     }
 
-    public void actionPerformedPauseSong(ActionEvent e)
+    public void actionPerformedPauseSong(ActionEvent e) // I should combine it into one button,
+    // the pause and unpause methods
     {
-        // I should combine it into one button, the pause and unpause methods
         songObject.pauseUnpauseMusic();
     }
 

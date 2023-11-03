@@ -14,11 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 public class PhotosWindow extends JPanel
 {
-    private JMenuBar menuBar;
-    private JMenuItem menuSelect, menuAddDelete, menuHome, menuPlaylists, menuSongs, menuQueue;
-    PhotosStuff photoStuffObject = new PhotosStuff();
     private ArrayList<Icon> list = new ArrayList<>();
-    // private ArrayList<JLabel> labels = new ArrayList<>();
     JLabel label;
 
     private Timer timer = new Timer(10000, new ActionListener() // this is ten seconds
@@ -67,7 +63,7 @@ public class PhotosWindow extends JPanel
 
     public void display()
     {
-        JFrame f = new JFrame("ImageShuffle");
+        JFrame f = new JFrame("Photos");
         // i don't want to exit the program, just the JFrame
         // f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.add(this);
