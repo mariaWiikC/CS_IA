@@ -58,7 +58,6 @@ public class HomePageWindow extends JFrame implements ActionListener
     ArrayList<Integer> numberOfSongsInPlaylist = new ArrayList<>(), alreadyPlayed = new ArrayList<>();
     HomePageMethods homePageMethodsObject = new HomePageMethods();
     // ProgressBarMethods progressBarObject = new ProgressBarMethods();
-
     // nameOfPlaylistT, nameOfSongT -> these two change according to what is playingggg
 
     public HomePageWindow() throws IOException
