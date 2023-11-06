@@ -28,7 +28,7 @@ public class HomePageWindow extends JFrame implements ActionListener
             randomButton, tenBackButton, tenForwardButton, searchButton, stopButton;
     // Do I need a search button? Or will the search happen when the user presses enter
     private ImageIcon filterIcon, loopIcon, nextSongIcon, pauseIcon, playIcon, previousSongIcon,
-            randomIcon, tenBackIcon, tenForwardIcon, searchIcon;
+            randomIcon, tenBackIcon, tenForwardIcon, searchIcon, loopingIcon, stopIcon;
     private JTextField searchBox;
     private SongStuff songObject = new SongStuff();
     boolean isPlaying;
@@ -57,8 +57,12 @@ public class HomePageWindow extends JFrame implements ActionListener
     String playlistNamePlaying;
     ArrayList<Integer> numberOfSongsInPlaylist = new ArrayList<>(), alreadyPlayed = new ArrayList<>();
     HomePageMethods homePageMethodsObject = new HomePageMethods();
+
+    boolean isPaused = false, isLooping = false;
     // ProgressBarMethods progressBarObject = new ProgressBarMethods();
     // nameOfPlaylistT, nameOfSongT -> these two change according to what is playingggg
+
+    JButton progressBarButton;
 
     public HomePageWindow() throws IOException
     {
@@ -278,12 +282,14 @@ public class HomePageWindow extends JFrame implements ActionListener
 
         //<editor-fold desc="Middle Stuff">
         pauseIcon = new ImageIcon("src/middleSectionHP/pauseIcon.jpg");
+        playIcon = new ImageIcon("src/middleSectionHP/playIcon.jpg");
         pauseButton = new JButton(pauseIcon);
         pauseButton.setBounds(550, 200, 90, 70);
         pauseButton.addActionListener(this::actionPerformedPauseSong);
         pCenter.add(pauseButton);
 
-        stopButton = new JButton("Stop");
+        stopIcon = new ImageIcon("src/middleSectionHP/stopIcon.jpg");
+        stopButton = new JButton(stopIcon);
         stopButton.setBounds(680, 200, 75, 60);
         stopButton.addActionListener(this::stopMusic);
         pCenter.add(stopButton);
@@ -301,6 +307,7 @@ public class HomePageWindow extends JFrame implements ActionListener
         pCenter.add(nextSongButton);
 
         loopIcon = new ImageIcon("src/middleSectionHP/loopIcon.jpg");
+        loopingIcon = new ImageIcon("src/middleSectionHP/loopingIcon.jpg");
         loopButton = new JButton(loopIcon);
         loopButton.setBounds(550, 300, 80, 70);
         loopButton.addActionListener(this::actionPerformedLoopSong);
@@ -324,10 +331,24 @@ public class HomePageWindow extends JFrame implements ActionListener
         tenForwardButton.addActionListener(this::actionPerformedTenSecForward);
         pCenter.add(tenForwardButton);
 
-        // progress bar that moves with music
-        //progressBarObject.pB.setBounds(480, 400, 300, 20);
-        // pCenter.add(progressBarObject.pB);
         //</editor-fold>
+
+        // progress bar
+
+        songObject.pB.setBounds(480, 400, 300, 20);
+        songObject.timeSongNow.setBounds(430, 400, 40, 20);
+        songObject.totalTimeSong.setBounds(800, 400, 40, 20);
+        pCenter.add(songObject.timeSongNow);
+        pCenter.add(songObject.totalTimeSong);
+        pCenter.add(songObject.pB);
+
+        /*
+        progressBarButton = new JButton("Progress Bar");
+        progressBarButton.setBounds(480, 400, 300, 20);
+        progressBarButton.addActionListener(this::displayPB);
+        pCenter.add(progressBarButton);
+
+         */
 
         searchObject = new SearchWindow();
         searchObject.dispose();
@@ -344,7 +365,6 @@ public class HomePageWindow extends JFrame implements ActionListener
         setVisible(true);
     }
 
-    /*
     public void displayPB(ActionEvent e) // FIX THIS
     {
         EventQueue.invokeLater(new Runnable()
@@ -353,12 +373,11 @@ public class HomePageWindow extends JFrame implements ActionListener
             @Override
             public void run()
             {
-                new ProgressBarMethods().display();
+                new SongStuff().display();
             }
         });
     }
 
-     */
     public void displayPhotos(ActionEvent e) // FIX THIS
     {
         EventQueue.invokeLater(new Runnable()
@@ -728,17 +747,37 @@ public class HomePageWindow extends JFrame implements ActionListener
     {
         songObject.stopPlaying();
         playingPlaylist = false;
+        pauseButton.setIcon(pauseIcon);
         //progressBarObject.timer.stop();
     }
 
-    public void actionPerformedPauseSong(ActionEvent e) // I should combine it into one button,
-    // the pause and unpause methods
+    public void actionPerformedPauseSong(ActionEvent e)
     {
+        if (!isPaused)
+        {
+            pauseButton.setIcon(playIcon);
+        }
+        else
+        {
+            pauseButton.setIcon(pauseIcon);
+        }
+        isPaused = !isPaused;
+
         songObject.pauseUnpauseMusic();
     }
 
     public void actionPerformedLoopSong(ActionEvent e)
     {
+        if (!isLooping)
+        {
+            loopButton.setIcon(loopingIcon);
+        }
+        else
+        {
+            loopButton.setIcon(loopIcon);
+        }
+        isLooping = !isLooping;
+
         songObject.loopMusic();
     }
 

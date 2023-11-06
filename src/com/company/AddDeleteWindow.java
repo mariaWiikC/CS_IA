@@ -210,15 +210,8 @@ public class AddDeleteWindow extends JFrame
         //<editor-fold desc="LAYOUT">
         layout.setHorizontalGroup(
                 layout.createParallelGroup()
-                        .addComponent(tagsT) // move to left
                         .addGroup(layout.createSequentialGroup()
-                                .addComponent(songsT)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED,
-                                        GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(instrumentsT)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED,
-                                        GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(themesT))
+                                .addComponent(songsT))
                         .addGroup(layout.createSequentialGroup()
                                 .addComponent(songSearchIconLabel)
                                 .addGroup(layout.createParallelGroup()
@@ -228,27 +221,12 @@ public class AddDeleteWindow extends JFrame
                                 .addComponent(validateButton)
                                 .addGroup(layout.createParallelGroup()
                                         .addComponent(addSongButton)
-                                        .addComponent(deleteSongButton))
-
-                                .addComponent(instrumentSearchIconLabel)
-                                .addComponent(instrumentsSearchBox)
-                                .addGroup(layout.createParallelGroup()
-                                        .addComponent(addInstrumentButton)
-                                        .addComponent(deleteInstrumentButton))
-
-                                .addComponent(themeSearchIconLabel)
-                                .addComponent(themesSearchBox)
-                                .addGroup(layout.createParallelGroup()
-                                        .addComponent(addThemeButton)
-                                        .addComponent(deleteThemeButton)))
+                                        .addComponent(deleteSongButton)))
         );
         layout.setVerticalGroup(
                 layout.createSequentialGroup()
-                        .addComponent(tagsT)
                         .addGroup(layout.createParallelGroup()
-                                .addComponent(songsT)
-                                .addComponent(instrumentsT)
-                                .addComponent(themesT))
+                                .addComponent(songsT))
                         .addGroup(layout.createParallelGroup()
                                 .addComponent(songSearchIconLabel)
                                 .addGroup(layout.createSequentialGroup()
@@ -258,20 +236,7 @@ public class AddDeleteWindow extends JFrame
                                 .addComponent(validateButton)
                                 .addGroup(layout.createSequentialGroup()
                                         .addComponent(addSongButton)
-                                        .addComponent(deleteSongButton))
-
-
-                                .addComponent(instrumentSearchIconLabel)
-                                .addComponent(instrumentsSearchBox)
-                                .addGroup(layout.createSequentialGroup()
-                                        .addComponent(addInstrumentButton)
-                                        .addComponent(deleteInstrumentButton))
-
-                                .addComponent(themeSearchIconLabel)
-                                .addComponent(themesSearchBox)
-                                .addGroup(layout.createSequentialGroup()
-                                        .addComponent(addThemeButton)
-                                        .addComponent(deleteThemeButton)))
+                                        .addComponent(deleteSongButton)))
         );
         //</editor-fold>
 

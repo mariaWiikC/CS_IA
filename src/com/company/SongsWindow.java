@@ -252,12 +252,58 @@ public class SongsWindow extends JFrame
         //<editor-fold desc="LAYOUT">
         layout.setHorizontalGroup(
                 layout.createParallelGroup()
-                        .addComponent(listScroller)
+                        .addGroup(layout.createSequentialGroup()
+                                .addComponent(listScroller)
+                                .addGroup(layout.createParallelGroup()
+                                        .addComponent(moodT)
+                                        .addComponent(sadBox)
+                                        .addComponent(happyBox)
+                                        .addComponent(energeticBox)
+                                        .addComponent(relaxedBox))
+                                .addGroup(layout.createParallelGroup()
+                                        .addComponent(timeT)
+                                        .addComponent(morningBox)
+                                        .addComponent(afternoonBox)
+                                        .addComponent(eveningBox))
+                                .addGroup(layout.createParallelGroup()
+                                        .addComponent(instrumentT)
+                                        .addComponent(vocalBox)
+                                        .addComponent(guitarBox)
+                                        .addComponent(pianoBox))
+                                .addGroup(layout.createParallelGroup()
+                                        .addComponent(themeT)
+                                        .addComponent(EasterBox)
+                                        .addComponent(IndependenceBox)
+                                        .addComponent(ChristmasBox))
+                        )
                         .addComponent(editButton)
         );
         layout.setVerticalGroup(
                 layout.createSequentialGroup()
-                        .addComponent(listScroller)
+                        .addGroup(layout.createParallelGroup()
+                                .addComponent(listScroller)
+                                .addGroup(layout.createSequentialGroup()
+                                        .addComponent(moodT)
+                                        .addComponent(sadBox)
+                                        .addComponent(happyBox)
+                                        .addComponent(energeticBox)
+                                        .addComponent(relaxedBox))
+                                .addGroup(layout.createSequentialGroup()
+                                        .addComponent(timeT)
+                                        .addComponent(morningBox)
+                                        .addComponent(afternoonBox)
+                                        .addComponent(eveningBox))
+                                .addGroup(layout.createSequentialGroup()
+                                        .addComponent(instrumentT)
+                                        .addComponent(vocalBox)
+                                        .addComponent(guitarBox)
+                                        .addComponent(pianoBox))
+                                .addGroup(layout.createSequentialGroup()
+                                        .addComponent(themeT)
+                                        .addComponent(EasterBox)
+                                        .addComponent(IndependenceBox)
+                                        .addComponent(ChristmasBox))
+                        )
                         .addComponent(editButton)
         );
         //</editor-fold>
@@ -380,7 +426,7 @@ public class SongsWindow extends JFrame
         boolean integerLast = false;
         // checking if last item is an int
         // checking if the line has more than just the name of the song there
-        if (sbO.lastIndexOf(" ",sbO.lastIndexOf(" ") - 1) > -1)
+        if (sbO.lastIndexOf(" ", sbO.lastIndexOf(" ") - 1) > -1)
         {
             StringBuffer sb = new StringBuffer(sbO);
             System.out.println(sb.lastIndexOf(" "));
@@ -408,7 +454,7 @@ public class SongsWindow extends JFrame
         sbA.append(" ");
         if (integerLast)
         {
-          sbA.append(numOfPlays + " ");
+            sbA.append(numOfPlays + " ");
         }
 
         String sA = String.valueOf(sbA);

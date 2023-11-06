@@ -14,7 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
-public class SongStuff
+public class SongStuff extends JPanel
 {
     AudioInputStream audioInput;
     protected Clip clip;
@@ -49,7 +49,15 @@ public class SongStuff
 
     public SongStuff()
     {
+        this.setLayout(new GridLayout(1, 0));
+        pB = new JProgressBar();
+        pB.setMinimum(0);
+        timeSongNow = new JLabel("00:00");
+        totalTimeSong = new JLabel("00:00");
 
+        this.add(timeSongNow);
+        this.add(pB);
+        this.add(totalTimeSong);
     }
 
     Clip playMusic(String musicLocation)
@@ -66,18 +74,13 @@ public class SongStuff
                 clip.open(audioInput);
                 clip.start();
                 clipLength = clip.getMicrosecondLength();
-                timer.start();
 
-                pB = new JProgressBar();
                 pB.setValue(0);
-                pB.setStringPainted(true);
                 pB.setPreferredSize(new Dimension(300, 20));
                 pB.setMaximumSize(new Dimension(300, 20));
                 pB.setMinimumSize(new Dimension(300, 20));
 
-                timeSongNow = new JLabel("00:00");
-                totalTimeSong = new JLabel("00:00");
-
+                timer.start();
                 return clip;
             }
             else
@@ -91,23 +94,53 @@ public class SongStuff
 
     private void update() throws NoSuchFieldException, IllegalAccessException
     {
-        pB.setMaximum((int) clipLength / 1000);
+        pB.setMaximum((int) clipLength / 1000000);
+        // System.out.println((int) clipLength / 1000000);
 
         long actualSongPosition = clipTimePosition;
         // System.out.println(actualSongPosition);
         songPositionMin = (int) (actualSongPosition / 1000000) / 60;
         songPositionSec = (int) (actualSongPosition / 1000000) % 60;
         System.out.println(songPositionMin + ":" + songPositionSec);
-        timeSongNow.setText(songPositionMin + ":" + songPositionSec);
+        String timeNow = "00:00";
+        if (songPositionSec < 10 && songPositionMin < 10)
+        {
+            timeNow = "0" + songPositionMin + ":0" + songPositionSec;
+        }
+        if (songPositionSec >= 10 && songPositionMin < 10)
+        {
+            timeNow = "0" + songPositionMin + ":" + songPositionSec;
+        }
+        if (songPositionSec < 10 && songPositionMin >= 10)
+        {
+            timeNow = songPositionMin + ":0" + songPositionSec;
+        }
+        if (songPositionSec >= 10 && songPositionMin >= 10)
+        {
+            timeNow = "0" + songPositionMin + ":0" + songPositionSec;
+        }
+        timeSongNow.setText(timeNow);
+        timeSongNow.paintImmediately(timeSongNow.getVisibleRect());
 
         songLengthMin = (int) (clipLength / 1000000) / 60;
         songLengthSec = (int) (clipLength / 1000000) % 60;
         System.out.println(songLengthMin + ":" + songLengthSec);
         totalTimeSong.setText(songLengthMin + ":" + songLengthSec);
+        totalTimeSong.paintImmediately(timeSongNow.getVisibleRect());
 
-        pB.setValue((int) (actualSongPosition / 1000));
+        System.out.println((int) (actualSongPosition / 1000000));
+        pB.setValue((int) (actualSongPosition / 1000000));
 
         System.out.println("playingggg");
+    }
+
+    public void display() // IT'S NOT UPDATING THE PROGRESS BAR OR THE LABELS, AND I DUNNO WHAT TO DO
+    {
+        JFrame f = new JFrame("PB");
+        f.add(this);
+        f.pack();
+        f.setLocationRelativeTo(null);
+        f.setVisible(true);
     }
 
     public String whichPlayingNow()

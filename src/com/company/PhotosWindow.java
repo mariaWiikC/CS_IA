@@ -17,7 +17,7 @@ public class PhotosWindow extends JPanel
     private ArrayList<Icon> list = new ArrayList<>();
     JLabel label;
 
-    private Timer timer = new Timer(10000, new ActionListener() // this is ten seconds
+    private Timer timer = new Timer(5000, new ActionListener() // this is five seconds
     {
 
         @Override

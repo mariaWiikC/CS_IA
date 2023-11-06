@@ -45,6 +45,11 @@ public class SearchWindow extends JFrame
         // pCenter.setBorder(BorderFactory.createLineBorder(Color.black));
         add(pCenter, BorderLayout.CENTER);
 
+        GroupLayout layout = new GroupLayout(pCenter);
+        pCenter.setLayout(layout);
+        layout.setAutoCreateGaps(true);
+        layout.setAutoCreateContainerGaps(true);
+
         searchTagsFile = new File("src\\SearchTags.txt");
         if (!searchTagsFile.exists())
         {
@@ -105,39 +110,6 @@ public class SearchWindow extends JFrame
         searchT = new JLabel("Search");
         searchT.setBounds(30, 100, 100, 35);
         pCenter.add(searchT);
-
-        //<editor-fold desc="Combo Boxes">
-        String[] days = {"Day", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13",
-                "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28",
-                "29", "30", "31"};
-        String[] months = {"Month", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"};
-        String[] years = {"Year", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013",
-                "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024",
-                "2025", "2026", "2027", "2028", "2029", "2030"};
-        JComboBox comboBoxDays = new JComboBox(days);
-
-        JComboBox comboBoxMonths = new JComboBox(months);
-
-        JComboBox comboBoxYears = new JComboBox(years);
-
-        pCenter.add(comboBoxDays);
-        pCenter.add(comboBoxMonths);
-        pCenter.add(comboBoxYears);
-        //</editor-fold>
-
-        //<editor-fold desc="Real time stuff">
-        realTimeBox = new JCheckBox("Real Time");
-        pCenter.add(realTimeBox);
-
-        timeLabel = new JLabel(); // not updating in real time
-        showTime();
-        // System.out.println(showTime());
-        pCenter.add(timeLabel);
-        //</editor-fold>
-
-        timer = new Timer (1000, (ActionEvent e) -> showTime ());
-        timer.start ();
-
 
         // add the bounds to everything hereeee
         // got them from here: https://www.javatpoint.com/java-jcheckbox
@@ -236,6 +208,69 @@ public class SearchWindow extends JFrame
             cb.setEnabled(false);
         }
 
+        // choosingSearchTags
+
+        layout.setVerticalGroup(
+                layout.createSequentialGroup()
+                        .addComponent(searchT)
+                        .addGroup(layout.createParallelGroup()
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(moodT)
+                                                .addComponent(sadBox)
+                                                .addComponent(happyBox)
+                                                .addComponent(energeticBox)
+                                                .addComponent(relaxedBox)
+                                                .addComponent(choosingSearchTags)
+                                        )
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(timeT)
+                                                .addComponent(morningBox)
+                                                .addComponent(afternoonBox)
+                                                .addComponent(eveningBox))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(instrumentT)
+                                                .addComponent(vocalBox)
+                                                .addComponent(guitarBox)
+                                                .addComponent(pianoBox))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(themeT)
+                                                .addComponent(EasterBox)
+                                                .addComponent(IndependenceBox)
+                                                .addComponent(ChristmasBox))
+                        )
+        );
+
+        layout.setHorizontalGroup(
+                layout.createParallelGroup()
+                        .addComponent(searchT)
+                        .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup()
+                                                .addComponent(moodT)
+                                                .addComponent(sadBox)
+                                                .addComponent(happyBox)
+                                                .addComponent(energeticBox)
+                                                .addComponent(relaxedBox)
+                                                .addComponent(choosingSearchTags)
+                                        )
+                                        .addGroup(layout.createParallelGroup()
+                                                .addComponent(timeT)
+                                                .addComponent(morningBox)
+                                                .addComponent(afternoonBox)
+                                                .addComponent(eveningBox))
+                                        .addGroup(layout.createParallelGroup()
+                                                .addComponent(instrumentT)
+                                                .addComponent(vocalBox)
+                                                .addComponent(guitarBox)
+                                                .addComponent(pianoBox))
+                                        .addGroup(layout.createParallelGroup()
+                                                .addComponent(themeT)
+                                                .addComponent(EasterBox)
+                                                .addComponent(IndependenceBox)
+                                                .addComponent(ChristmasBox))
+                        )
+        );
+
+
         setVisible(true);
     }
 
@@ -297,19 +332,19 @@ public class SearchWindow extends JFrame
             for (ArrayList<String> a : allTags)
             {
                 // checking the tags
-                    checkingTag(a, "sad", sadBox);
-                    checkingTag(a, "energetic", energeticBox);
-                    checkingTag(a, "happy", happyBox);
-                    checkingTag(a, "relaxed", relaxedBox);
-                    checkingTag(a, "morning", morningBox);
-                    checkingTag(a, "afternoon", afternoonBox);
-                    checkingTag(a, "evening", eveningBox);
-                    checkingTag(a, "guitar", guitarBox);
-                    checkingTag(a, "piano", pianoBox);
-                    checkingTag(a, "vocal", vocalBox);
-                    checkingTag(a, "Independence", IndependenceBox);
-                    checkingTag(a, "Easter", EasterBox);
-                    checkingTag(a, "Christmas", ChristmasBox);
+                checkingTag(a, "sad", sadBox);
+                checkingTag(a, "energetic", energeticBox);
+                checkingTag(a, "happy", happyBox);
+                checkingTag(a, "relaxed", relaxedBox);
+                checkingTag(a, "morning", morningBox);
+                checkingTag(a, "afternoon", afternoonBox);
+                checkingTag(a, "evening", eveningBox);
+                checkingTag(a, "guitar", guitarBox);
+                checkingTag(a, "piano", pianoBox);
+                checkingTag(a, "vocal", vocalBox);
+                checkingTag(a, "Independence", IndependenceBox);
+                checkingTag(a, "Easter", EasterBox);
+                checkingTag(a, "Christmas", ChristmasBox);
             }
         }
 
@@ -423,18 +458,6 @@ public class SearchWindow extends JFrame
         }
     }
 
-    public void showTime()
-    {
-        LocalTime now = LocalTime.now();
-        int hours = now.getHour(), minutes = now.getMinute(), seconds = now.getSecond();
-        timeLabel.setText(formatInt(hours) + ":" + formatInt(minutes) + ":" + formatInt(seconds));
-    }
-
-    private String formatInt(int i)
-    {
-        return String.format("%02d", i);
-    }
-
     //<editor-fold desc="Menu bar actions">
     public void actionPerformed2(ActionEvent e)
     {
@@ -490,5 +513,3 @@ public class SearchWindow extends JFrame
     //</editor-fold>
 
 }
-
-// check the file thingy -> if the first element is a space, delete it
