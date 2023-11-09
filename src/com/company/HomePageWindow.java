@@ -30,7 +30,7 @@ public class HomePageWindow extends JFrame implements ActionListener
     private ImageIcon filterIcon, loopIcon, nextSongIcon, pauseIcon, playIcon, previousSongIcon,
             randomIcon, tenBackIcon, tenForwardIcon, searchIcon, loopingIcon, stopIcon;
     private JTextField searchBox;
-    private SongStuff songObject = new SongStuff();
+    private SongMethods songObject = new SongMethods();
     boolean isPlaying;
     private SearchWindow searchObject;
     ArrayList<ArrayList> allTags, allSongsAndTags;
@@ -105,12 +105,8 @@ public class HomePageWindow extends JFrame implements ActionListener
         menuSongs = new JMenuItem("Songs");
         menuSongs.addActionListener(this::actionPerformed3);
 
-        menuQueue = new JMenuItem("Queue");
-        menuQueue.addActionListener(this::actionPerformed6);
-
         fileMenu.add(menuAddDelete);
         fileMenu.add(menuPhotos);
-        fileMenu.add(menuQueue);
         fileMenu.add(menuSongs);
         fileMenu.add(menuSelect);
         fileMenu.add(menuPlaylists);
@@ -363,19 +359,6 @@ public class HomePageWindow extends JFrame implements ActionListener
         }
 
         setVisible(true);
-    }
-
-    public void displayPB(ActionEvent e) // FIX THIS
-    {
-        EventQueue.invokeLater(new Runnable()
-        {
-
-            @Override
-            public void run()
-            {
-                new SongStuff().display();
-            }
-        });
     }
 
     public void displayPhotos(ActionEvent e) // FIX THIS
@@ -939,13 +922,6 @@ public class HomePageWindow extends JFrame implements ActionListener
             ex.printStackTrace();
         }
         PlaylistsWindow.setVisible(true); // display
-        dispose(); // close home page
-    }
-
-    public void actionPerformed6(ActionEvent e)
-    {
-        JFrame QueuePreviewWindow = new QueuePreviewWindow(); // open another JFrame
-        QueuePreviewWindow.setVisible(true); // display
         dispose(); // close home page
     }
 

@@ -14,7 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
-public class SongStuff extends JPanel
+public class SongMethods extends JPanel
 {
     AudioInputStream audioInput;
     protected Clip clip;
@@ -47,7 +47,7 @@ public class SongStuff extends JPanel
         }
     });
 
-    public SongStuff()
+    public SongMethods()
     {
         this.setLayout(new GridLayout(1, 0));
         pB = new JProgressBar();
@@ -95,13 +95,11 @@ public class SongStuff extends JPanel
     private void update() throws NoSuchFieldException, IllegalAccessException
     {
         pB.setMaximum((int) clipLength / 1000000);
-        // System.out.println((int) clipLength / 1000000);
 
         long actualSongPosition = clipTimePosition;
         // System.out.println(actualSongPosition);
         songPositionMin = (int) (actualSongPosition / 1000000) / 60;
         songPositionSec = (int) (actualSongPosition / 1000000) % 60;
-        System.out.println(songPositionMin + ":" + songPositionSec);
         String timeNow = "00:00";
         if (songPositionSec < 10 && songPositionMin < 10)
         {
@@ -124,23 +122,10 @@ public class SongStuff extends JPanel
 
         songLengthMin = (int) (clipLength / 1000000) / 60;
         songLengthSec = (int) (clipLength / 1000000) % 60;
-        System.out.println(songLengthMin + ":" + songLengthSec);
         totalTimeSong.setText(songLengthMin + ":" + songLengthSec);
         totalTimeSong.paintImmediately(timeSongNow.getVisibleRect());
 
-        System.out.println((int) (actualSongPosition / 1000000));
         pB.setValue((int) (actualSongPosition / 1000000));
-
-        System.out.println("playingggg");
-    }
-
-    public void display() // IT'S NOT UPDATING THE PROGRESS BAR OR THE LABELS, AND I DUNNO WHAT TO DO
-    {
-        JFrame f = new JFrame("PB");
-        f.add(this);
-        f.pack();
-        f.setLocationRelativeTo(null);
-        f.setVisible(true);
     }
 
     public String whichPlayingNow()

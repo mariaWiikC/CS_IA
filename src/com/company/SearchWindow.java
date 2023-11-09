@@ -85,12 +85,8 @@ public class SearchWindow extends JFrame
         menuSongs = new JMenuItem("Songs");
         menuSongs.addActionListener(this::actionPerformed3);
 
-        menuQueue = new JMenuItem("Queue");
-        menuQueue.addActionListener(this::actionPerformed6);
-
         fileMenu.add(menuHome);
         fileMenu.add(menuPhotos);
-        fileMenu.add(menuQueue);
         fileMenu.add(menuSongs);
         fileMenu.add(menuPlaylists);
         menuBar.add(fileMenu);
@@ -503,13 +499,6 @@ public class SearchWindow extends JFrame
     }
 
      */
-
-    public void actionPerformed6(ActionEvent e)
-    {
-        JFrame QueuePreviewWindow = new QueuePreviewWindow(); // open another JFrame
-        QueuePreviewWindow.setVisible(true); // display SelectPlayWindow
-        dispose(); // close home page
-    }
     //</editor-fold>
 
 }

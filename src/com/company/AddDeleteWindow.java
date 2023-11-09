@@ -92,12 +92,8 @@ public class AddDeleteWindow extends JFrame
         menuSongs = new JMenuItem("Songs");
         menuSongs.addActionListener(this::actionPerformed3);
 
-        menuQueue = new JMenuItem("Queue");
-        menuQueue.addActionListener(this::actionPerformed6);
-
         fileMenu.add(menuHome);
         fileMenu.add(menuPhotos);
-        fileMenu.add(menuQueue);
         fileMenu.add(menuSongs);
         fileMenu.add(menuPlaylists);
         menuBar.add(fileMenu);
@@ -276,23 +272,6 @@ public class AddDeleteWindow extends JFrame
             ex.printStackTrace();
         }
         PlaylistsWindow.setVisible(true); // display SelectPlayWindow
-        dispose(); // close home page
-    }
-
-    /*
-    public void actionPerformed5(ActionEvent e)
-    {
-        JFrame PhotosWindow = new PhotosWindow(); // open another JFrame
-        PhotosWindow.setVisible(true); // display SelectPlayWindow
-        dispose(); // close home page
-    }
-
-     */
-
-    public void actionPerformed6(ActionEvent e)
-    {
-        JFrame QueuePreviewWindow = new QueuePreviewWindow(); // open another JFrame
-        QueuePreviewWindow.setVisible(true); // display SelectPlayWindow
         dispose(); // close home page
     }
     //</editor-fold>

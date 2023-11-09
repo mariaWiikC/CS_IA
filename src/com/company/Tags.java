@@ -27,6 +27,7 @@ public class Tags
         allTags.add("Christmas");
     }
 
+    /*
     public void addTag(String newTag)
     {
         allTags.add(newTag);
@@ -36,5 +37,5 @@ public class Tags
     {
         allTags.remove(toRemoveTag);
     }
-
+     */
 }

@@ -17,7 +17,7 @@ public class PlaylistMethods extends Thread
     PlaylistsWindow playlistsObject;
     protected JButton playButton;
     protected ArrayList<String> playlistFileContent, songsPaths = new ArrayList<>();
-    SongStuff songObject;
+    SongMethods songObject;
 
     public PlaylistMethods()
     {
@@ -51,12 +51,12 @@ public class PlaylistMethods extends Thread
         //</editor-fold>
 
         playButton = new JButton("Play");
-        playButton.addActionListener(this::smt);
+        playButton.addActionListener(this::playPlaylist);
 
-        songObject = new SongStuff();
+        songObject = new SongMethods();
     }
 
-    public void smt(ActionEvent e)
+    public void playPlaylist(ActionEvent e)
     {
         if (listPlaylists.getSelectedValue() != null)
         {

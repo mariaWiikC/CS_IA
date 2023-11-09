@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 public class HomePageMethods extends Thread
 {
-    private SongStuff songObject = new SongStuff();
     File searchResultsFile, queueFile, queueSongsFile;
 
     public HomePageMethods() throws IOException
@@ -39,6 +38,7 @@ public class HomePageMethods extends Thread
             queueSongsFile.createNewFile();
     }
 
+    /*
     public void smtElse()
     {
         PlaylistMethods selectPlaylistObject = null;
@@ -48,4 +48,6 @@ public class HomePageMethods extends Thread
         System.out.println("Printing the thingy now");
         System.out.println(songsToPlay);
     }
+
+     */
 }
