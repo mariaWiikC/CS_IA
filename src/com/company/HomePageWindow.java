@@ -64,6 +64,9 @@ public class HomePageWindow extends JFrame implements ActionListener
 
     JButton progressBarButton;
 
+    Photo photoObject = new Photo();
+    Queue queueObject = new Queue();
+
     public HomePageWindow() throws IOException
     {
         super("Audio Player");
@@ -97,8 +100,7 @@ public class HomePageWindow extends JFrame implements ActionListener
         menuAddDelete.addActionListener(this::actionPerformed2);
 
         menuPhotos = new JMenuItem("Photos");
-        menuPhotos.addActionListener(this::displayPhotos);
-
+        menuPhotos.addActionListener((ActionEvent e) -> photoObject.displayPhotos());
         menuPlaylists = new JMenuItem("Playlists");
         menuPlaylists.addActionListener(this::actionPerformed4);
 
@@ -206,18 +208,18 @@ public class HomePageWindow extends JFrame implements ActionListener
 
         toQueuePreviewWindow = new JButton("Queue");
         toQueuePreviewWindow.setBounds(1100, 300, 100, 35);
-        toQueuePreviewWindow.addActionListener(this::updateQueue);
+        toQueuePreviewWindow.addActionListener((ActionEvent e) -> queueObject.updateQueue());
         pCenter.add(toQueuePreviewWindow);
 
         toPhotosWindow = new JButton("Photos");
         toPhotosWindow.setBounds(1100, 150, 100, 35);
-        toPhotosWindow.addActionListener(this::displayPhotos);
+        toPhotosWindow.addActionListener((ActionEvent e) -> photoObject.displayPhotos());
         pCenter.add(toPhotosWindow);
         //</editor-fold>
 
         addPhotosButton = new JButton("Add Photo");
         addPhotosButton.setBounds(1100, 100, 100, 35);
-        addPhotosButton.addActionListener(this::addingPhotos);
+        addPhotosButton.addActionListener((ActionEvent e) -> photoObject.addingPhotos());
         pCenter.add(addPhotosButton);
 
         //<editor-fold desc="Search Stuff">
@@ -249,25 +251,25 @@ public class HomePageWindow extends JFrame implements ActionListener
 
         sadIcon = new ImageIcon("src/moodIcons/sadIcon.png");
         sadFaceButton = new JButton(sadIcon);
-        sadFaceButton.addActionListener(this::addSadFace);
+        sadFaceButton.addActionListener((ActionEvent e) -> queueObject.addSadFace());
         sadFaceButton.setBounds(800, 450, 100, 90);
         pCenter.add(sadFaceButton);
 
         chillIcon = new ImageIcon("src/moodIcons/chillIcon.png");
         chillFaceButton = new JButton(chillIcon);
-        chillFaceButton.addActionListener(this::addRelaxedFace);
+        chillFaceButton.addActionListener((ActionEvent e) -> queueObject.addRelaxedFace());
         chillFaceButton.setBounds(1100, 450, 100, 90);
         pCenter.add(chillFaceButton);
 
         happyIcon = new ImageIcon("src/moodIcons/happyIcon.png");
         happyFaceButton = new JButton(happyIcon);
-        happyFaceButton.addActionListener(this::addHappyFace);
+        happyFaceButton.addActionListener((ActionEvent e) -> queueObject.addHappyFace());
         happyFaceButton.setBounds(900, 450, 100, 90);
         pCenter.add(happyFaceButton);
 
         veryHappyIcon = new ImageIcon("src/moodIcons/veryHappyIcon.png");
         veryHappyButton = new JButton(veryHappyIcon);
-        veryHappyButton.addActionListener(this::addEnergeticFace);
+        veryHappyButton.addActionListener((ActionEvent e) -> queueObject.addEnergeticFace());
         veryHappyButton.setBounds(1000, 450, 100, 90);
         pCenter.add(veryHappyButton);
         //</editor-fold>
@@ -359,233 +361,6 @@ public class HomePageWindow extends JFrame implements ActionListener
         }
 
         setVisible(true);
-    }
-
-    public void displayPhotos(ActionEvent e) // FIX THIS
-    {
-        EventQueue.invokeLater(new Runnable()
-        {
-
-            @Override
-            public void run()
-            {
-                new PhotosWindow().display();
-            }
-        });
-    }
-
-    //<editor-fold desc="Editing mood on queue txt file">
-    public void addSadFace(ActionEvent e)
-    {
-        try
-        {
-            fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(homePageMethodsObject.queueFile)), StandardCharsets.UTF_8));
-            fileContent.set(0, "sad ");
-            Files.write(Path.of(String.valueOf(homePageMethodsObject.queueFile)), fileContent, StandardCharsets.UTF_8);
-        } catch (IOException a)
-        {
-            a.printStackTrace();
-        }
-    }
-
-    public void addEnergeticFace(ActionEvent e)
-    {
-        try
-        {
-            fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(homePageMethodsObject.queueFile)), StandardCharsets.UTF_8));
-            fileContent.set(0, "energetic ");
-            Files.write(Path.of(String.valueOf(homePageMethodsObject.queueFile)), fileContent, StandardCharsets.UTF_8);
-        } catch (IOException a)
-        {
-            a.printStackTrace();
-        }
-    }
-
-    public void addHappyFace(ActionEvent e)
-    {
-        try
-        {
-            fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(homePageMethodsObject.queueFile)), StandardCharsets.UTF_8));
-            fileContent.set(0, "happy ");
-            Files.write(Path.of(String.valueOf(homePageMethodsObject.queueFile)), fileContent, StandardCharsets.UTF_8);
-        } catch (IOException a)
-        {
-            a.printStackTrace();
-        }
-    }
-
-    public void addRelaxedFace(ActionEvent e)
-    {
-        try
-        {
-            fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(homePageMethodsObject.queueFile)), StandardCharsets.UTF_8));
-            fileContent.set(0, "relaxed ");
-            Files.write(Path.of(String.valueOf(homePageMethodsObject.queueFile)), fileContent, StandardCharsets.UTF_8);
-        } catch (IOException a)
-        {
-            a.printStackTrace();
-        }
-    }
-    //</editor-fold>
-
-    public void updateQueue(ActionEvent e)
-            // icould probs use  dame fileContent, just update it
-    {
-        //<editor-fold desc="Themes tags added">
-        // MAKE SURE I DELETE THE TEXT WHEN IT'S OUT OF SEASON
-        // ALSO, CHECK IF THE TAG IS THERE ALREADY
-        // clear the entire FILE CONTENT after the first element
-        if (currentMonth > 9)
-        {
-            try
-            {
-                fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(homePageMethodsObject.queueFile)), StandardCharsets.UTF_8));
-                int numReps = fileContent.size();
-                for (int i = 0; i < numReps; i++)
-                {
-                    if (i > 0)
-                    {
-                        fileContent.remove(fileContent.get(1));
-                    }
-                }
-                fileContent.add("Christmas ");
-                fileContent.add("Independence ");
-                Files.write(Path.of(String.valueOf(homePageMethodsObject.queueFile)), fileContent, StandardCharsets.UTF_8);
-            } catch (IOException a)
-            {
-                a.printStackTrace();
-            }
-        }
-
-        if (currentMonth < 3)
-        {
-            try
-            {
-                fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(homePageMethodsObject.queueFile)), StandardCharsets.UTF_8));
-                for (int i = 0; i < fileContent.size(); i++)
-                {
-                    if (i > 0)
-                    {
-                        fileContent.remove(fileContent.get(1));
-                    }
-                }
-                fileContent.add("Easter ");
-                Files.write(Path.of(String.valueOf(homePageMethodsObject.queueFile)), fileContent, StandardCharsets.UTF_8);
-            } catch (IOException a)
-            {
-                a.printStackTrace();
-            }
-        }
-        //</editor-fold>
-
-        //<editor-fold desc="Time of day">
-        String[] timeDayArr = {"morning ", "afternoon ", "evening "};
-
-        try
-        {
-            fileContent4 = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(homePageMethodsObject.queueFile)), StandardCharsets.UTF_8));
-            for (String str : timeDayArr)
-            {
-                if (fileContent4.contains(str))
-                {
-                    fileContent4.remove(str);
-                }
-            }
-            LocalTime now = LocalTime.now();
-            int hours = now.getHour();
-            if (hours >= 6 && hours < 12)
-                fileContent4.add("morning ");
-            if (hours >= 12 && hours < 18)
-                fileContent4.add("afternoon");
-            if (hours >= 18 || hours < 6)
-                fileContent4.add("evening ");
-            Files.write(Path.of(String.valueOf(homePageMethodsObject.queueFile)), fileContent4, StandardCharsets.UTF_8);
-        } catch (IOException a)
-        {
-            a.printStackTrace();
-        }
-        //</editor-fold>
-
-        // adding songs to queueSongs txt file
-        //<editor-fold desc="Adding songs">
-        // most and least selected songs
-        int min = 100000000, max = 0, minIndex = 0, maxIndex = 0;
-        try
-        {
-            // is there a better way to refer to the object? Or should I have made an object and just open it on the window
-            // instead of placing the whole code on the window -> i don't think this way it would open another window
-            fileContent2 = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(addDeleteObject.songsAndTagsFile)), StandardCharsets.UTF_8));
-            for (int i = 0; i < fileContent2.size(); i++)
-            {
-                String[] sArray = fileContent2.get(i).split(" ");
-                if (Integer.valueOf(sArray[sArray.length - 1]) < min && Integer.valueOf(sArray[sArray.length - 1]) > 0)
-                {
-                    min = Integer.valueOf(sArray[sArray.length - 1]);
-                    minIndex = i;
-                }
-                if (Integer.valueOf(sArray[sArray.length - 1]) > max)
-                {
-                    max = Integer.valueOf(sArray[sArray.length - 1]);
-                    maxIndex = i;
-                }
-            }
-
-            fileContent3 = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(homePageMethodsObject.queueSongsFile)), StandardCharsets.UTF_8));
-            int numReps = fileContent3.size();
-            for (int i = 0; i < numReps; i++)
-            {
-                fileContent3.remove(fileContent3.get(0));
-            }
-            Files.write(Path.of(String.valueOf(homePageMethodsObject.queueSongsFile)), fileContent3, StandardCharsets.UTF_8);
-
-
-            // adding the most and least played songs
-            for (int i = 0; i < fileContent2.size(); i++)
-            {
-                String[] sArray = fileContent2.get(i).split(" ");
-                if (i == minIndex)
-                {
-                    fileContent3.add(sArray[0]);
-                }
-                if (i == maxIndex)
-                {
-                    fileContent3.add(sArray[0]);
-                }
-            }
-
-            // NOW I GOTTA ADD THE SONGS THAT HAVE THE TAGS
-            for (int i = 0; i < fileContent4.size(); i++)
-            {
-                StringBuffer sb = new StringBuffer(fileContent4.get(i));
-                sb.delete(sb.length() - 1, sb.length());
-                String actualMood = String.valueOf(sb);
-
-                boolean hasTag = false;
-                for (int l = 0; l < fileContent2.size(); l++)
-                {
-                    String[] sArray = fileContent2.get(l).split(" ");
-                    for (String wordInLine : sArray)
-                    {
-                        if (wordInLine.equals(actualMood))
-                        {
-                            hasTag = true;
-                            break;
-                        }
-                    }
-                    if (hasTag && (!fileContent3.contains(sArray[0])))
-                    {
-                        fileContent3.add(sArray[0]);
-                    }
-                }
-
-            }
-
-            Files.write(Path.of(String.valueOf(homePageMethodsObject.queueSongsFile)), fileContent3, StandardCharsets.UTF_8);
-        } catch (IOException a)
-        {
-            a.printStackTrace();
-        }
-        //</editor-fold>
     }
 
     public void search(ActionEvent e)
@@ -890,32 +665,6 @@ public class HomePageWindow extends JFrame implements ActionListener
                 System.out.println(rnd);
                 alreadyPlayed.add(rnd);
                 songObject.playMusic(songsPaths.get(rnd));
-            }
-        }
-    }
-
-    public void addingPhotos(ActionEvent e) // FIX THIS
-    {
-        JFileChooser imageUpload = new JFileChooser();
-        int res2 = imageUpload.showSaveDialog(null);
-
-        // copying the file
-        if (res2 == JFileChooser.APPROVE_OPTION)
-        {
-            File imagePath = new File(imageUpload.getSelectedFile().getAbsolutePath());
-
-            Path sourcePath = Path.of(imageUpload.getSelectedFile().getAbsolutePath());
-            StringBuffer sb = new StringBuffer(imageUpload.getSelectedFile().getAbsolutePath());
-            System.out.println(sb);
-            sb.delete(0, sb.length() - 7);
-            String targetPath = "src/Photos/" + sb;
-
-            try
-            {
-                Files.copy(sourcePath, Path.of(targetPath), new StandardCopyOption[]{StandardCopyOption.REPLACE_EXISTING});
-            } catch (IOException ex)
-            {
-                ex.printStackTrace();
             }
         }
     }
