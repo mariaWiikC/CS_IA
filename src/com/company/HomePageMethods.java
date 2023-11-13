@@ -37,17 +37,4 @@ public class HomePageMethods extends Thread
         if (!queueSongsFile.exists())
             queueSongsFile.createNewFile();
     }
-
-    /*
-    public void smtElse()
-    {
-        PlaylistMethods selectPlaylistObject = null;
-        selectPlaylistObject = new PlaylistMethods();
-        ArrayList<String> songsToPlay = new ArrayList<>(selectPlaylistObject.returningSongsPaths());
-
-        System.out.println("Printing the thingy now");
-        System.out.println(songsToPlay);
-    }
-
-     */
 }

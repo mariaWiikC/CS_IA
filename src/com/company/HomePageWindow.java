@@ -11,8 +11,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalTime;
 import java.util.*;
-
+// create classes for the objects and stuff - one for each of the following: song, playlist, photo, queue
 public class HomePageWindow extends JFrame implements ActionListener
 {
     private JMenuBar menuBar;
@@ -26,11 +27,10 @@ public class HomePageWindow extends JFrame implements ActionListener
     private ImageIcon sadIcon, chillIcon, happyIcon, veryHappyIcon;
     private JButton filterButton, loopButton, nextSongButton, pauseButton, playButton, previousSongButton,
             randomButton, tenBackButton, tenForwardButton, searchButton, stopButton;
-    // Do I need a search button? Or will the search happen when the user presses enter
     private ImageIcon filterIcon, loopIcon, nextSongIcon, pauseIcon, playIcon, previousSongIcon,
             randomIcon, tenBackIcon, tenForwardIcon, searchIcon, loopingIcon, stopIcon;
     private JTextField searchBox;
-    private SongMethods songObject = new SongMethods();
+    private AudioControl songObject = new AudioControl();
     boolean isPlaying;
     private SearchWindow searchObject;
     ArrayList<ArrayList> allTags, allSongsAndTags;
@@ -46,7 +46,7 @@ public class HomePageWindow extends JFrame implements ActionListener
     protected DefaultListModel listModel;
     PlaylistsWindow playlistsObjectWindow;
 
-    protected ArrayList<String> playlistFileContent, fileContent2, songsPaths = new ArrayList<>();
+    protected ArrayList<String> playlistFileContent, fileContent2, fileContent4, songsPaths = new ArrayList<>();
     Calendar cal;
     int currentMonth;
 
@@ -429,6 +429,7 @@ public class HomePageWindow extends JFrame implements ActionListener
     //</editor-fold>
 
     public void updateQueue(ActionEvent e)
+            // icould probs use  dame fileContent, just update it
     {
         //<editor-fold desc="Themes tags added">
         // MAKE SURE I DELETE THE TEXT WHEN IT'S OUT OF SEASON
@@ -474,6 +475,34 @@ public class HomePageWindow extends JFrame implements ActionListener
             {
                 a.printStackTrace();
             }
+        }
+        //</editor-fold>
+
+        //<editor-fold desc="Time of day">
+        String[] timeDayArr = {"morning ", "afternoon ", "evening "};
+
+        try
+        {
+            fileContent4 = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(homePageMethodsObject.queueFile)), StandardCharsets.UTF_8));
+            for (String str : timeDayArr)
+            {
+                if (fileContent4.contains(str))
+                {
+                    fileContent4.remove(str);
+                }
+            }
+            LocalTime now = LocalTime.now();
+            int hours = now.getHour();
+            if (hours >= 6 && hours < 12)
+                fileContent4.add("morning ");
+            if (hours >= 12 && hours < 18)
+                fileContent4.add("afternoon");
+            if (hours >= 18 || hours < 6)
+                fileContent4.add("evening ");
+            Files.write(Path.of(String.valueOf(homePageMethodsObject.queueFile)), fileContent4, StandardCharsets.UTF_8);
+        } catch (IOException a)
+        {
+            a.printStackTrace();
         }
         //</editor-fold>
 
@@ -525,26 +554,30 @@ public class HomePageWindow extends JFrame implements ActionListener
             }
 
             // NOW I GOTTA ADD THE SONGS THAT HAVE THE TAGS
-            for (int i = 0; i < fileContent.size(); i++)
+            for (int i = 0; i < fileContent4.size(); i++)
             {
-                StringBuffer sb = new StringBuffer(fileContent.get(i));
+                StringBuffer sb = new StringBuffer(fileContent4.get(i));
                 sb.delete(sb.length() - 1, sb.length());
                 String actualMood = String.valueOf(sb);
 
                 boolean hasTag = false;
-                String[] sArray = fileContent2.get(i).split(" ");
-                for (String wordInLine : sArray)
+                for (int l = 0; l < fileContent2.size(); l++)
                 {
-                    if (wordInLine.equals(actualMood))
+                    String[] sArray = fileContent2.get(l).split(" ");
+                    for (String wordInLine : sArray)
                     {
-                        hasTag = true;
-                        break;
+                        if (wordInLine.equals(actualMood))
+                        {
+                            hasTag = true;
+                            break;
+                        }
+                    }
+                    if (hasTag && (!fileContent3.contains(sArray[0])))
+                    {
+                        fileContent3.add(sArray[0]);
                     }
                 }
-                if (hasTag && (!fileContent3.contains(sArray[0])))
-                {
-                    fileContent3.add(sArray[0]);
-                }
+
             }
 
             Files.write(Path.of(String.valueOf(homePageMethodsObject.queueSongsFile)), fileContent3, StandardCharsets.UTF_8);

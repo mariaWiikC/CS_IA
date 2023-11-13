@@ -17,7 +17,7 @@ public class PlaylistMethods extends Thread
     PlaylistsWindow playlistsObject;
     protected JButton playButton;
     protected ArrayList<String> playlistFileContent, songsPaths = new ArrayList<>();
-    SongMethods songObject;
+    AudioControl songObject;
 
     public PlaylistMethods()
     {
@@ -53,7 +53,7 @@ public class PlaylistMethods extends Thread
         playButton = new JButton("Play");
         playButton.addActionListener(this::playPlaylist);
 
-        songObject = new SongMethods();
+        songObject = new AudioControl();
     }
 
     public void playPlaylist(ActionEvent e)

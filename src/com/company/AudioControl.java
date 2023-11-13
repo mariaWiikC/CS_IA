@@ -14,7 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
-public class SongMethods extends JPanel
+public class AudioControl extends JPanel // could call it audiocontrol
 {
     AudioInputStream audioInput;
     protected Clip clip;
@@ -47,7 +47,7 @@ public class SongMethods extends JPanel
         }
     });
 
-    public SongMethods()
+    public AudioControl()
     {
         this.setLayout(new GridLayout(1, 0));
         pB = new JProgressBar();
@@ -55,9 +55,12 @@ public class SongMethods extends JPanel
         timeSongNow = new JLabel("00:00");
         totalTimeSong = new JLabel("00:00");
 
+        /*
         this.add(timeSongNow);
         this.add(pB);
         this.add(totalTimeSong);
+
+         */
     }
 
     Clip playMusic(String musicLocation)
