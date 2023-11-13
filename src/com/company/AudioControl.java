@@ -27,6 +27,16 @@ public class AudioControl extends JPanel // could call it audiocontrol
     protected JProgressBar pB;
     int songPositionSec = 0, songPositionMin = 0, songLengthMin = 0, songLengthSec = 0;
     protected JLabel timeSongNow, totalTimeSong;
+    AddingDeleting addDeleteObject;
+    {
+        try
+        {
+            addDeleteObject = new AddingDeleting();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
 
     public Timer timer = new Timer(1000, new ActionListener() // this is one seconds
     {
@@ -137,23 +147,13 @@ public class AudioControl extends JPanel // could call it audiocontrol
         return musicPath.getName();
     }
 
-    public void addingNumOfPlays(String musicLocation)
+    public void addingNumOfPlays(String musicLocation) throws IOException
     {
         StringBuffer songName = new StringBuffer(musicLocation);
         songName.delete(songName.length() - 4, songName.length());
         // 15 is to delete src\songsFiles\
         songName.delete(0, 15);
         System.out.println(songName);
-
-        AddDeleteWindow addDeleteObject = null;
-        try
-        {
-            addDeleteObject = new AddDeleteWindow();
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        addDeleteObject.dispose();
 
         // open the songsWithTags file, find the line with the song, get the last element
         // add one to the last element, and substitute it

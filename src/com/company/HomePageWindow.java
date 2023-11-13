@@ -38,7 +38,7 @@ public class HomePageWindow extends JFrame implements ActionListener
     private boolean allMatch;
     protected ArrayList<String> allSearchResults = new ArrayList<>(), fileContent, fileContent3;
     JFrame SearchResultsWindow;
-    PlaylistMethods playlistsObject;
+    Playlist playlistsObject;
     HomePageMethods homePageObject;
 
     protected JScrollPane listScroller;
@@ -168,6 +168,8 @@ public class HomePageWindow extends JFrame implements ActionListener
         {
             e.printStackTrace();
         }
+
+        Playlist playlistMethodsObject = new Playlist();
 
         listModel = new DefaultListModel();
         playlistsObjectWindow.readingTxtFile();
@@ -340,13 +342,6 @@ public class HomePageWindow extends JFrame implements ActionListener
         pCenter.add(songObject.totalTimeSong);
         pCenter.add(songObject.pB);
 
-        /*
-        progressBarButton = new JButton("Progress Bar");
-        progressBarButton.setBounds(480, 400, 300, 20);
-        progressBarButton.addActionListener(this::displayPB);
-        pCenter.add(progressBarButton);
-
-         */
 
         searchObject = new SearchWindow();
         searchObject.dispose();
@@ -529,8 +524,6 @@ public class HomePageWindow extends JFrame implements ActionListener
             String realPath = "src/songsFiles/" + actualPath;
             System.out.println(realPath);
             songObject.playMusic(realPath);
-            // songObject.isPlaying = true;
-            // progressBarObject.timer.start();
         }
     }
 

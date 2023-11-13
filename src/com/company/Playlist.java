@@ -9,7 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
-public class PlaylistMethods extends Thread
+public class Playlist extends Thread
 {
     protected JScrollPane listScroller;
     protected JList listPlaylists;
@@ -19,7 +19,7 @@ public class PlaylistMethods extends Thread
     protected ArrayList<String> playlistFileContent, songsPaths = new ArrayList<>();
     AudioControl songObject;
 
-    public PlaylistMethods()
+    public Playlist()
     {
         try
         {
