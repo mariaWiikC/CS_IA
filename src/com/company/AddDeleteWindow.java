@@ -35,7 +35,7 @@ public class AddDeleteWindow extends JFrame
     private JList listSongs;
     private DefaultListModel listModel;
     private JScrollPane listScroller;
-    public File songsAndTagsFile;
+    // public File songsAndTagsFile;
     private ArrayList<String> fileContent, fileContent2;
     private String nameWritten, targetPath;
     PlaylistsWindow playlistObject;
@@ -50,7 +50,8 @@ public class AddDeleteWindow extends JFrame
         super("Add/Delete");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLayout(new FlowLayout());
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        // setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         pCenter = new JPanel();
         pCenter.setPreferredSize(new Dimension(1260, 650));
@@ -93,7 +94,7 @@ public class AddDeleteWindow extends JFrame
         menuSongs = new JMenuItem("Songs");
         menuSongs.addActionListener(this::actionPerformed3);
 
-        fileMenu.add(menuHome);
+        // fileMenu.add(menuHome);
         fileMenu.add(menuPhotos);
         fileMenu.add(menuSongs);
         fileMenu.add(menuPlaylists);
@@ -225,7 +226,7 @@ public class AddDeleteWindow extends JFrame
             ex.printStackTrace();
         }
         HomePageWindow.setVisible(true); // display SelectPlayWindow
-        dispose(); // close home page
+        dispose(); // close page
     }
 
     public void actionPerformed3(ActionEvent e)

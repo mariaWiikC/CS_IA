@@ -21,12 +21,13 @@ public class SearchResultsWindow extends JFrame
     public SearchResultsWindow() throws IOException
     {
         super("Search Results");
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setSize(250, 400);
+        setLocationRelativeTo(null);
         setLayout(new FlowLayout());
         // TO THE HOME PAGE
 
         pCenter = new JPanel();
-        pCenter.setPreferredSize(new Dimension(1260, 650));
+        pCenter.setPreferredSize(new Dimension(250, 400));
         // pCenter.setBorder(BorderFactory.createLineBorder(Color.black));
         add(pCenter, BorderLayout.CENTER);
 

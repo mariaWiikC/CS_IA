@@ -35,13 +35,14 @@ public class SearchWindow extends JFrame
         // make a smaller JFrame - is there a way to leave the "minimize", "x" button out of the frame?
         // DO NOT USE SET BOUNDS, I AM SUPPOSED TO USE PANELS INSIDE PANELS
         super("Search");
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setSize(500, 300);
+        setLocationRelativeTo(null);
         setLayout(new FlowLayout());
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        // setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         // make a smaller JPanel
         pCenter = new JPanel();
-        pCenter.setPreferredSize(new Dimension(1260, 650));
+        pCenter.setPreferredSize(new Dimension(500, 300));
         // pCenter.setBorder(BorderFactory.createLineBorder(Color.black));
         add(pCenter, BorderLayout.CENTER);
 

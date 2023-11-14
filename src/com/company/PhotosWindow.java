@@ -65,7 +65,7 @@ public class PhotosWindow extends JPanel
     {
         JFrame f = new JFrame("Photos");
         // i don't want to exit the program, just the JFrame
-        // f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         f.add(this);
         //f.setSize(new Dimension(400, 400));
         f.pack(); // not this, make it full screen

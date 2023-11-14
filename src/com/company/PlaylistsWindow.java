@@ -54,7 +54,8 @@ public class PlaylistsWindow extends JFrame
         super("Playlists");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLayout(new FlowLayout());
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        // setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         pCenter = new JPanel();
         pCenter.setLayout(null);
@@ -87,7 +88,7 @@ public class PlaylistsWindow extends JFrame
         fileMenu.add(menuAddDelete);
         fileMenu.add(menuPhotos);
         fileMenu.add(menuSongs);
-        fileMenu.add(menuHome);
+        // fileMenu.add(menuHome);
         menuBar.add(fileMenu);
         setJMenuBar(menuBar);
         //</editor-fold>

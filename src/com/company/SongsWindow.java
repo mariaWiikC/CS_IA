@@ -34,13 +34,16 @@ public class SongsWindow extends JFrame
     String nameWritten, songsAndTagsFilePath;
     private JButton editButton;
     String numOfPlays;
+    Song songObject = new Song();
+    AddingDeleting addingDeletingObject;
 
     public SongsWindow()
     {
         super("Songs");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLayout(new FlowLayout());
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        // setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         pCenter = new JPanel();
         pCenter.setPreferredSize(new Dimension(1260, 650));
@@ -79,7 +82,7 @@ public class SongsWindow extends JFrame
 
         fileMenu.add(menuAddDelete);
         fileMenu.add(menuPhotos);
-        fileMenu.add(menuHome);
+        // fileMenu.add(menuHome);
         fileMenu.add(menuSongs);
         fileMenu.add(menuPlaylists);
         menuBar.add(fileMenu);
@@ -239,6 +242,7 @@ public class SongsWindow extends JFrame
         pCenter.add(EasterBox);
         //</editor-fold>
 
+        /*
         try
         {
             addDeleteObject = new AddDeleteWindow();
@@ -247,7 +251,16 @@ public class SongsWindow extends JFrame
         {
             e.printStackTrace();
         }
-        songsAndTagsFilePath = String.valueOf(addDeleteObject.songsAndTagsFile);
+
+         */
+        try
+        {
+            addingDeletingObject = new AddingDeleting();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        songsAndTagsFilePath = String.valueOf(addingDeletingObject.songsAndTagsFile);
 
         //<editor-fold desc="LAYOUT">
         layout.setHorizontalGroup(
@@ -316,7 +329,7 @@ public class SongsWindow extends JFrame
         allSongsAndTags = new ArrayList<>();
         try
         {
-            Scanner scanner = new Scanner(addDeleteObject.songsAndTagsFile);
+            Scanner scanner = new Scanner(addingDeletingObject.songsAndTagsFile);
             ArrayList<String> songsAndTags = new ArrayList<>();
 
             while (scanner.hasNextLine())
@@ -459,7 +472,7 @@ public class SongsWindow extends JFrame
 
         String sA = String.valueOf(sbA);
 
-        editingTagTxtFile(songName, sA, songsAndTagsFilePath);
+        songObject.editingTagTxtFile(songName, sA, songsAndTagsFilePath);
     }
 
     public void deletingStringsForTxtFile(ArrayList<String> a, String nameTag)
@@ -479,31 +492,10 @@ public class SongsWindow extends JFrame
         a.remove(nameTag);
         String sA = String.valueOf(sbA);
 
-        editingTagTxtFile(songName, sA, songsAndTagsFilePath);
+        songObject.editingTagTxtFile(songName, sA, songsAndTagsFilePath);
     }
 
-    public void editingTagTxtFile(String songName, String sA, String songsAndTagsFilePath)
-    {
-        try
-        {
-            // is there a better way to refer to the object? Or should I have made an object and just open it on the window
-            // instead of placing the whole code on the window -> i don't think this way it would open another window
-            fileContent = new ArrayList<>(Files.readAllLines(Path.of(songsAndTagsFilePath), StandardCharsets.UTF_8));
-            for (int i = 0; i < fileContent.size(); i++)
-            {
-                String[] sArray = fileContent.get(i).split(" ");
-                if (sArray[0].equals(songName))
-                {
-                    fileContent.set(i, sA);
-                    break;
-                }
-            }
-            Files.write(Path.of(String.valueOf(addDeleteObject.songsAndTagsFile)), fileContent, StandardCharsets.UTF_8);
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-    }
+
 
     //<editor-fold desc="Menu bar actions">
     public void actionPerformed2(ActionEvent e)

@@ -16,6 +16,7 @@ public class Queue
     protected ArrayList<String> fileContent, fileContent2, fileContent3, fileContent4;
     HomePageMethods homePageMethodsObject = new HomePageMethods();
     private AddDeleteWindow addDeleteObject;
+    AddingDeleting addingDeletingObject;
 
 
     Queue() throws IOException
@@ -30,6 +31,14 @@ public class Queue
         } catch (IOException ex)
         {
             ex.printStackTrace();
+        }
+
+        try
+        {
+            addingDeletingObject = new AddingDeleting();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
     }
     public void updateQueue()
@@ -117,7 +126,7 @@ public class Queue
         {
             // is there a better way to refer to the object? Or should I have made an object and just open it on the window
             // instead of placing the whole code on the window -> i don't think this way it would open another window
-            fileContent2 = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(addDeleteObject.songsAndTagsFile)), StandardCharsets.UTF_8));
+            fileContent2 = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(addingDeletingObject.songsAndTagsFile)), StandardCharsets.UTF_8));
             for (int i = 0; i < fileContent2.size(); i++)
             {
                 String[] sArray = fileContent2.get(i).split(" ");

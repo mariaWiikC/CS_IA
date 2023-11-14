@@ -13,7 +13,12 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalTime;
 import java.util.*;
-// create classes for the objects and stuff - one for each of the following: song, playlist, photo, queue
+// create classes for the objects and stuff
+// one for each of the following: song, (playlist), (photo), (queue)
+
+// what if I never dispose the home page? then the user will never see the ugly thing
+// then to close the program they have to close the home page -> like I'm doing with the PhotosFrame!!!
+// now I have to make the new frame be on top of the homePage
 public class HomePageWindow extends JFrame implements ActionListener
 {
     private JMenuBar menuBar;
@@ -66,6 +71,7 @@ public class HomePageWindow extends JFrame implements ActionListener
 
     Photo photoObject = new Photo();
     Queue queueObject = new Queue();
+    AddingDeleting addingDeletingObject;
 
     public HomePageWindow() throws IOException
     {
@@ -124,6 +130,14 @@ public class HomePageWindow extends JFrame implements ActionListener
         currentMonth = cal.get(Calendar.MONTH) + 1;
         System.out.println(currentMonth);
 
+        try
+        {
+            addingDeletingObject = new AddingDeleting();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
         //<editor-fold desc="Main Stuff">
         // is it possible to make the panel full screen?
         pCenter = new JPanel();
@@ -158,6 +172,7 @@ public class HomePageWindow extends JFrame implements ActionListener
         toSelectPlaylistWindow.setBounds(565, 50, 205, 35);
         toSelectPlaylistWindow.addActionListener(this::selectPlaylist);
         pCenter.add(toSelectPlaylistWindow);
+
 
         //<editor-fold desc="Setting up playlists list">
         try
@@ -346,6 +361,7 @@ public class HomePageWindow extends JFrame implements ActionListener
         searchObject = new SearchWindow();
         searchObject.dispose();
 
+        /*
         try
         {
             addDeleteObject = new AddDeleteWindow();
@@ -354,6 +370,8 @@ public class HomePageWindow extends JFrame implements ActionListener
         {
             ex.printStackTrace();
         }
+
+         */
 
         setVisible(true);
     }
@@ -411,7 +429,7 @@ public class HomePageWindow extends JFrame implements ActionListener
         allSongsAndTags = new ArrayList<>();
         try
         {
-            Scanner scanner = new Scanner(addDeleteObject.songsAndTagsFile);
+            Scanner scanner = new Scanner(addingDeletingObject.songsAndTagsFile);
             ArrayList<String> songsAndTags = new ArrayList<>();
 
             while (scanner.hasNextLine())
@@ -675,15 +693,19 @@ public class HomePageWindow extends JFrame implements ActionListener
         {
             ex.printStackTrace();
         }
+        // setVisible(false);
         AddDeleteWindow.setVisible(true); // display SelectPlayWindow
-        dispose(); // close home page
+        AddDeleteWindow.setAlwaysOnTop(true);
+        // setVisible(true);
+        // dispose(); // close home page
     }
 
     public void actionPerformed3(ActionEvent e)
     {
         JFrame SongsWindow = new SongsWindow(); // open another JFrame
         SongsWindow.setVisible(true); // display
-        dispose(); // close home page
+        SongsWindow.setAlwaysOnTop(true);
+        // dispose(); // close home page
     }
 
     public void actionPerformed4(ActionEvent e)
@@ -697,14 +719,16 @@ public class HomePageWindow extends JFrame implements ActionListener
             ex.printStackTrace();
         }
         PlaylistsWindow.setVisible(true); // display
-        dispose(); // close home page
+        PlaylistsWindow.setAlwaysOnTop(true);
+        // dispose(); // close home page
     }
 
     public void actionPerformed7(ActionEvent e)
     {
         JFrame SearchWindow = new SearchWindow(); // open another JFrame
         SearchWindow.setVisible(true); // display
-        dispose(); // close home page
+        SearchWindow.setAlwaysOnTop(true);
+        // dispose(); // close home page
     }
 
     @Override
