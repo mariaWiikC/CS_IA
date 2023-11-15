@@ -33,7 +33,6 @@ public class SongsWindow extends JFrame
     ArrayList<String> fileContent;
     String nameWritten, songsAndTagsFilePath;
     private JButton editButton;
-    String numOfPlays;
     Song songObject = new Song();
     AddingDeleting addingDeletingObject;
 
@@ -242,17 +241,6 @@ public class SongsWindow extends JFrame
         pCenter.add(EasterBox);
         //</editor-fold>
 
-        /*
-        try
-        {
-            addDeleteObject = new AddDeleteWindow();
-            addDeleteObject.dispose();
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-
-         */
         try
         {
             addingDeletingObject = new AddingDeleting();
@@ -414,88 +402,16 @@ public class SongsWindow extends JFrame
             if (box.isSelected())
             {
                 if (!a.contains(nameTag))
-                    creatingNewStringsForTxtFile(a, nameTag);
+                    songObject.creatingNewStringsForTxtFile(a, nameTag);
             }
             else
             {
                 if (a.contains(nameTag))
-                    deletingStringsForTxtFile(a, nameTag);
+                    songObject.deletingStringsForTxtFile(a, nameTag);
             }
             box.setSelected(false);
         }
     }
-
-    public void creatingNewStringsForTxtFile(ArrayList<String> a, String nameTag)
-    {
-        String songName = a.get(0);
-
-        StringBuffer sbO = new StringBuffer();
-        for (String add : a)
-        {
-            sbO.append(add);
-            sbO.append(" ");
-        }
-
-        boolean integerLast = false;
-        // checking if last item is an int
-        // checking if the line has more than just the name of the song there
-        if (sbO.lastIndexOf(" ", sbO.lastIndexOf(" ") - 1) > -1)
-        {
-            StringBuffer sb = new StringBuffer(sbO);
-            System.out.println(sb.lastIndexOf(" "));
-            System.out.println("Length: " + sb.length());
-            sb.delete(0, sb.lastIndexOf(" ", sb.lastIndexOf(" ") - 1));
-            System.out.println(sb);
-            sb.delete(sb.length() - 1, sb.length());
-            sb.delete(0, 1);
-            System.out.println(sb);
-
-            // deleting the integer
-            if (Integer.parseInt(String.valueOf(sb)) % 1 == 0)
-            {
-                numOfPlays = String.valueOf(sb);
-                sbO.delete(sbO.lastIndexOf(numOfPlays) - numOfPlays.length(), sbO.lastIndexOf(numOfPlays) + numOfPlays.length());
-                System.out.println(sbO);
-                integerLast = true;
-            }
-        }
-
-        StringBuffer sbA = new StringBuffer();
-        sbA.append(sbO);
-        sbA.append(nameTag);
-        a.add(a.size() - 1, nameTag);
-        sbA.append(" ");
-        if (integerLast)
-        {
-            sbA.append(numOfPlays + " ");
-        }
-
-        String sA = String.valueOf(sbA);
-
-        songObject.editingTagTxtFile(songName, sA, songsAndTagsFilePath);
-    }
-
-    public void deletingStringsForTxtFile(ArrayList<String> a, String nameTag)
-    {
-        String songName = a.get(0);
-
-        StringBuffer sbO = new StringBuffer();
-        for (String add : a)
-        {
-            sbO.append(add);
-            sbO.append(" ");
-        }
-
-        StringBuffer sbA = new StringBuffer();
-        sbA.append(sbO);
-        sbA.delete(sbA.indexOf(nameTag), sbA.indexOf(nameTag) + nameTag.length() + 1);
-        a.remove(nameTag);
-        String sA = String.valueOf(sbA);
-
-        songObject.editingTagTxtFile(songName, sA, songsAndTagsFilePath);
-    }
-
-
 
     //<editor-fold desc="Menu bar actions">
     public void actionPerformed2(ActionEvent e)
