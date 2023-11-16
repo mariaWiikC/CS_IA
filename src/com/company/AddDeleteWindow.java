@@ -21,9 +21,9 @@ import java.util.Scanner;
 public class AddDeleteWindow extends JFrame
 {
     private JMenuBar menuBar;
-    private JMenuItem menuSelect, menuPhotos, menuPlaylists, menuSongs, menuQueue, menuHome;
+    private JMenuItem menuPhotos, menuPlaylists, menuSongs, menuHome;
     private JPanel pCenter;
-    private JLabel songsT, tagsT, instrumentsT, themesT;
+    private JLabel songsT;
     private JTextField songSearchBox, instrumentsSearchBox, themesSearchBox;
     private ImageIcon addSongIcon, deleteSongIcon, addInstrumentIcon, deleteInstrumentIcon,
             addThemeIcon, deleteThemeIcon;
@@ -31,13 +31,7 @@ public class AddDeleteWindow extends JFrame
             addThemeButton, deleteThemeButton, validateButton;
     private JTextField inputField;
     private String[] newNameArr = new String[1];
-    private File chosenFile;
-    private JList listSongs;
-    private DefaultListModel listModel;
     private JScrollPane listScroller;
-    // public File songsAndTagsFile;
-    private ArrayList<String> fileContent, fileContent2;
-    private String nameWritten, targetPath;
     PlaylistsWindow playlistObject;
     HomePageMethods homePageMethodsObject;
     AddingDeleting addingDeletingObject = new AddingDeleting();
@@ -102,20 +96,7 @@ public class AddDeleteWindow extends JFrame
         setJMenuBar(menuBar);
         //</editor-fold>
 
-        // all locations are wronggggggggg
-        //<editor-fold desc="Some Labels">
         songsT = new JLabel("Songs");
-        // pCenter.add(songsT);
-
-        tagsT = new JLabel("Tags");
-        // pCenter.add(tagsT);
-
-        instrumentsT = new JLabel("Instruments");
-        //pCenter.add(instrumentsT);
-
-        themesT = new JLabel("Themes");
-        // pCenter.add(themesT);
-        //</editor-fold>
 
         // song search
         //<editor-fold desc="Song Add/Delete">

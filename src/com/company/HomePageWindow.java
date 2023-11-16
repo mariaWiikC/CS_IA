@@ -22,7 +22,6 @@ import java.util.*;
 public class HomePageWindow extends JFrame implements ActionListener
 {
     private JMenuBar menuBar;
-    private JPanel p;
     private JPanel pCenter;
     private JButton toSelectPlayWindow, toAddDeleteWindow, toPhotosWindow, toPlaylistsWindow,
             toQueuePreviewWindow, toSongsWindow, toSelectPlaylistWindow, addPhotosButton;
@@ -36,38 +35,25 @@ public class HomePageWindow extends JFrame implements ActionListener
             randomIcon, tenBackIcon, tenForwardIcon, searchIcon, loopingIcon, stopIcon;
     private JTextField searchBox;
     private AudioControl songObject = new AudioControl();
-    boolean isPlaying;
     private SearchWindow searchObject;
     ArrayList<ArrayList> allTags, allSongsAndTags;
-    private AddDeleteWindow addDeleteObject;
-    private boolean allMatch;
     protected ArrayList<String> allSearchResults = new ArrayList<>(), fileContent, fileContent3;
     JFrame SearchResultsWindow;
-    Playlist playlistsObject;
-    HomePageMethods homePageObject;
 
     protected JScrollPane listScroller;
     protected JList listPlaylists;
     protected DefaultListModel listModel;
     PlaylistsWindow playlistsObjectWindow;
 
-    protected ArrayList<String> playlistFileContent, fileContent2, fileContent4, songsPaths = new ArrayList<>();
+    protected ArrayList<String> playlistFileContent, songsPaths = new ArrayList<>();
     Calendar cal;
     int currentMonth;
 
-    boolean display = true;
-    PhotosWindow photosObject;
-    JFrame PhotosWindow;
     boolean playingPlaylist, random = false;
-    String playlistNamePlaying;
-    ArrayList<Integer> numberOfSongsInPlaylist = new ArrayList<>(), alreadyPlayed = new ArrayList<>();
+    ArrayList<Integer> alreadyPlayed = new ArrayList<>();
     HomePageMethods homePageMethodsObject = new HomePageMethods();
 
     boolean isPaused = false, isLooping = false;
-    // ProgressBarMethods progressBarObject = new ProgressBarMethods();
-    // nameOfPlaylistT, nameOfSongT -> these two change according to what is playingggg
-
-    JButton progressBarButton;
 
     Photo photoObject = new Photo();
     Queue queueObject = new Queue();
@@ -125,10 +111,6 @@ public class HomePageWindow extends JFrame implements ActionListener
         // adding a panel so I can add buttons here, buttons weren't moving without this :/
         // i think the layout is too small and not positioned correctly
         // i need to move it so my buttons show up
-
-        cal = Calendar.getInstance();
-        currentMonth = cal.get(Calendar.MONTH) + 1;
-        System.out.println(currentMonth);
 
         try
         {
