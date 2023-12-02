@@ -124,8 +124,6 @@ public class Queue
         int min = 100000000, max = 0, minIndex = 0, maxIndex = 0;
         try
         {
-            // is there a better way to refer to the object? Or should I have made an object and just open it on the window
-            // instead of placing the whole code on the window -> i don't think this way it would open another window
             fileContent2 = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(addingDeletingObject.songsAndTagsFile)), StandardCharsets.UTF_8));
             for (int i = 0; i < fileContent2.size(); i++)
             {

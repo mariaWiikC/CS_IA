@@ -16,12 +16,11 @@ import java.util.Scanner;
 public class SearchWindow extends JFrame
 {
     private JMenuBar menuBar;
-    private JMenuItem menuSelect, menuAddDelete, menuPhotos, menuPlaylists, menuSongs, menuQueue, menuHome;
+    private JMenuItem menuAddDelete, menuPhotos, menuPlaylists, menuSongs, menuHome;
     private JPanel pCenter;
-    private JLabel searchT, moodT, timeT, instrumentT, themeT, timeLabel;
+    private JLabel searchT, moodT, timeT, instrumentT, themeT;
     private JCheckBox sadBox, energeticBox, happyBox, relaxedBox, morningBox, afternoonBox, eveningBox,
-            guitarBox, pianoBox, vocalBox, ChristmasBox, IndependenceBox, EasterBox, realTimeBox;
-    private Timer timer;
+            guitarBox, pianoBox, vocalBox, ChristmasBox, IndependenceBox, EasterBox;
     private boolean searching = false;
     protected File searchTagsFile;
     private ArrayList<String> fileContent;

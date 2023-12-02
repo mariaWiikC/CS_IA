@@ -1,18 +1,12 @@
 package com.company;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.Collections;
 
 public class Photo
 {
@@ -20,7 +14,7 @@ public class Photo
     {
 
     }
-    public void addingPhotos() // FIX THIS
+    public void addingPhotos()
     {
         JFileChooser imageUpload = new JFileChooser();
         int res2 = imageUpload.showSaveDialog(null);
@@ -46,7 +40,7 @@ public class Photo
         }
     }
 
-    public void displayPhotos() // FIX THIS
+    public void displayPhotos()
     {
         EventQueue.invokeLater(new Runnable()
         {
@@ -58,47 +52,4 @@ public class Photo
             }
         });
     }
-
-    protected Timer timer = new Timer(5000, new ActionListener() // this is five seconds
-    {
-
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            update();
-        }
-    });
-
-    protected void buildingPhotoWindow()
-    {
-        String directoryPhotosFilePath = "src/Photos";
-        File directoryPhotos = new File(directoryPhotosFilePath);
-        File[] filesPhotos = directoryPhotos.listFiles(File::isFile);
-        for (File file : filesPhotos)
-        {
-            String actualPath = directoryPhotosFilePath + "/" + file.getName();
-            try
-            {
-                BufferedImage img = ImageIO.read(new File(actualPath));
-                ImageIcon icon = new ImageIcon(img);
-                list.add(icon);
-            } catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-
-        }
-
-        label = new JLabel(list.get(0));
-
-    }
-
-    private void update()
-    {
-        Collections.shuffle(list);
-        label.setIcon(list.get(0));
-    }
-
-    private ArrayList<Icon> list = new ArrayList<>();
-    JLabel label;
 }

@@ -15,7 +15,6 @@ public class SearchResultsWindow extends JFrame
     private HomePageMethods homePageObject;
     private DefaultListModel listModel;
     private JScrollPane listScroller;
-    private String searchResults;
     private ArrayList<ArrayList> searchResultsArr;
 
     public SearchResultsWindow() throws IOException

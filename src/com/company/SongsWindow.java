@@ -14,8 +14,7 @@ import java.util.Scanner;
 public class SongsWindow extends JFrame
 {
     private JMenuBar menuBar;
-    private JMenuItem menuSelect, menuAddDelete, menuPhotos, menuPlaylists, menuSongs, menuHome;
-    private JLabel songsT;
+    private JMenuItem menuAddDelete, menuPhotos, menuPlaylists, menuSongs, menuHome;
     private JPanel pCenter;
     private JList listSongs;
     private DefaultListModel listModel;
@@ -23,14 +22,11 @@ public class SongsWindow extends JFrame
     private JLabel moodT, timeT, instrumentT, themeT;
     private JCheckBox sadBox, energeticBox, happyBox, relaxedBox, morningBox, afternoonBox, eveningBox,
             guitarBox, pianoBox, vocalBox, ChristmasBox, IndependenceBox, EasterBox;
-    private Timer timer;
     ArrayList<ArrayList> allSongsAndTags;
-    AddDeleteWindow addDeleteObject;
     Tags tagsObject;
     boolean isEnabled = false, editing = false;
     ArrayList<JCheckBox> checkBoxesList;
     String directorySongsFilePath;
-    ArrayList<String> fileContent;
     String nameWritten, songsAndTagsFilePath;
     private JButton editButton;
     Song songObject = new Song();

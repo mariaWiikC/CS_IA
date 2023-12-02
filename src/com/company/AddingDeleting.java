@@ -58,9 +58,25 @@ public class AddingDeleting
 
         //</editor-fold>
     }
+
     public void addSong()
     {
         JFileChooser songUpload = new JFileChooser();
+        /*
+        {
+            @Override
+            protected JDialog createDialog(Component parent) throws HeadlessException
+            {
+                // intercept the dialog created by JFileChooser
+                JDialog dialog = super.createDialog(parent);
+                dialog.setAlwaysOnTop(true);
+                dialog.setModal(true);  // set modality (or setModalityType)
+                return dialog;
+            }
+        };
+
+         */
+
         int res2 = songUpload.showSaveDialog(null);
 
         // copying the file

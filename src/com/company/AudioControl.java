@@ -23,11 +23,13 @@ public class AudioControl extends JPanel // could call it audiocontrol
     public boolean isPlaying;
     private ArrayList<String> fileContent;
     File musicPath;
+    int loopCounter = 0;
 
     protected JProgressBar pB;
     int songPositionSec = 0, songPositionMin = 0, songLengthMin = 0, songLengthSec = 0;
     protected JLabel timeSongNow, totalTimeSong;
     AddingDeleting addDeleteObject;
+
     {
         try
         {
@@ -38,12 +40,21 @@ public class AudioControl extends JPanel // could call it audiocontrol
         }
     }
 
-    public Timer timer = new Timer(1000, new ActionListener() // this is one seconds
+    public Timer timer = new Timer(1000, new ActionListener() // this is one second
     {
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            clipTimePosition = clip.getMicrosecondPosition();
+            System.out.println(loopCounter);
+            if (isPlaying)
+            {
+                clipTimePosition = clip.getMicrosecondPosition(); // - (loopCounter * clipLength);
+                if (clipTimePosition < 0)
+                {
+                    System.out.println("why");
+                    System.out.println("really, why");
+                }
+            }
             try
             {
                 update();
@@ -64,13 +75,6 @@ public class AudioControl extends JPanel // could call it audiocontrol
         pB.setMinimum(0);
         timeSongNow = new JLabel("00:00");
         totalTimeSong = new JLabel("00:00");
-
-        /*
-        this.add(timeSongNow);
-        this.add(pB);
-        this.add(totalTimeSong);
-
-         */
     }
 
     Clip playMusic(String musicLocation)
@@ -94,10 +98,14 @@ public class AudioControl extends JPanel // could call it audiocontrol
                 pB.setMinimumSize(new Dimension(300, 20));
 
                 timer.start();
+                loopCounter = 0;
                 return clip;
             }
             else
+            {
                 System.out.println("Can't find file");
+                JOptionPane.showMessageDialog(null, "File not found");
+            }
         } catch (Exception ex)
         {
             ex.printStackTrace();
@@ -108,27 +116,42 @@ public class AudioControl extends JPanel // could call it audiocontrol
     private void update() throws NoSuchFieldException, IllegalAccessException
     {
         pB.setMaximum((int) clipLength / 1000000);
+        String timeNow = "00:00";
 
         long actualSongPosition = clipTimePosition;
-        // System.out.println(actualSongPosition);
-        songPositionMin = (int) (actualSongPosition / 1000000) / 60;
-        songPositionSec = (int) (actualSongPosition / 1000000) % 60;
-        String timeNow = "00:00";
-        if (songPositionSec < 10 && songPositionMin < 10)
+        if (isLooped && (clipLength - clipTimePosition < 1000) && clipLength != 0)
         {
-            timeNow = "0" + songPositionMin + ":0" + songPositionSec;
+            pB.setValue(0);
+            songPositionMin = 0;
+            songPositionSec = 0;
+            clipTimePosition = 0;
+            clip.setMicrosecondPosition(0);
+            // System.out.println(clip.getMicrosecondPosition());
+            loopCounter++;
         }
-        if (songPositionSec >= 10 && songPositionMin < 10)
+        else
         {
-            timeNow = "0" + songPositionMin + ":" + songPositionSec;
-        }
-        if (songPositionSec < 10 && songPositionMin >= 10)
-        {
-            timeNow = songPositionMin + ":0" + songPositionSec;
-        }
-        if (songPositionSec >= 10 && songPositionMin >= 10)
-        {
-            timeNow = "0" + songPositionMin + ":0" + songPositionSec;
+            // System.out.println(actualSongPosition);
+            songPositionMin = (int) (clipTimePosition / 1000000) / 60;
+            songPositionSec = (int) (clipTimePosition / 1000000) % 60;
+            if (songPositionSec < 10 && songPositionMin < 10)
+            {
+                timeNow = "0" + songPositionMin + ":0" + songPositionSec;
+            }
+            if (songPositionSec >= 10 && songPositionMin < 10)
+            {
+                timeNow = "0" + songPositionMin + ":" + songPositionSec;
+            }
+            if (songPositionSec < 10 && songPositionMin >= 10)
+            {
+                timeNow = songPositionMin + ":0" + songPositionSec;
+            }
+            if (songPositionSec >= 10 && songPositionMin >= 10)
+            {
+                timeNow = songPositionMin + ":" + songPositionSec;
+            }
+
+            pB.setValue((int) (clipTimePosition / 1000000));
         }
         timeSongNow.setText(timeNow);
         timeSongNow.paintImmediately(timeSongNow.getVisibleRect());
@@ -138,7 +161,7 @@ public class AudioControl extends JPanel // could call it audiocontrol
         totalTimeSong.setText(songLengthMin + ":" + songLengthSec);
         totalTimeSong.paintImmediately(timeSongNow.getVisibleRect());
 
-        pB.setValue((int) (actualSongPosition / 1000000));
+        System.out.println(clipTimePosition + " clip time position test");
     }
 
     public String whichPlayingNow()
@@ -189,22 +212,31 @@ public class AudioControl extends JPanel // could call it audiocontrol
     {
         if (!paused)
         {
-            clipTimePosition = clip.getMicrosecondPosition();
+            clipTimePosition = clip.getMicrosecondPosition(); // - (loopCounter * clipLength);
+            System.out.println(clipTimePosition + " pause test");
             clip.stop();
             paused = !paused;
+            isPlaying = false;
+            loopCounter = 0;
         }
         else if (paused)
         {
             clip.setMicrosecondPosition(clipTimePosition);
             clip.start();
             paused = !paused;
+            isPlaying = true;
+            if (isLooped)
+            {
+                clip.loop(Clip.LOOP_CONTINUOUSLY);
+            }
         }
 
     }
 
     void tenSecForward()
     {
-        clipTimePosition = clip.getMicrosecondPosition();
+
+        clipTimePosition = clip.getMicrosecondPosition(); // - (loopCounter * clipLength);
         clip.setMicrosecondPosition(clipTimePosition + tenSec);
     }
 

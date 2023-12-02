@@ -27,9 +27,9 @@ public class HomePageWindow extends JFrame implements ActionListener
             toQueuePreviewWindow, toSongsWindow, toSelectPlaylistWindow, addPhotosButton;
     private JButton sadFaceButton, chillFaceButton, happyFaceButton, veryHappyButton;
     private JLabel searchT, selectYourMoodT;
-    private JMenuItem menuSelect, menuAddDelete, menuPhotos, menuPlaylists, menuSongs, menuQueue;
+    private JMenuItem menuSelect, menuAddDelete, menuPhotos, menuPlaylists, menuSongs;
     private ImageIcon sadIcon, chillIcon, happyIcon, veryHappyIcon;
-    private JButton filterButton, loopButton, nextSongButton, pauseButton, playButton, previousSongButton,
+    private JButton filterButton, loopButton, nextSongButton, pauseButton, previousSongButton,
             randomButton, tenBackButton, tenForwardButton, searchButton, stopButton;
     private ImageIcon filterIcon, loopIcon, nextSongIcon, pauseIcon, playIcon, previousSongIcon,
             randomIcon, tenBackIcon, tenForwardIcon, searchIcon, loopingIcon, stopIcon;
@@ -37,7 +37,7 @@ public class HomePageWindow extends JFrame implements ActionListener
     private AudioControl songObject = new AudioControl();
     private SearchWindow searchObject;
     ArrayList<ArrayList> allTags, allSongsAndTags;
-    protected ArrayList<String> allSearchResults = new ArrayList<>(), fileContent, fileContent3;
+    protected ArrayList<String> allSearchResults = new ArrayList<>(), fileContent;
     JFrame SearchResultsWindow;
 
     protected JScrollPane listScroller;
@@ -46,14 +46,12 @@ public class HomePageWindow extends JFrame implements ActionListener
     PlaylistsWindow playlistsObjectWindow;
 
     protected ArrayList<String> playlistFileContent, songsPaths = new ArrayList<>();
-    Calendar cal;
-    int currentMonth;
 
     boolean playingPlaylist, random = false;
     ArrayList<Integer> alreadyPlayed = new ArrayList<>();
     HomePageMethods homePageMethodsObject = new HomePageMethods();
 
-    boolean isPaused = false, isLooping = false;
+    boolean isPaused = false, isLooping = false, isPlaying = false;
 
     Photo photoObject = new Photo();
     Queue queueObject = new Queue();
@@ -343,17 +341,6 @@ public class HomePageWindow extends JFrame implements ActionListener
         searchObject = new SearchWindow();
         searchObject.dispose();
 
-        /*
-        try
-        {
-            addDeleteObject = new AddDeleteWindow();
-            addDeleteObject.dispose();
-        } catch (IOException ex)
-        {
-            ex.printStackTrace();
-        }
-
-         */
 
         setVisible(true);
     }
@@ -509,21 +496,33 @@ public class HomePageWindow extends JFrame implements ActionListener
     public void actionPerformedSelectSongPlay(ActionEvent e) throws UnsupportedAudioFileException,
             IOException, LineUnavailableException
     {
-        JFileChooser songUpload = new JFileChooser(new File("src/songsFiles"));
-        int res2 = songUpload.showSaveDialog(null);
-
-        if (res2 == JFileChooser.APPROVE_OPTION)
+        if (!isPlaying)
         {
-            File song = new File(songUpload.getSelectedFile().getAbsolutePath());
-            // ok, so I only want the last word from the path (so the name of the song)
-            // and then I just add the two strings
-            String songPath = song.getAbsolutePath();
-            System.out.println(songPath);
-            String actualPath = songPath.substring(songPath.lastIndexOf("songsFiles") + 11);
-            System.out.println(actualPath);
-            String realPath = "src/songsFiles/" + actualPath;
-            System.out.println(realPath);
-            songObject.playMusic(realPath);
+            JFileChooser songUpload = new JFileChooser(new File("src/songsFiles"));
+            int res2 = songUpload.showSaveDialog(null);
+
+            if (res2 == JFileChooser.APPROVE_OPTION)
+            {
+                File song = new File(songUpload.getSelectedFile().getAbsolutePath());
+                // ok, so I only want the last word from the path (so the name of the song)
+                // and then I just add the two strings
+                String songPath = song.getAbsolutePath();
+                System.out.println(songPath);
+                String actualPath = songPath.substring(songPath.lastIndexOf("songsFiles") + 11);
+                System.out.println(actualPath);
+                String realPath = "src/songsFiles/" + actualPath;
+                System.out.println(realPath);
+                songObject.playMusic(realPath);
+
+                pauseButton.setIcon(pauseIcon);
+                loopButton.setIcon(loopIcon);
+                isPlaying = true;
+            }
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "Already playing song. " +
+                    "Press stop button and select again.");
         }
     }
 
@@ -532,7 +531,8 @@ public class HomePageWindow extends JFrame implements ActionListener
         songObject.stopPlaying();
         playingPlaylist = false;
         pauseButton.setIcon(pauseIcon);
-        //progressBarObject.timer.stop();
+        loopButton.setIcon(loopIcon);
+        isPlaying = false;
     }
 
     public void actionPerformedPauseSong(ActionEvent e)
@@ -582,40 +582,53 @@ public class HomePageWindow extends JFrame implements ActionListener
 
     public void selectPlaylist(ActionEvent e)
     {
-        if (listPlaylists.getSelectedValue() != null)
+        if (!isPlaying)
         {
-            alreadyPlayed.clear();
-            String namePlaylist = String.valueOf(listPlaylists.getSelectedValue());
-            String playlistPath;
-            if (namePlaylist.equals("Queue"))
+            if (listPlaylists.getSelectedValue() != null)
             {
-                playlistPath = "src\\QueueSongs.txt";
-            }
-            else
-            {
-                playlistPath = "src\\" + namePlaylist + ".txt";
-            }
-            songsPaths.clear();
-            try
-            {
-                playlistFileContent = new ArrayList<>(Files.readAllLines(Path.of(playlistPath), StandardCharsets.UTF_8));
-                for (String songName : playlistFileContent)
+                alreadyPlayed.clear();
+                String namePlaylist = String.valueOf(listPlaylists.getSelectedValue());
+                String playlistPath;
+                if (namePlaylist.equals("Queue"))
                 {
-                    songsPaths.add("src\\songsFiles\\" + songName + ".wav");
+                    playlistPath = "src\\QueueSongs.txt";
                 }
-                songObject.playMusic(songsPaths.get(0));
-                alreadyPlayed.add(0);
-                playingPlaylist = true;
+                else
+                {
+                    playlistPath = "src\\" + namePlaylist + ".txt";
+                }
+                songsPaths.clear();
+                try
+                {
+                    playlistFileContent = new ArrayList<>(Files.readAllLines(Path.of(playlistPath), StandardCharsets.UTF_8));
+                    for (String songName : playlistFileContent)
+                    {
+                        songsPaths.add("src\\songsFiles\\" + songName + ".wav");
+                    }
+                    pauseButton.setIcon(pauseIcon);
+                    songObject.playMusic(songsPaths.get(0));
+                    alreadyPlayed.add(0);
+                    playingPlaylist = true;
 
-            } catch (IOException ex)
-            {
-                ex.printStackTrace();
+                    pauseButton.setIcon(pauseIcon);
+                    isPlaying = true;
+                } catch (IOException ex)
+                {
+                    ex.printStackTrace();
+                }
             }
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "Already playing song. " +
+                    "Press stop button and select again.");
         }
     }
 
     public void goPreviousSong(ActionEvent e)
     {
+        pauseButton.setIcon(pauseIcon);
+
         if (playingPlaylist)
         {
             String songPlayingNow = "src\\songsFiles\\" + songObject.whichPlayingNow();
@@ -633,6 +646,8 @@ public class HomePageWindow extends JFrame implements ActionListener
 
     public void goNextSong(ActionEvent e)
     {
+        pauseButton.setIcon(pauseIcon);
+
         if (playingPlaylist)
         {
             if (!random)
@@ -677,9 +692,9 @@ public class HomePageWindow extends JFrame implements ActionListener
         }
         // setVisible(false);
         AddDeleteWindow.setVisible(true); // display SelectPlayWindow
-        AddDeleteWindow.setAlwaysOnTop(true);
+        // AddDeleteWindow.setAlwaysOnTop(true);
         // setVisible(true);
-        // dispose(); // close home page
+        dispose(); // close home page
     }
 
     public void actionPerformed3(ActionEvent e)

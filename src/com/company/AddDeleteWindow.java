@@ -28,7 +28,7 @@ public class AddDeleteWindow extends JFrame
     private ImageIcon addSongIcon, deleteSongIcon, addInstrumentIcon, deleteInstrumentIcon,
             addThemeIcon, deleteThemeIcon;
     private JButton addSongButton, deleteSongButton, addInstrumentButton, deleteInstrumentButton,
-            addThemeButton, deleteThemeButton, validateButton;
+            addThemeButton, deleteThemeButton, validateButton, goHome;
     private JTextField inputField;
     private String[] newNameArr = new String[1];
     private JScrollPane listScroller;
@@ -44,8 +44,8 @@ public class AddDeleteWindow extends JFrame
         super("Add/Delete");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLayout(new FlowLayout());
-        // setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        // setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         pCenter = new JPanel();
         pCenter.setPreferredSize(new Dimension(1260, 650));
@@ -56,6 +56,11 @@ public class AddDeleteWindow extends JFrame
         pCenter.setLayout(layout);
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
+
+        goHome = new JButton("Return to Home Page");
+        goHome.setBounds(500, 350, 300, 50);
+        goHome.addActionListener(this::toHomePage);
+        pCenter.add(goHome);
 
         // the text field I'm doing this with can be the specific for each type of element
         // use the specific one for song, instrument, wtv
@@ -231,6 +236,20 @@ public class AddDeleteWindow extends JFrame
         dispose(); // close home page
     }
     //</editor-fold>
+
+    public void toHomePage(ActionEvent e)
+    {
+        try
+        {
+            HomePageWindow homePageWindow = new HomePageWindow();
+            homePageWindow.setVisible(true);
+            dispose();
+        } catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
+
+    }
 
     public void actionPerformedAddSong(ActionEvent e)
     {
