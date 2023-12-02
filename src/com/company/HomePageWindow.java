@@ -438,9 +438,15 @@ public class HomePageWindow extends JFrame implements ActionListener
                 }
                 if (theSame)
                 {
-                    allSearchResults.add(arrSong.get(0));
+                    allSearchResults.add(String.valueOf(arrSong.get(0)));
                 }
             }
+
+            for(int i = 0; i < charsTxtFieldList.size(); i++)
+            {
+                arrTags.remove(arrTags.size()-1);
+            }
+
             // don't add the song if it's already on the array
             for (ArrayList<String> arrSong : allSongsAndTags)
             {
