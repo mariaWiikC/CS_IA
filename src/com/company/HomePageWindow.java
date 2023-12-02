@@ -248,25 +248,25 @@ public class HomePageWindow extends JFrame implements ActionListener
 
         sadIcon = new ImageIcon("src/moodIcons/sadIcon.png");
         sadFaceButton = new JButton(sadIcon);
-        sadFaceButton.addActionListener((ActionEvent e) -> queueObject.addSadFace());
+        sadFaceButton.addActionListener((ActionEvent e) -> queueObject.addFace("sad"));
         sadFaceButton.setBounds(800, 450, 100, 90);
         pCenter.add(sadFaceButton);
 
         chillIcon = new ImageIcon("src/moodIcons/chillIcon.png");
         chillFaceButton = new JButton(chillIcon);
-        chillFaceButton.addActionListener((ActionEvent e) -> queueObject.addRelaxedFace());
+        chillFaceButton.addActionListener((ActionEvent e) -> queueObject.addFace("relaxed"));
         chillFaceButton.setBounds(1100, 450, 100, 90);
         pCenter.add(chillFaceButton);
 
         happyIcon = new ImageIcon("src/moodIcons/happyIcon.png");
         happyFaceButton = new JButton(happyIcon);
-        happyFaceButton.addActionListener((ActionEvent e) -> queueObject.addHappyFace());
+        happyFaceButton.addActionListener((ActionEvent e) -> queueObject.addFace("happy"));
         happyFaceButton.setBounds(900, 450, 100, 90);
         pCenter.add(happyFaceButton);
 
         veryHappyIcon = new ImageIcon("src/moodIcons/veryHappyIcon.png");
         veryHappyButton = new JButton(veryHappyIcon);
-        veryHappyButton.addActionListener((ActionEvent e) -> queueObject.addEnergeticFace());
+        veryHappyButton.addActionListener((ActionEvent e) -> queueObject.addFace("energetic"));
         veryHappyButton.setBounds(1000, 450, 100, 90);
         pCenter.add(veryHappyButton);
         //</editor-fold>

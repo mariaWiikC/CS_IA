@@ -38,18 +38,13 @@ public class AddDeleteWindow extends JFrame
 
     public AddDeleteWindow() throws IOException
     {
-        // if i add three songs in a row, it adds the same to the list three times
-        // If I add more than one song, the following ones are not added as wav files -> whenever there
-        // clean the input field after using it
         super("Add/Delete");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLayout(new FlowLayout());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        // setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         pCenter = new JPanel();
         pCenter.setPreferredSize(new Dimension(1260, 650));
-        // pCenter.setBorder(BorderFactory.createLineBorder(Color.black));
         add(pCenter, BorderLayout.CENTER);
 
         GroupLayout layout = new GroupLayout(pCenter);
@@ -63,7 +58,7 @@ public class AddDeleteWindow extends JFrame
         pCenter.add(goHome);
 
         // the text field I'm doing this with can be the specific for each type of element
-        // use the specific one for song, instrument, wtv
+        // use the specific one for song, instrument
         inputField = new JTextField(5);
         inputField.setMaximumSize(new Dimension(200, 30));
         validateButton = new JButton("Confirm");

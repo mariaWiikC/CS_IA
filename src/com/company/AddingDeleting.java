@@ -1,8 +1,6 @@
 package com.company;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -16,19 +14,16 @@ public class AddingDeleting
     protected JList listSongs;
     private DefaultListModel listModel;
     public File songsAndTagsFile;
-    private ArrayList<String> fileContent, fileContent2;
+    private ArrayList<String> fileContent, fileContentPlaylist;
     private String nameWritten, targetPath;
     PlaylistsWindow playlistObject;
-
-
     HomePageMethods homePageMethodsObject = new HomePageMethods();
 
     AddingDeleting() throws IOException
     {
-        // I want to display all the uploaded songs
-        String directorySongsFilePath = "src/songsFiles";
-
         //<editor-fold desc="Setting up the list of songs">
+        String directorySongsFilePath = "src/songsFiles";
+        // Gather all files (songs) in the folder songsFiles
         File directorySongs = new File(directorySongsFilePath);
         File[] filesSongs = directorySongs.listFiles(File::isFile);
 
@@ -36,13 +31,17 @@ public class AddingDeleting
         playlistObject.dispose();
 
         listModel = new DefaultListModel();
+        // JList created with songs in the songsFiles
         for (File f : filesSongs)
         {
-            StringBuffer sb = new StringBuffer();
-            sb.append(f.getName());
-            sb.delete(sb.length() - 4, sb.length());
-            String addNow = String.valueOf(sb);
-            listModel.addElement(addNow);
+            // removing ".wav" from the name of the file to obtain only the
+            // name of the song
+            StringBuffer songName = new StringBuffer();
+            songName.append(f.getName());
+            songName.delete(songName.length() - 4, songName.length());
+            String songAdd = String.valueOf(songName);
+
+            listModel.addElement(songAdd);
         }
         listSongs = new JList(listModel);
         listSongs.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -54,42 +53,28 @@ public class AddingDeleting
         if (!songsAndTagsFile.exists())
             songsAndTagsFile.createNewFile();
 
-        // FIX PLAYLIST WINDOW CLASS NEXT
-
         //</editor-fold>
     }
 
     public void addSong()
     {
+
+        // opening the file chooser
         JFileChooser songUpload = new JFileChooser();
-        /*
-        {
-            @Override
-            protected JDialog createDialog(Component parent) throws HeadlessException
-            {
-                // intercept the dialog created by JFileChooser
-                JDialog dialog = super.createDialog(parent);
-                dialog.setAlwaysOnTop(true);
-                dialog.setModal(true);  // set modality (or setModalityType)
-                return dialog;
-            }
-        };
-
-         */
-
         int res2 = songUpload.showSaveDialog(null);
 
-        // copying the file
+        // Confirming action
         if (res2 == JFileChooser.APPROVE_OPTION)
         {
             File songPath = new File(songUpload.getSelectedFile().getAbsolutePath());
-
+            // the new file is named newSong
             Path sourcePath = Path.of(songUpload.getSelectedFile().getAbsolutePath());
             targetPath = "src/songsFiles/newSong";
-
             try
             {
-                Files.copy(sourcePath, Path.of(targetPath), new StandardCopyOption[]{StandardCopyOption.REPLACE_EXISTING});
+                // copying the file
+                Files.copy(sourcePath, Path.of(targetPath),
+                        new StandardCopyOption[]{StandardCopyOption.REPLACE_EXISTING});
             } catch (IOException ex)
             {
                 ex.printStackTrace();
@@ -100,25 +85,33 @@ public class AddingDeleting
     void validateButton(String newNameStr)
     {
         JOptionPane.showMessageDialog(null, "File information saved");
+        // creating the path for the renamed new song
         String newName = "src/songsFiles/" + newNameStr + ".wav";
         System.out.println(newName);
+        // adding the song to the list of all songs in this window
         listModel.addElement(newNameStr);
 
         try
         {
-            Files.copy(Path.of(targetPath), Path.of(newName), new StandardCopyOption[]{StandardCopyOption.REPLACE_EXISTING});
+            // creating the new file with the correct name
+            Files.copy(Path.of(targetPath), Path.of(newName),
+                    new StandardCopyOption[]{StandardCopyOption.REPLACE_EXISTING});
         } catch (IOException ex)
         {
             ex.printStackTrace();
         }
 
+        // delete the file named newSong
         File toDelete = new File(targetPath);
         toDelete.delete();
 
         // ADDING SONG TO TXT FILE
         try
         {
-            fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(songsAndTagsFile)), StandardCharsets.UTF_8));
+            // reading the file that contains all songs and their tags
+            fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(songsAndTagsFile)),
+                    StandardCharsets.UTF_8));
+            // adding the song to that file. "0" indicates the number of times this song has been played
             fileContent.add(newNameStr + " 0 ");
             Files.write(Path.of(String.valueOf(songsAndTagsFile)), fileContent, StandardCharsets.UTF_8);
         } catch (IOException ex)
@@ -129,6 +122,7 @@ public class AddingDeleting
 
     public void deleteSong()
     {
+        // deleting the selected song from the list of all songs
         if (listSongs.getSelectedIndex() != -1)
         {
             nameWritten = (String) listSongs.getSelectedValue();
@@ -150,26 +144,32 @@ public class AddingDeleting
         deletingSong(homePageMethodsObject.searchResultsFile);
         deletingSong(homePageMethodsObject.queueSongsFile);
 
-        // go through each playlist on the playlistsFile
+        // going through each playlist on the playlistsFile to delete the song
         try
         {
-            fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(playlistObject.playlistsFile)), StandardCharsets.UTF_8));
+            // reading names of all playlists
+            fileContent = new ArrayList<>(Files.readAllLines(
+                    Path.of(String.valueOf(playlistObject.playlistsFile)), StandardCharsets.UTF_8));
             for (int i = 0; i < fileContent.size(); i++)
             {
                 String playlistPath = "src/" + fileContent.get(i) + ".txt";
                 try
                 {
-                    fileContent2 = new ArrayList<>(Files.readAllLines(Path.of(playlistPath), StandardCharsets.UTF_8));
+                    // open specific playlist file
+                    fileContentPlaylist = new ArrayList<>(Files.readAllLines(Path.of(playlistPath),
+                            StandardCharsets.UTF_8));
                     for (int j = 0; j < fileContent.size(); j++)
                     {
-                        String[] sArray = fileContent2.get(j).split(" ");
+                        String[] sArray = fileContentPlaylist.get(j).split(" ");
+                        // the first element of the array is the name of the song, the others are tags
                         if (sArray[0].equals(nameWritten))
                         {
-                            fileContent2.remove(j);
+                            // delete the song and tags associated with it from the file
+                            fileContentPlaylist.remove(j);
                             break;
                         }
                     }
-                    Files.write(Path.of(playlistPath), fileContent2, StandardCharsets.UTF_8);
+                    Files.write(Path.of(playlistPath), fileContentPlaylist, StandardCharsets.UTF_8);
                 } catch (IOException ex)
                 {
                     ex.printStackTrace();
@@ -185,12 +185,16 @@ public class AddingDeleting
     {
         try
         {
-            fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(fileName)), StandardCharsets.UTF_8));
+            // open specific file
+            fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(fileName)),
+                    StandardCharsets.UTF_8));
             for (int i = 0; i < fileContent.size(); i++)
             {
                 String[] sArray = fileContent.get(i).split(" ");
+                // the first element of the array is the name of the song
                 if (sArray[0].equals(nameWritten))
                 {
+                    // delete the song from the file
                     fileContent.remove(i);
                     break;
                 }
