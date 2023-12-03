@@ -18,7 +18,6 @@ public class Queue
     private AddDeleteWindow addDeleteObject;
     AddingDeleting addingDeletingObject;
 
-
     Queue() throws IOException
     {
         cal = Calendar.getInstance();
@@ -42,60 +41,40 @@ public class Queue
         }
     }
 
-    public void updateQueue()
+    public void addToQueueFile(String theme)
     {
-        //<editor-fold desc="Themes tags added">
         try
         {
-            fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(homePageMethodsObject.queueFile)), StandardCharsets.UTF_8));
-            int numReps = fileContent.size();
-            for (int i = 0; i < numReps; i++)
-            {
-                if (i > 0)
-                {
-                    fileContent.remove(fileContent.get(1));
-                }
-            }
+            fileContent.add(theme);
+            Files.write(Path.of(String.valueOf(homePageMethodsObject.queueFile)), fileContent, StandardCharsets.UTF_8);
         } catch (IOException e)
         {
             e.printStackTrace();
         }
+    }
 
+    public void updateQueue()
+    {   try
+        {
+            fileContent = new ArrayList<>(Files.readAllLines(
+                    Path.of(String.valueOf(homePageMethodsObject.queueFile)), StandardCharsets.UTF_8));
+            int numReps = fileContent.size();
+            for (int i = 0; i < numReps; i++)
+                if (i > 0)
+                    fileContent.remove(fileContent.get(1));
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
         if (currentMonth > 9)
-        {
-            try
-            {
-                // if it is past September, add Christmas and Independence Day tags, as December
-                // is approaching
-                fileContent.add("Christmas ");
-                fileContent.add("Independence ");
-                Files.write(Path.of(String.valueOf(homePageMethodsObject.queueFile)), fileContent, StandardCharsets.UTF_8);
-            } catch (IOException a)
-            {
-                a.printStackTrace();
-            }
+        { // if it is past September, add Christmas and Independence Day tags, as December is approaching
+            addToQueueFile("Christmas ");
+            addToQueueFile("Independence ");
         }
-
         if (currentMonth < 3)
-        {
-            try
-            {
-                // if it is not March yet, add Easter tag, as it is approaching
-                fileContent.add("Easter ");
-                Files.write(Path.of(String.valueOf(homePageMethodsObject.queueFile)), fileContent, StandardCharsets.UTF_8);
-            } catch (IOException a)
-            {
-                a.printStackTrace();
-            }
-        }
-        //</editor-fold>
-
-        //<editor-fold desc="Time of day">
-        String[] timeDayArr = {"morning ", "afternoon ", "evening "};
-
+            addToQueueFile("Easter ");
         try
-        {
-            // recording real time to add it as a recommendation parameter
+        { // recording real time to add it as a recommendation parameter
             LocalTime now = LocalTime.now();
             int hours = now.getHour();
             if (hours >= 6 && hours < 12)
@@ -109,18 +88,15 @@ public class Queue
         {
             a.printStackTrace();
         }
-        //</editor-fold>
 
         // all tags that set the conditions for the recommendation are defined and recorded
         // now, the songs that fulfill the conditions will be added to the queueSongs file
         // which can be played as a regular playlist
 
-        //<editor-fold desc="Adding songs">
         // find most and least played songs
         int min = 2147483647, max = 0, minIndex = 0, maxIndex = 0;
         try
-        {
-            // read file with all songs
+        { // read file with all songs
             fileContentSongsTags = new ArrayList<>(Files.readAllLines(
                     Path.of(String.valueOf(addingDeletingObject.songsAndTagsFile)),
                     StandardCharsets.UTF_8));
@@ -130,30 +106,21 @@ public class Queue
                 // access the number of times the song has been played
                 int numPlays = Integer.valueOf(sArray[sArray.length - 1]);
                 // if it is smaller than the minimum, it is the least played song
+                // record the index to locate the song and later save it
                 if (numPlays < min)
-                {
-                    min = numPlays;
-                    // record the index to locate the song and later save it
-                    minIndex = i;
-                }
+                { min = numPlays; minIndex = i; }
                 // if it is larger than the minimum, it is the most played song
                 if (numPlays > max)
-                {
-                    max = numPlays;
-                    maxIndex = i;
-                }
+                { max = numPlays; maxIndex = i; }
             }
-
             // read the queueSongsFile, which contains the previously recommended songs
             fileContentQueueS = new ArrayList<>(Files.readAllLines(
-                    Path.of(String.valueOf(homePageMethodsObject.queueSongsFile)),
-                    StandardCharsets.UTF_8));
+                    Path.of(String.valueOf(homePageMethodsObject.queueSongsFile)), StandardCharsets.UTF_8));
             // delete previous recommendations
-            for (int i = 0; i < fileContentQueueS.size(); i++)
+            int numReps = fileContentQueueS.size();
+            for (int i = 0; i < numReps; i++)
                 fileContentQueueS.remove(fileContentQueueS.get(0));
             Files.write(Path.of(String.valueOf(homePageMethodsObject.queueSongsFile)), fileContentQueueS, StandardCharsets.UTF_8);
-
-
             // adding the most and least played songs
             for (int i = 0; i < fileContentSongsTags.size(); i++)
             {
@@ -164,26 +131,21 @@ public class Queue
                 if (i == maxIndex)
                     fileContentQueueS.add(sArray[0]);
             }
-
             // now, the songs which contain at least one parameter tag are added to the queueSongsFile
             for (int i = 0; i < fileContent.size(); i++)
-            {
-                // delete the placeholder "mood" on the Queue file and substitute it with the
-                // user's selected mood
-                StringBuffer mood = new StringBuffer(fileContent.get(i));
-                mood.delete(mood.length() - 1, mood.length());
-                String actualMood = String.valueOf(mood);
+            { // delete the placeholder "mood" on the Queue file and substitute it with the user's selected mood
+                StringBuffer tag = new StringBuffer(fileContent.get(i));
+                tag.delete(tag.length() - 1, tag.length());
+                String actualTag = String.valueOf(tag);
 
                 boolean hasTag = false;
                 for (int l = 0; l < fileContentSongsTags.size(); l++)
-                {
-                    // obtain the song and its tags
+                { // obtain the song and its tags
                     String[] sArray = fileContentSongsTags.get(l).split(" ");
                     for (String wordInLine : sArray)
-                    {
-                        // the mood is not in a specific index, so the array must be traversed
+                    { // the mood is not in a specific index, so the array must be traversed
                         // until the selected mood is found or the array ends
-                        if (wordInLine.equals(actualMood))
+                        if (wordInLine.equals(actualTag))
                         {
                             hasTag = true;
                             break;
@@ -193,14 +155,13 @@ public class Queue
                     if (hasTag && (!fileContentQueueS.contains(sArray[0])))
                         fileContentQueueS.add(sArray[0]);
                 }
-
             }
-            Files.write(Path.of(String.valueOf(homePageMethodsObject.queueSongsFile)), fileContentQueueS, StandardCharsets.UTF_8);
+            Files.write(Path.of(String.valueOf(homePageMethodsObject.queueSongsFile)), fileContentQueueS,
+                    StandardCharsets.UTF_8);
         } catch (IOException a)
         {
             a.printStackTrace();
         }
-        //</editor-fold>
     }
 
     //<editor-fold desc="Editing mood on queue txt file">
@@ -208,9 +169,9 @@ public class Queue
     public void addFace(String mood)
     {
         try
-        {
-            // open the queue file and add the mood that corresponds to the clicked button
-            fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(homePageMethodsObject.queueFile)), StandardCharsets.UTF_8));
+        { // open the queue file and add the mood that corresponds to the clicked button
+            fileContent = new ArrayList<>(Files.readAllLines(
+                    Path.of(String.valueOf(homePageMethodsObject.queueFile)), StandardCharsets.UTF_8));
             fileContent.set(0, mood + " ");
             Files.write(Path.of(String.valueOf(homePageMethodsObject.queueFile)), fileContent, StandardCharsets.UTF_8);
         } catch (IOException a)

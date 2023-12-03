@@ -23,11 +23,9 @@ public class SearchResultsWindow extends JFrame
         setSize(250, 400);
         setLocationRelativeTo(null);
         setLayout(new FlowLayout());
-        // TO THE HOME PAGE
 
         pCenter = new JPanel();
         pCenter.setPreferredSize(new Dimension(250, 400));
-        // pCenter.setBorder(BorderFactory.createLineBorder(Color.black));
         add(pCenter, BorderLayout.CENTER);
 
         GroupLayout layout = new GroupLayout(pCenter);
@@ -35,39 +33,37 @@ public class SearchResultsWindow extends JFrame
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
 
-        // CREATE A LIST WITH ALL THE SEARCH RESULTS
         homePageObject = new HomePageMethods();
 
         //<editor-fold desc="Reading txt file">
+        // reading search results text file into array list
         searchResultsArr = new ArrayList<>();
         Scanner scanner = new Scanner(homePageObject.searchResultsFile);
         ArrayList<String> readingResults = new ArrayList<>();
 
         while (scanner.hasNextLine())
-        {
             readingResults.add(scanner.nextLine());
-        }
+
+        // split the results so that each element is a single song
         for (String s : readingResults)
         {
             ArrayList<String> toAdd = new ArrayList<>();
             String[] sArray = s.split(" ");
-            for (String str : sArray)
+            for (String songs : sArray)
             {
-                toAdd.add(str);
+                toAdd.add(songs);
             }
             searchResultsArr.add(toAdd);
         }
-        System.out.println(searchResultsArr);
         //</editor-fold>
 
         //<editor-fold desc="Setting up list">
+        // use the search results array list as the model for the JList
         listModel = new DefaultListModel();
         for (ArrayList<String> arr : searchResultsArr)
         {
-            for (String s : arr)
-            {
-                listModel.addElement(s);
-            }
+            for (String song : arr)
+                listModel.addElement(song);
         }
         listSongs = new JList(listModel);
         listSongs.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

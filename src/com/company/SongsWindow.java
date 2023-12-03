@@ -84,14 +84,6 @@ public class SongsWindow extends JFrame
         setJMenuBar(menuBar);
         //</editor-fold>
 
-        // WHAT I WANT NOW:
-        // When the user selects one of the songs from the list, they can see the info of the song
-        // on the side
-        // I'm assuming this means I need to create a class Songs, and then I'll have a bunch of stuff here
-        // like have a method .addMoodTags, and then I add the mood
-
-        // AFTER I CLICK CONFIRM, IT'S NOT CLEANING THE BOXES FOR ANOTHER SONG
-
         directorySongsFilePath = "src/songsFiles";
 
         //LIST OF ALL CHECK BOXES
@@ -117,22 +109,6 @@ public class SongsWindow extends JFrame
 
         listScroller = new JScrollPane(listSongs);
         listScroller.setMaximumSize(new Dimension(250, 300));
-        //</editor-fold>
-
-        //<editor-fold desc="Date stuff">
-        String[] months = {"Month", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"};
-        String[] years = {"Year", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013",
-                "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024",
-                "2025", "2026", "2027", "2028", "2029", "2030"};
-
-        JComboBox comboBoxMonths = new JComboBox(months);
-        comboBoxMonths.setEnabled(isEnabled);
-
-        JComboBox comboBoxYears = new JComboBox(years);
-        comboBoxYears.setEnabled(isEnabled);
-
-        pCenter.add(comboBoxMonths);
-        pCenter.add(comboBoxYears);
         //</editor-fold>
 
         //<editor-fold desc="Mood tags">

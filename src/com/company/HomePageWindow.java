@@ -118,16 +118,13 @@ public class HomePageWindow extends JFrame implements ActionListener
             e.printStackTrace();
         }
 
-        //<editor-fold desc="Main Stuff">
-        // is it possible to make the panel full screen?
+        //<editor-fold desc="Main Section">
         pCenter = new JPanel();
         pCenter.setLayout(null);
         pCenter.setPreferredSize(new Dimension(1260, 650));
         // pCenter.setBorder(BorderFactory.createLineBorder(Color.black));
         add(pCenter, BorderLayout.CENTER);
 
-        // get the positions right
-        // this is not actually to the window, it just opens the file chooser
         toSelectPlayWindow = new JButton("Select a Song");
         toSelectPlayWindow.setBounds(300, 50, 225, 35);
         toSelectPlayWindow.addActionListener(e ->
@@ -219,7 +216,7 @@ public class HomePageWindow extends JFrame implements ActionListener
         addPhotosButton.addActionListener((ActionEvent e) -> photoObject.addingPhotos());
         pCenter.add(addPhotosButton);
 
-        //<editor-fold desc="Search Stuff">
+        //<editor-fold desc="Search Section">
         searchT = new JLabel("Search");
         searchT.setBounds(50, 150, 100, 35);
         pCenter.add(searchT);
@@ -241,7 +238,7 @@ public class HomePageWindow extends JFrame implements ActionListener
         pCenter.add(searchButton);
         //</editor-fold>
 
-        //<editor-fold desc="Mood Stuff">
+        //<editor-fold desc="Mood Section">
         selectYourMoodT = new JLabel("Select Your Mood");
         selectYourMoodT.setBounds(950, 400, 150, 35);
         pCenter.add(selectYourMoodT);
@@ -271,11 +268,7 @@ public class HomePageWindow extends JFrame implements ActionListener
         pCenter.add(veryHappyButton);
         //</editor-fold>
 
-        // middle section -> pause play stuff
-        // create a play button -> change to this when pause is clicked, and vice versa
-        // adjust the coordinates cause this looks weird
-
-        //<editor-fold desc="Middle Stuff">
+        //<editor-fold desc="Middle Section">
         pauseIcon = new ImageIcon("src/middleSectionHP/pauseIcon.jpg");
         playIcon = new ImageIcon("src/middleSectionHP/playIcon.jpg");
         pauseButton = new JButton(pauseIcon);
@@ -317,19 +310,17 @@ public class HomePageWindow extends JFrame implements ActionListener
         tenBackIcon = new ImageIcon("src/middleSectionHP/tenBackIcon.jpg");
         tenBackButton = new JButton(tenBackIcon);
         tenBackButton.setBounds(410, 300, 50, 30);
-        tenBackButton.addActionListener(this::actionPerformedTenSecBack);
+        tenBackButton.addActionListener((ActionEvent e) -> songObject.tenSecBack());
         pCenter.add(tenBackButton);
 
         tenForwardIcon = new ImageIcon("src/middleSectionHP/tenForwardIcon.jpg");
         tenForwardButton = new JButton(tenForwardIcon);
         tenForwardButton.setBounds(800, 300, 50, 30);
-        tenForwardButton.addActionListener(this::actionPerformedTenSecForward);
+        tenForwardButton.addActionListener((ActionEvent e) -> songObject.tenSecForward());
         pCenter.add(tenForwardButton);
-
         //</editor-fold>
 
         // progress bar
-
         songObject.pB.setBounds(480, 400, 300, 20);
         songObject.timeSongNow.setBounds(430, 400, 40, 20);
         songObject.totalTimeSong.setBounds(800, 400, 40, 20);
@@ -337,64 +328,48 @@ public class HomePageWindow extends JFrame implements ActionListener
         pCenter.add(songObject.totalTimeSong);
         pCenter.add(songObject.pB);
 
-
         searchObject = new SearchWindow();
         searchObject.dispose();
-
 
         setVisible(true);
     }
 
     public void search(ActionEvent e)
-    {
-        // can I have a search thing that if the user types only one letter, or a few, it shows all the
-        // songs that start like that
-
-        // i think I have to split the content of the text field, and each song name into individual char
-        // then i compare those one by one, if one char is different, break
+    { // clear previous search results to begin search
         allSearchResults.clear();
-
         allTags = new ArrayList<>();
         try
-        {
-            // reading the txt file
+        { // reading the txt file
             Scanner scanner = new Scanner(searchObject.searchTagsFile);
             ArrayList<String> searchTags = new ArrayList<>();
 
             while (scanner.hasNextLine())
-            {
                 searchTags.add(scanner.nextLine());
-            }
+
+            // adding all tags from the searchTags file to the allTags list to then compare with the songs
             for (String s : searchTags)
             {
                 ArrayList<String> toAdd = new ArrayList<>();
                 String[] sArray = s.split(" ");
-                for (String str : sArray)
-                {
-                    toAdd.add(str);
-                }
+                for (String tag : sArray)
+                    toAdd.add(tag);
                 allTags.add(toAdd);
             }
-        } catch (FileNotFoundException c)
-        {
-            c.printStackTrace();
-        }
+        } catch (FileNotFoundException c) {c.printStackTrace();}
 
         ArrayList<Character> charsTxtFieldList = new ArrayList<>();
         // adding searchBox text to the search tags array
         if (searchBox.getText().length() > 0)
-        {
-            // dividing the textField content into chars
+        { // dividing the textField content into chars
             char[] charsTextField = searchBox.getText().toCharArray();
             for (char c : charsTextField)
-            {
+            { // adding the chars as conditions for search results
                 System.out.println(c);
                 charsTxtFieldList.add(c);
                 allTags.get(0).add(c);
             }
         }
-
-        // now, I'll read the songs with tags file
+        // now, read the songs with tags file
         allSongsAndTags = new ArrayList<>();
         try
         {
@@ -402,94 +377,87 @@ public class HomePageWindow extends JFrame implements ActionListener
             ArrayList<String> songsAndTags = new ArrayList<>();
 
             while (scanner.hasNextLine())
-            {
                 songsAndTags.add(scanner.nextLine());
-            }
+
             for (String s : songsAndTags)
             {
                 ArrayList<String> toAdd = new ArrayList<>();
                 String[] sArray = s.split(" ");
-                for (String str : sArray)
+                for (String contents : sArray)
                 {
-                    toAdd.add(str);
+                    toAdd.add(contents);
                 }
                 allSongsAndTags.add(toAdd);
             }
-        } catch (FileNotFoundException c)
-        {
-            c.printStackTrace();
-        }
+        } catch (FileNotFoundException c) {c.printStackTrace();}
 
-        // now I need to see which lines match - e.g. the tags file has "sad" and "morning"
-        // I want a new search mechanism -> show all the songs with all the tags, or at least one of them
+        // compare text input with song name
         for (ArrayList<String> arrTags : allTags)
         {
             for (ArrayList<String> arrSong : allSongsAndTags)
             {
                 boolean theSame = true;
+                // transform the name of the song into chars to compare it with the text field input
                 char[] songInChars = arrSong.get(0).toCharArray();
                 for (int i = 0; i < charsTxtFieldList.size(); i++)
                 {
+                    // if the char does not match, the song does not match the text field's input
                     if (Character.compare(songInChars[i], charsTxtFieldList.get(i)) != 0)
                     {
                         theSame = false;
                         break;
                     }
                 }
+                // if the texts match, add the song to the search results
                 if (theSame)
-                {
                     allSearchResults.add(String.valueOf(arrSong.get(0)));
-                }
             }
 
+            // delete the text field input from the search conditions as it has been dealt with
             for(int i = 0; i < charsTxtFieldList.size(); i++)
-            {
                 arrTags.remove(arrTags.size()-1);
-            }
 
-            // don't add the song if it's already on the array
+            // check which lines match the search conditions
+            // goal: display all songs with at least one of the filter tags
             for (ArrayList<String> arrSong : allSongsAndTags)
             {
                 for (String tag : arrTags)
                 {
                     if (arrSong.contains(tag))
                     {
-                        // add the song name to an array, so I can display it in the SearchResultsWindow
-                        System.out.println(arrSong.get(0));
+                        // add the song name to array, so it can be displayed in the SearchResultsWindow
                         if (!allSearchResults.contains(arrSong.get(0)))
                             allSearchResults.add(arrSong.get(0));
                         break;
                     }
                 }
             }
-
         }
-
         editingSearchTxtFile(allSearchResults);
 
+        // create the search results window to display the search results
         try
         {
             SearchResultsWindow = new SearchResultsWindow();
-        } catch (IOException ex)
-        {
-            ex.printStackTrace();
-        }
+        } catch (IOException ex) {ex.printStackTrace();}
         SearchResultsWindow.setVisible(true); // display SelectPlayWindow
-        // now I need to display all the songs that match the search -> use the SearchResultsWindow
+        // now, display all the songs that match the search -> SearchResultsWindow
     }
 
     public void editingSearchTxtFile(ArrayList<String> allSearchResults)
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuffer stringFile = new StringBuffer();
+        // adding search results to a single string
         for (String s : allSearchResults)
         {
-            sb.append(s);
-            sb.append(" ");
+            stringFile.append(s);
+            stringFile.append(" ");
         }
-        String sA = String.valueOf(sb);
+        String sA = String.valueOf(stringFile);
 
         try
         {
+            // adding search results to the search results file
             fileContent = new ArrayList<>();
             fileContent.add(sA);
             Files.write(Path.of(String.valueOf(homePageMethodsObject.searchResultsFile)), fileContent, StandardCharsets.UTF_8);
@@ -502,29 +470,31 @@ public class HomePageWindow extends JFrame implements ActionListener
     public void actionPerformedSelectSongPlay(ActionEvent e) throws UnsupportedAudioFileException,
             IOException, LineUnavailableException
     {
+        // if no song is being played, open file chooser so user can choose a song
         if (!isPlaying)
         {
+            // open the folder with all the songs in the program
             JFileChooser songUpload = new JFileChooser(new File("src/songsFiles"));
             int res2 = songUpload.showSaveDialog(null);
 
             if (res2 == JFileChooser.APPROVE_OPTION)
             {
                 File song = new File(songUpload.getSelectedFile().getAbsolutePath());
-                // ok, so I only want the last word from the path (so the name of the song)
-                // and then I just add the two strings
+                // only the last word from the path (so the name of the song) is needed
                 String songPath = song.getAbsolutePath();
-                System.out.println(songPath);
+                // record just the name of the song, what comes after songsFiles\ in the path
                 String actualPath = songPath.substring(songPath.lastIndexOf("songsFiles") + 11);
-                System.out.println(actualPath);
+                // the path below is the one used as input to play the song
                 String realPath = "src/songsFiles/" + actualPath;
-                System.out.println(realPath);
                 songObject.playMusic(realPath);
 
+                // buttons to default
                 pauseButton.setIcon(pauseIcon);
                 loopButton.setIcon(loopIcon);
                 isPlaying = true;
             }
         }
+        // Do not allow another song to be selected while one is playing
         else
         {
             JOptionPane.showMessageDialog(null, "Already playing song. " +
@@ -534,6 +504,7 @@ public class HomePageWindow extends JFrame implements ActionListener
 
     public void stopMusic(ActionEvent e)
     {
+        // stop the music and set buttons to default icons
         songObject.stopPlaying();
         playingPlaylist = false;
         pauseButton.setIcon(pauseIcon);
@@ -544,146 +515,114 @@ public class HomePageWindow extends JFrame implements ActionListener
     public void actionPerformedPauseSong(ActionEvent e)
     {
         if (!isPaused)
-        {
             pauseButton.setIcon(playIcon);
-        }
         else
-        {
             pauseButton.setIcon(pauseIcon);
-        }
         isPaused = !isPaused;
-
         songObject.pauseUnpauseMusic();
     }
 
     public void actionPerformedLoopSong(ActionEvent e)
     {
         if (!isLooping)
-        {
             loopButton.setIcon(loopingIcon);
-        }
         else
-        {
             loopButton.setIcon(loopIcon);
-        }
         isLooping = !isLooping;
-
         songObject.loopMusic();
     }
 
-    public void actionPerformedTenSecForward(ActionEvent e)
-    {
-        songObject.tenSecForward();
-    }
-
-    public void actionPerformedTenSecBack(ActionEvent e)
-    {
-        songObject.tenSecBack();
-    }
-
-    public void randomizePlaylist(ActionEvent e) // HAVE SMT INDICATE RANDOM IS ACTIVATED
+    public void randomizePlaylist(ActionEvent e)
     {
         random = !random;
     }
 
     public void selectPlaylist(ActionEvent e)
     {
+        // only allow a playlist to be selected if nothing is playing
         if (!isPlaying)
         {
             if (listPlaylists.getSelectedValue() != null)
             {
+                // new playlist has been chosen, no songs from it have been played (for the random feature)
                 alreadyPlayed.clear();
                 String namePlaylist = String.valueOf(listPlaylists.getSelectedValue());
                 String playlistPath;
+                // decide if the playlist is the queue or a generic playlist
                 if (namePlaylist.equals("Queue"))
-                {
                     playlistPath = "src\\QueueSongs.txt";
-                }
                 else
-                {
                     playlistPath = "src\\" + namePlaylist + ".txt";
-                }
                 songsPaths.clear();
                 try
                 {
-                    playlistFileContent = new ArrayList<>(Files.readAllLines(Path.of(playlistPath), StandardCharsets.UTF_8));
+                    // read file to find songs included in the playlist
+                    playlistFileContent = new ArrayList<>(Files.readAllLines(
+                            Path.of(playlistPath), StandardCharsets.UTF_8));
                     for (String songName : playlistFileContent)
-                    {
                         songsPaths.add("src\\songsFiles\\" + songName + ".wav");
-                    }
-                    pauseButton.setIcon(pauseIcon);
-                    songObject.playMusic(songsPaths.get(0));
-                    alreadyPlayed.add(0);
-                    playingPlaylist = true;
 
                     pauseButton.setIcon(pauseIcon);
+                    songObject.playMusic(songsPaths.get(0));
+                    // add the first song to list of the already played ones
+                    alreadyPlayed.add(0);
+                    playingPlaylist = true;
                     isPlaying = true;
-                } catch (IOException ex)
-                {
-                    ex.printStackTrace();
-                }
+                } catch (IOException ex) {ex.printStackTrace();}
             }
         }
         else
-        {
-            JOptionPane.showMessageDialog(null, "Already playing song. " +
-                    "Press stop button and select again.");
-        }
+            JOptionPane.showMessageDialog(null, "Already playing song. " + "Press stop button and select again.");
     }
 
     public void goPreviousSong(ActionEvent e)
-    {
+    { // pause button to default
         pauseButton.setIcon(pauseIcon);
 
         if (playingPlaylist)
         {
             String songPlayingNow = "src\\songsFiles\\" + songObject.whichPlayingNow();
+            // stop current song
             songObject.stopPlaying();
+            // play previous song on the list
+            // (does not matter if it is random or not, the previous does not change)
             if (songsPaths.indexOf(songPlayingNow) - 1 >= 0)
-            {
                 songObject.playMusic(songsPaths.get(songsPaths.indexOf(songPlayingNow) - 1));
-            }
             else
-            {
                 songObject.playMusic(songsPaths.get(songsPaths.size() - 1));
-            }
         }
     }
 
     public void goNextSong(ActionEvent e)
     {
         pauseButton.setIcon(pauseIcon);
-
         if (playingPlaylist)
         {
+            // if the playlist is not set to random, proceed here
             if (!random)
             {
+                // move sequentially in the list
                 String songPlayingNow = "src\\songsFiles\\" + songObject.whichPlayingNow();
                 songObject.stopPlaying();
                 if (songsPaths.indexOf(songPlayingNow) + 1 < songsPaths.size())
-                {
                     songObject.playMusic(songsPaths.get(songsPaths.indexOf(songPlayingNow) + 1));
-                }
                 else
-                {
                     songObject.playMusic(songsPaths.get(0));
-                }
             }
+            // if it is random
             else
             {
                 int rnd = 0;
+                // if the list with the index of songs that have been played contains this index,
+                // generate new random number
                 while (alreadyPlayed.contains(rnd))
-                {
                     rnd = new Random().nextInt(songsPaths.size());
-                }
-                System.out.println(rnd);
+
                 alreadyPlayed.add(rnd);
                 songObject.playMusic(songsPaths.get(rnd));
             }
         }
     }
-
-    // i found this here: https://stackoverflow.com/questions/9569700/java-call-method-via-jbutton
 
     //<editor-fold desc="Menu bar actions">
     public void actionPerformed2(ActionEvent e)

@@ -1,22 +1,12 @@
 package com.company;
 
 import javax.imageio.ImageIO;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.Scanner;
+
 
 public class AddDeleteWindow extends JFrame
 {
@@ -27,10 +17,8 @@ public class AddDeleteWindow extends JFrame
     private JTextField songSearchBox, instrumentsSearchBox, themesSearchBox;
     private ImageIcon addSongIcon, deleteSongIcon, addInstrumentIcon, deleteInstrumentIcon,
             addThemeIcon, deleteThemeIcon;
-    private JButton addSongButton, deleteSongButton, addInstrumentButton, deleteInstrumentButton,
-            addThemeButton, deleteThemeButton, validateButton, goHome;
+    private JButton addSongButton, deleteSongButton, validateButton, goHome;
     private JTextField inputField;
-    private String[] newNameArr = new String[1];
     private JScrollPane listScroller;
     PlaylistsWindow playlistObject;
     HomePageMethods homePageMethodsObject;
@@ -118,25 +106,6 @@ public class AddDeleteWindow extends JFrame
         // pCenter.add(deleteSongButton);
         //</editor-fold>
 
-        // instrument tag search
-        //<editor-fold desc="Instrument Tag Add/Delete">
-        BufferedImage instrumentSearchIcon = ImageIO.read(new File("src/middleSectionHP/searchIcon.png"));
-        JLabel instrumentSearchIconLabel = new JLabel(new ImageIcon(instrumentSearchIcon));
-        // pCenter.add(instrumentSearchIconLabel);
-
-        instrumentsSearchBox = new JTextField();
-        instrumentsSearchBox.setMaximumSize(new Dimension(200, 30));
-        // pCenter.add(instrumentsSearchBox);
-
-        addInstrumentIcon = new ImageIcon("src/add-delete/addIcon.jpg");
-        addInstrumentButton = new JButton(addInstrumentIcon);
-        // pCenter.add(addInstrumentButton);
-
-        deleteInstrumentIcon = new ImageIcon("src/add-delete/deleteIcon.jpg");
-        deleteInstrumentButton = new JButton(deleteInstrumentIcon);
-        // pCenter.add(deleteInstrumentButton);
-        //</editor-fold>
-
         // theme tag search
         //<editor-fold desc="Theme Tag Add/Delete">
         BufferedImage themeSearchIcon = ImageIO.read(new File("src/middleSectionHP/searchIcon.png"));
@@ -145,15 +114,6 @@ public class AddDeleteWindow extends JFrame
 
         themesSearchBox = new JTextField();
         themesSearchBox.setMaximumSize(new Dimension(200, 30));
-        // pCenter.add(themesSearchBox);
-
-        addThemeIcon = new ImageIcon("src/add-delete/addIcon.jpg");
-        addThemeButton = new JButton(addThemeIcon);
-        // pCenter.add(addThemeButton);
-
-        deleteThemeIcon = new ImageIcon("src/add-delete/deleteIcon.jpg");
-        deleteThemeButton = new JButton(deleteThemeIcon);
-        // pCenter.add(deleteThemeButton);
         //</editor-fold>
 
         listScroller = new JScrollPane(addingDeletingObject.listSongs);
@@ -248,10 +208,10 @@ public class AddDeleteWindow extends JFrame
 
     public void actionPerformedAddSong(ActionEvent e)
     {
-        addingDeletingObject.addSong();
-        // I need to get the user's input as a string and substitute in place of "NewName"
-        inputField.setEnabled(true);
-        validateButton.setEnabled(true);
+        boolean isSaving = addingDeletingObject.addSong();
+        // Get user input as a string and substitute in place of "NewName"
+        inputField.setEnabled(isSaving);
+        validateButton.setEnabled(isSaving);
     }
 
     void validateButtonAction(ActionEvent e)

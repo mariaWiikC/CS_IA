@@ -16,7 +16,7 @@ import java.util.Scanner;
 public class SearchWindow extends JFrame
 {
     private JMenuBar menuBar;
-    private JMenuItem menuAddDelete, menuPhotos, menuPlaylists, menuSongs, menuHome;
+    private JMenuItem menuAddDelete, menuPlaylists, menuSongs, menuHome;
     private JPanel pCenter;
     private JLabel searchT, moodT, timeT, instrumentT, themeT;
     private JCheckBox sadBox, energeticBox, happyBox, relaxedBox, morningBox, afternoonBox, eveningBox,
@@ -31,18 +31,13 @@ public class SearchWindow extends JFrame
 
     public SearchWindow()
     {
-        // make a smaller JFrame - is there a way to leave the "minimize", "x" button out of the frame?
-        // DO NOT USE SET BOUNDS, I AM SUPPOSED TO USE PANELS INSIDE PANELS
         super("Search");
         setSize(500, 300);
         setLocationRelativeTo(null);
         setLayout(new FlowLayout());
-        // setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        // make a smaller JPanel
         pCenter = new JPanel();
         pCenter.setPreferredSize(new Dimension(500, 300));
-        // pCenter.setBorder(BorderFactory.createLineBorder(Color.black));
         add(pCenter, BorderLayout.CENTER);
 
         GroupLayout layout = new GroupLayout(pCenter);
@@ -50,6 +45,7 @@ public class SearchWindow extends JFrame
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
 
+        // creating searchTags file
         searchTagsFile = new File("src\\SearchTags.txt");
         if (!searchTagsFile.exists())
         {
@@ -76,8 +72,6 @@ public class SearchWindow extends JFrame
         menuHome = new JMenuItem("Home Page");
         menuHome.addActionListener(this::actionPerformed2);
 
-        menuPhotos = new JMenuItem("Photos");
-        // menuPhotos.addActionListener(this::actionPerformed5);
 
         menuPlaylists = new JMenuItem("Playlists");
         menuPlaylists.addActionListener(this::actionPerformed4);
@@ -86,153 +80,103 @@ public class SearchWindow extends JFrame
         menuSongs.addActionListener(this::actionPerformed3);
 
         fileMenu.add(menuHome);
-        fileMenu.add(menuPhotos);
         fileMenu.add(menuSongs);
         fileMenu.add(menuPlaylists);
         menuBar.add(fileMenu);
         setJMenuBar(menuBar);
         //</editor-fold>
 
-        // I want this to be kinda the filters (tags here) - so it's like what should appear when
-        // the user clicks the filter button
-        // so like a subwindow-ish thing, not full screen, just right there in the middle
-
-        // WHAT I WANT TO DO NOW
-        // I'm gonna create a txt file. It will contain the tags selected here.
-        // GREATT, NOW
-        // make the search happen in the home page!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
         searchT = new JLabel("Search");
-        searchT.setBounds(30, 100, 100, 35);
-        pCenter.add(searchT);
 
-        // add the bounds to everything hereeee
-        // got them from here: https://www.javatpoint.com/java-jcheckbox
         //<editor-fold desc="Mood tags">
         moodT = new JLabel("Mood");
-        moodT.setBounds(50, 150, 100, 35);
-        pCenter.add(moodT);
 
         sadBox = new JCheckBox("Sad");
-        sadBox.setBounds(50, 200, 100, 35);
         checkBoxesList.add(sadBox);
-        pCenter.add(sadBox);
 
         energeticBox = new JCheckBox("Energetic");
-        energeticBox.setBounds(50, 250, 100, 35);
         checkBoxesList.add(energeticBox);
-        pCenter.add(energeticBox);
 
         happyBox = new JCheckBox("Happy");
-        happyBox.setBounds(50, 300, 100, 35);
         checkBoxesList.add(happyBox);
-        pCenter.add(happyBox);
 
         relaxedBox = new JCheckBox("Relaxed");
-        relaxedBox.setBounds(50, 350, 100, 35);
         checkBoxesList.add(relaxedBox);
-        pCenter.add(relaxedBox);
         //</editor-fold>
 
         //<editor-fold desc="Time tags">
         timeT = new JLabel("Time");
-        timeT.setBounds(200, 150, 100, 35);
-        pCenter.add(timeT);
 
         morningBox = new JCheckBox("Morning");
-        morningBox.setBounds(200, 200, 100, 35);
         checkBoxesList.add(morningBox);
-        pCenter.add(morningBox);
 
         afternoonBox = new JCheckBox("Afternoon");
-        afternoonBox.setBounds(200, 250, 100, 35);
         checkBoxesList.add(afternoonBox);
-        pCenter.add(afternoonBox);
 
         eveningBox = new JCheckBox("Evening");
-        eveningBox.setBounds(200, 300, 100, 35);
         checkBoxesList.add(eveningBox);
-        pCenter.add(eveningBox);
         //</editor-fold>
 
         //<editor-fold desc="Instruments tags">
         instrumentT = new JLabel("Instrument");
-        instrumentT.setBounds(350, 150, 100, 35);
-        pCenter.add(instrumentT);
 
         guitarBox = new JCheckBox("Guitar");
-        guitarBox.setBounds(350, 200, 100, 35);
         checkBoxesList.add(guitarBox);
-        pCenter.add(guitarBox);
 
         pianoBox = new JCheckBox("Piano");
-        pianoBox.setBounds(350, 250, 100, 35);
         checkBoxesList.add(pianoBox);
-        pCenter.add(pianoBox);
 
         vocalBox = new JCheckBox("Vocal");
-        vocalBox.setBounds(350, 300, 100, 35);
         checkBoxesList.add(vocalBox);
-        pCenter.add(vocalBox);
         //</editor-fold>
 
         //<editor-fold desc="Themes tags">
         themeT = new JLabel("Theme");
-        themeT.setBounds(500, 150, 100, 35);
-        pCenter.add(themeT);
 
         ChristmasBox = new JCheckBox("Christmas");
-        ChristmasBox.setBounds(500, 200, 100, 35);
         checkBoxesList.add(ChristmasBox);
-        pCenter.add(ChristmasBox);
 
         IndependenceBox = new JCheckBox("Independence Day");
-        IndependenceBox.setBounds(500, 250, 200, 35);
         checkBoxesList.add(IndependenceBox);
-        pCenter.add(IndependenceBox);
 
         EasterBox = new JCheckBox("Easter");
-        EasterBox.setBounds(500, 300, 100, 35);
         checkBoxesList.add(EasterBox);
-        pCenter.add(EasterBox);
         //</editor-fold>
 
-        // disable check boxes
+        // disable checkboxes
         for (JCheckBox cb : checkBoxesList)
         {
             cb.setEnabled(false);
         }
 
-        // choosingSearchTags
-
+        //<editor-fold desc="LAYOUT">
         layout.setVerticalGroup(
                 layout.createSequentialGroup()
                         .addComponent(searchT)
                         .addGroup(layout.createParallelGroup()
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addComponent(moodT)
-                                                .addComponent(sadBox)
-                                                .addComponent(happyBox)
-                                                .addComponent(energeticBox)
-                                                .addComponent(relaxedBox)
-                                                .addComponent(choosingSearchTags)
-                                        )
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addComponent(timeT)
-                                                .addComponent(morningBox)
-                                                .addComponent(afternoonBox)
-                                                .addComponent(eveningBox))
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addComponent(instrumentT)
-                                                .addComponent(vocalBox)
-                                                .addComponent(guitarBox)
-                                                .addComponent(pianoBox))
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addComponent(themeT)
-                                                .addComponent(EasterBox)
-                                                .addComponent(IndependenceBox)
-                                                .addComponent(ChristmasBox))
+                                .addGroup(layout.createSequentialGroup()
+                                        .addComponent(moodT)
+                                        .addComponent(sadBox)
+                                        .addComponent(happyBox)
+                                        .addComponent(energeticBox)
+                                        .addComponent(relaxedBox)
+                                        .addComponent(choosingSearchTags)
+                                )
+                                .addGroup(layout.createSequentialGroup()
+                                        .addComponent(timeT)
+                                        .addComponent(morningBox)
+                                        .addComponent(afternoonBox)
+                                        .addComponent(eveningBox))
+                                .addGroup(layout.createSequentialGroup()
+                                        .addComponent(instrumentT)
+                                        .addComponent(vocalBox)
+                                        .addComponent(guitarBox)
+                                        .addComponent(pianoBox))
+                                .addGroup(layout.createSequentialGroup()
+                                        .addComponent(themeT)
+                                        .addComponent(EasterBox)
+                                        .addComponent(IndependenceBox)
+                                        .addComponent(ChristmasBox))
                         )
         );
 
@@ -240,32 +184,32 @@ public class SearchWindow extends JFrame
                 layout.createParallelGroup()
                         .addComponent(searchT)
                         .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup()
-                                                .addComponent(moodT)
-                                                .addComponent(sadBox)
-                                                .addComponent(happyBox)
-                                                .addComponent(energeticBox)
-                                                .addComponent(relaxedBox)
-                                                .addComponent(choosingSearchTags)
-                                        )
-                                        .addGroup(layout.createParallelGroup()
-                                                .addComponent(timeT)
-                                                .addComponent(morningBox)
-                                                .addComponent(afternoonBox)
-                                                .addComponent(eveningBox))
-                                        .addGroup(layout.createParallelGroup()
-                                                .addComponent(instrumentT)
-                                                .addComponent(vocalBox)
-                                                .addComponent(guitarBox)
-                                                .addComponent(pianoBox))
-                                        .addGroup(layout.createParallelGroup()
-                                                .addComponent(themeT)
-                                                .addComponent(EasterBox)
-                                                .addComponent(IndependenceBox)
-                                                .addComponent(ChristmasBox))
+                                .addGroup(layout.createParallelGroup()
+                                        .addComponent(moodT)
+                                        .addComponent(sadBox)
+                                        .addComponent(happyBox)
+                                        .addComponent(energeticBox)
+                                        .addComponent(relaxedBox)
+                                        .addComponent(choosingSearchTags)
+                                )
+                                .addGroup(layout.createParallelGroup()
+                                        .addComponent(timeT)
+                                        .addComponent(morningBox)
+                                        .addComponent(afternoonBox)
+                                        .addComponent(eveningBox))
+                                .addGroup(layout.createParallelGroup()
+                                        .addComponent(instrumentT)
+                                        .addComponent(vocalBox)
+                                        .addComponent(guitarBox)
+                                        .addComponent(pianoBox))
+                                .addGroup(layout.createParallelGroup()
+                                        .addComponent(themeT)
+                                        .addComponent(EasterBox)
+                                        .addComponent(IndependenceBox)
+                                        .addComponent(ChristmasBox))
                         )
         );
-
+        //</editor-fold>
 
         setVisible(true);
     }
@@ -274,184 +218,124 @@ public class SearchWindow extends JFrame
     {
         allTags = new ArrayList<>();
         try
-        {
-            // reading the txt file
+        { // reading the searchTags file
             Scanner scanner = new Scanner(searchTagsFile);
             ArrayList<String> searchTags = new ArrayList<>();
 
             while (scanner.hasNextLine())
-            {
                 searchTags.add(scanner.nextLine());
-            }
+
             for (String s : searchTags)
-            {
+            { // adding the tags already in the file to a list of all selected tags
                 ArrayList<String> toAdd = new ArrayList<>();
                 String[] sArray = s.split(" ");
-                for (String str : sArray)
-                {
-                    toAdd.add(str);
-                }
+                for (String tag : sArray)
+                    toAdd.add(tag);
                 allTags.add(toAdd);
             }
-        } catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
-        }
-
-        if (searching)
-        {
-            enablingCheckBoxes(false);
-            for (ArrayList<String> a : allTags)
-            {
-                // checking the tags
-                checkingTag(a, "sad", sadBox);
-                checkingTag(a, "energetic", energeticBox);
-                checkingTag(a, "happy", happyBox);
-                checkingTag(a, "relaxed", relaxedBox);
-                checkingTag(a, "morning", morningBox);
-                checkingTag(a, "afternoon", afternoonBox);
-                checkingTag(a, "evening", eveningBox);
-                checkingTag(a, "guitar", guitarBox);
-                checkingTag(a, "piano", pianoBox);
-                checkingTag(a, "vocal", vocalBox);
-                checkingTag(a, "Independence", IndependenceBox);
-                checkingTag(a, "Easter", EasterBox);
-                checkingTag(a, "Christmas", ChristmasBox);
-            }
-        }
-
+        } catch (FileNotFoundException e) {e.printStackTrace();}
+        // if the user clicked the button to initiate the tag selection, proceed to this
         if (!searching)
-        {
-            // display correctly the selection of tags
+        { // enable checkboxes so the user can select them
             enablingCheckBoxes(true);
-
-            for (ArrayList<String> a : allTags)
-            {
-                // checking the tags
-                checkingTag(a, "sad", sadBox);
-                checkingTag(a, "energetic", energeticBox);
-                checkingTag(a, "happy", happyBox);
-                checkingTag(a, "relaxed", relaxedBox);
-                checkingTag(a, "morning", morningBox);
-                checkingTag(a, "afternoon", afternoonBox);
-                checkingTag(a, "evening", eveningBox);
-                checkingTag(a, "guitar", guitarBox);
-                checkingTag(a, "piano", pianoBox);
-                checkingTag(a, "vocal", vocalBox);
-                checkingTag(a, "Independence", IndependenceBox);
-                checkingTag(a, "Easter", EasterBox);
-                checkingTag(a, "Christmas", ChristmasBox);
-            }
+            // method used to select checkboxes previously selected -> display saved filters
+            checkingAllTags();
         }
-
+        // if the user has selected the desired tags and wants to move on to their search, proceed to this
         if (searching)
+        { // disable checkboxes to save the selected ones and stop user from selecting while saving
             enablingCheckBoxes(false);
-
+            // saving selections
+            checkingAllTags();
+        }
+        // change searching stage
         searching = !searching;
     }
 
-    public void enablingCheckBoxes(boolean isEnabled)
+    public void checkingAllTags()
     {
-        for (JCheckBox cb : checkBoxesList)
+        // checking if the selected checkboxes match the tags on the searchTags file
+        for (ArrayList<String> a : allTags)
         {
-            cb.setEnabled(isEnabled);
+            checkingTag(a, "sad", sadBox);
+            checkingTag(a, "energetic", energeticBox);
+            checkingTag(a, "happy", happyBox);
+            checkingTag(a, "relaxed", relaxedBox);
+            checkingTag(a, "morning", morningBox);
+            checkingTag(a, "afternoon", afternoonBox);
+            checkingTag(a, "evening", eveningBox);
+            checkingTag(a, "guitar", guitarBox);
+            checkingTag(a, "piano", pianoBox);
+            checkingTag(a, "vocal", vocalBox);
+            checkingTag(a, "Independence", IndependenceBox);
+            checkingTag(a, "Easter", EasterBox);
+            checkingTag(a, "Christmas", ChristmasBox);
         }
     }
 
     public void checkingTag(ArrayList<String> a, String nameTag, JCheckBox box)
     {
-        // I need to create smt to delete the tag from the txt file if the box is unchecked -> slay
+        // if the user has just begun the search tag selection proceed
         if (!searching)
-        {
+            // if the searchTags file contains a certain tag, select it (it has been previously selected)
             if (a.contains(nameTag))
-            {
                 box.setSelected(true);
-            }
-        }
+        // if the user has clicked the confirm button - finished the filter process
         else
         {
+            // if the tag's checkbox is selected, it means the user chose it
             if (box.isSelected())
-            {
                 if (!a.contains(nameTag))
                     creatingNewStringsForTxtFile(a, nameTag);
-            }
+            // if it is not selected, but is in the file, delete it from there
             else
-            {
                 if (a.contains(nameTag))
                     deletingStringsForTxtFile(a, nameTag);
-            }
         }
+    }
+
+    public void enablingCheckBoxes(boolean isEnabled)
+    {
+        for (JCheckBox cb : checkBoxesList)
+            cb.setEnabled(isEnabled);
     }
 
     public void creatingNewStringsForTxtFile(ArrayList<String> a, String nameTag)
     {
-        // Why am I getting the name of the song????????????????????????? -> I think it's
-        // the input in the textField
-        String songName = a.get(0);
-
-        StringBuffer sbO = new StringBuffer();
-        for (String add : a)
+        // tags in the file to a string buffer
+        StringBuffer stringFile = new StringBuffer();
+        for (String tag : a)
         {
-            sbO.append(add);
-            sbO.append(" ");
+            stringFile.append(tag);
+            stringFile.append(" ");
         }
-
-        System.out.println(sbO);
-
-        StringBuffer sbA = new StringBuffer();
-        sbA.append(sbO);
-        sbA.append(nameTag);
-        sbA.append(" ");
-
-        String sA = String.valueOf(sbA);
-        System.out.println(sA);
-
-        editingTagTxtFile(songName, sA, searchTagsFilePath);
+        stringFile.append(nameTag);
+        stringFile.append(" ");
+        String sAfter = String.valueOf(stringFile);
+        editingTagTxtFile(sAfter, searchTagsFilePath);
     }
 
     public void deletingStringsForTxtFile(ArrayList<String> a, String nameTag)
     {
-        String songName = a.get(0);
-
-        StringBuffer sbO = new StringBuffer();
-        for (String add : a)
+        StringBuffer stringFile = new StringBuffer();
+        for (String tag : a)
         {
-            sbO.append(add);
-            sbO.append(" ");
+            stringFile.append(tag);
+            stringFile.append(" ");
         }
-
-        StringBuffer sbA = new StringBuffer();
-        sbA.append(sbO);
-        sbA.delete(sbA.indexOf(nameTag), sbA.indexOf(nameTag) + nameTag.length() + 1);
-
-        String sA = String.valueOf(sbA);
-
-        editingTagTxtFile(songName, sA, searchTagsFilePath);
+        stringFile.delete(stringFile.indexOf(nameTag), stringFile.indexOf(nameTag) + nameTag.length() + 1);
+        String sAfter = String.valueOf(stringFile);
+        editingTagTxtFile(sAfter, searchTagsFilePath);
     }
 
-    public void editingTagTxtFile(String songName, String sA, String searchTagsFilePath)
+    public void editingTagTxtFile(String sA, String searchTagsFilePath)
     {
         try
-        {
-            // is there a better way to refer to the object? Or should I have made an object and just open it on the window
-            // instead of placing the whole code on the window -> i don't think this way it would open another window
+        {  // reading the searchTags file and updating it
             fileContent = new ArrayList<>(Files.readAllLines(Path.of(searchTagsFilePath), StandardCharsets.UTF_8));
-            for (int i = 0; i < fileContent.size(); i++)
-            {
-                // the problem here is that now the element in fileContent = "nameSong tag1"
-                // I need to make it just nameSong
-                String[] sArray = fileContent.get(i).split(" ");
-                if (sArray[0].equals(songName))
-                {
-                    fileContent.set(i, sA);
-                    break;
-                }
-            }
+            fileContent.set(0, sA);
             Files.write(Path.of(String.valueOf(searchTagsFile)), fileContent, StandardCharsets.UTF_8);
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+        } catch (IOException e) { e.printStackTrace();}
     }
 
     //<editor-fold desc="Menu bar actions">
@@ -489,16 +373,6 @@ public class SearchWindow extends JFrame
         PlaylistsWindow.setVisible(true); // display SelectPlayWindow
         dispose(); // close home page
     }
-
-    /*
-    public void actionPerformed5(ActionEvent e)
-    {
-        JFrame PhotosWindow = new PhotosWindow(); // open another JFrame
-        PhotosWindow.setVisible(true); // display SelectPlayWindow
-        dispose(); // close home page
-    }
-
-     */
     //</editor-fold>
 
 }

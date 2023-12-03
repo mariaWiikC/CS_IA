@@ -6,9 +6,7 @@ import java.util.LinkedList;
 
 public class Tags
 {
-    // ok, each song can have tags, so I need to be able to add them to the songs, so a parameter for the songs class
-    // can be a list of tags
-    LinkedList<String> allTags = new LinkedList<>();
+    protected LinkedList<String> allTags = new LinkedList<>();
 
     public Tags()
     {
@@ -27,15 +25,4 @@ public class Tags
         allTags.add("Christmas");
     }
 
-    /*
-    public void addTag(String newTag)
-    {
-        allTags.add(newTag);
-    }
-
-    public void removeTag(String toRemoveTag)
-    {
-        allTags.remove(toRemoveTag);
-    }
-     */
 }
