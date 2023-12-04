@@ -283,18 +283,18 @@ public class PlaylistsWindow extends JFrame
                     System.out.println("Got exception: " + exc);
                     System.exit(1);
                 }
-                // add playlist name to the Playlist txt file
-                try (FileWriter fw = new FileWriter(playlistsFile); BufferedWriter bw = new BufferedWriter(fw))
-                {
-                    bw.write(playlistPartPath);
-                    bw.newLine();
-                } catch (IOException exc)
-                {
-                    exc.printStackTrace();
-                    System.out.println("Got exception: " + exc);
-                    System.exit(1);
-                }
 
+                // add playlist name to the Playlist txt file
+                try
+                {
+                    ArrayList<String> fileContent = new ArrayList<>(Files.readAllLines(
+                            Path.of(String.valueOf(playlistsFile)), StandardCharsets.UTF_8));
+                    fileContent.add(playlistPartPath);
+                    Files.write(Path.of(String.valueOf(playlistsFile)), fileContent, StandardCharsets.UTF_8);
+                } catch (IOException ex)
+                {
+                    ex.printStackTrace();
+                }
                 listModel.addElement(playlistPartPath);
             }
         }
@@ -343,6 +343,13 @@ public class PlaylistsWindow extends JFrame
             a.printStackTrace();
         }
         // deleting the playlist from the list
+        try
+        {
+            Files.deleteIfExists(Path.of("src/" + listPlaylists.getSelectedValue() + ".txt"));
+        } catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
         listModel.removeElement(listPlaylists.getSelectedValue());
     }
 

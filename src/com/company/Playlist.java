@@ -71,18 +71,10 @@ public class Playlist extends Thread
                     songsPaths.add("src\\songsFiles\\" + songName + ".wav");
                 }
                 System.out.println(songsPaths);
-                // I HAVE TO MAKE IT GO BACK TO THE HOME PAGE
-                // songObject.playPlaylist(songsPaths);
             } catch (IOException ex)
             {
                 ex.printStackTrace();
             }
         }
-    }
-
-    public ArrayList<String> returningSongsPaths()
-    {
-        // System.out.println(songsPaths);
-        return songsPaths;
     }
 }

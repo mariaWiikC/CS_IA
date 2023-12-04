@@ -3,6 +3,7 @@ package com.company;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
+import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -63,6 +64,8 @@ public class HomePageWindow extends JFrame implements ActionListener
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLayout(new FlowLayout());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        timer.start();
 
         //<editor-fold desc="Menu Bar">
         menuBar = new JMenuBar();
@@ -149,7 +152,6 @@ public class HomePageWindow extends JFrame implements ActionListener
         toSelectPlaylistWindow.setBounds(565, 50, 205, 35);
         toSelectPlaylistWindow.addActionListener(this::selectPlaylist);
         pCenter.add(toSelectPlaylistWindow);
-
 
         //<editor-fold desc="Setting up playlists list">
         try
@@ -334,6 +336,33 @@ public class HomePageWindow extends JFrame implements ActionListener
         setVisible(true);
     }
 
+
+    public Timer timer = new Timer(5000, new ActionListener() // updating every second
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            updatePlaylists();
+        }
+    });
+
+
+    public void updatePlaylists()
+    {
+        listModel.clear();
+        playlistsObjectWindow.readingTxtFile();
+        listModel.addElement("Queue");
+        for (ArrayList<String> arr : playlistsObjectWindow.allPlaylists)
+        {
+            StringBuffer sb = new StringBuffer();
+            for (String s : arr)
+                sb.append(s);
+            String addNow = String.valueOf(sb);
+            listModel.addElement(addNow);
+        }
+    }
+
+    // SEARCH RESULTS ARE WRONG!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     public void search(ActionEvent e)
     { // clear previous search results to begin search
         allSearchResults.clear();
@@ -408,6 +437,8 @@ public class HomePageWindow extends JFrame implements ActionListener
                         break;
                     }
                 }
+                if (charsTxtFieldList.size() == 0)
+                    theSame = false;
                 // if the texts match, add the song to the search results
                 if (theSame)
                     allSearchResults.add(String.valueOf(arrSong.get(0)));
@@ -618,6 +649,7 @@ public class HomePageWindow extends JFrame implements ActionListener
                 while (alreadyPlayed.contains(rnd))
                     rnd = new Random().nextInt(songsPaths.size());
 
+                songObject.stopPlaying();
                 alreadyPlayed.add(rnd);
                 songObject.playMusic(songsPaths.get(rnd));
             }

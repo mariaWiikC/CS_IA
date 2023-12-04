@@ -57,7 +57,6 @@ public class SearchWindow extends JFrame
                 e.printStackTrace();
             }
         }
-
         checkBoxesList = new ArrayList<>();
         searchTagsFilePath = String.valueOf(searchTagsFile);
 
@@ -239,38 +238,36 @@ public class SearchWindow extends JFrame
         { // enable checkboxes so the user can select them
             enablingCheckBoxes(true);
             // method used to select checkboxes previously selected -> display saved filters
-            checkingAllTags();
+            for (ArrayList<String> a : allTags) // checking the tags
+                checkingAllTags(a);
         }
         // if the user has selected the desired tags and wants to move on to their search, proceed to this
         if (searching)
         { // disable checkboxes to save the selected ones and stop user from selecting while saving
             enablingCheckBoxes(false);
             // saving selections
-            checkingAllTags();
+            for (ArrayList<String> a : allTags) // checking the tags
+                checkingAllTags(a);
         }
         // change searching stage
         searching = !searching;
     }
 
-    public void checkingAllTags()
+    public void checkingAllTags(ArrayList<String> a)
     {
-        // checking if the selected checkboxes match the tags on the searchTags file
-        for (ArrayList<String> a : allTags)
-        {
-            checkingTag(a, "sad", sadBox);
-            checkingTag(a, "energetic", energeticBox);
-            checkingTag(a, "happy", happyBox);
-            checkingTag(a, "relaxed", relaxedBox);
-            checkingTag(a, "morning", morningBox);
-            checkingTag(a, "afternoon", afternoonBox);
-            checkingTag(a, "evening", eveningBox);
-            checkingTag(a, "guitar", guitarBox);
-            checkingTag(a, "piano", pianoBox);
-            checkingTag(a, "vocal", vocalBox);
-            checkingTag(a, "Independence", IndependenceBox);
-            checkingTag(a, "Easter", EasterBox);
-            checkingTag(a, "Christmas", ChristmasBox);
-        }
+        checkingTag(a, "sad", sadBox);
+        checkingTag(a, "energetic", energeticBox);
+        checkingTag(a, "happy", happyBox);
+        checkingTag(a, "relaxed", relaxedBox);
+        checkingTag(a, "morning", morningBox);
+        checkingTag(a, "afternoon", afternoonBox);
+        checkingTag(a, "evening", eveningBox);
+        checkingTag(a, "guitar", guitarBox);
+        checkingTag(a, "piano", pianoBox);
+        checkingTag(a, "vocal", vocalBox);
+        checkingTag(a, "Independence", IndependenceBox);
+        checkingTag(a, "Easter", EasterBox);
+        checkingTag(a, "Christmas", ChristmasBox);
     }
 
     public void checkingTag(ArrayList<String> a, String nameTag, JCheckBox box)
@@ -281,16 +278,18 @@ public class SearchWindow extends JFrame
             if (a.contains(nameTag))
                 box.setSelected(true);
         // if the user has clicked the confirm button - finished the filter process
-        else
+        if(searching)
         {
             // if the tag's checkbox is selected, it means the user chose it
             if (box.isSelected())
                 if (!a.contains(nameTag))
                     creatingNewStringsForTxtFile(a, nameTag);
             // if it is not selected, but is in the file, delete it from there
-            else
+            if (!box.isSelected())
+            {
                 if (a.contains(nameTag))
                     deletingStringsForTxtFile(a, nameTag);
+            }
         }
     }
 
@@ -312,6 +311,7 @@ public class SearchWindow extends JFrame
         stringFile.append(nameTag);
         stringFile.append(" ");
         String sAfter = String.valueOf(stringFile);
+        System.out.println(sAfter);
         editingTagTxtFile(sAfter, searchTagsFilePath);
     }
 
@@ -332,7 +332,7 @@ public class SearchWindow extends JFrame
     {
         try
         {  // reading the searchTags file and updating it
-            fileContent = new ArrayList<>(Files.readAllLines(Path.of(searchTagsFilePath), StandardCharsets.UTF_8));
+            fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(searchTagsFile)), StandardCharsets.UTF_8));
             fileContent.set(0, sA);
             Files.write(Path.of(String.valueOf(searchTagsFile)), fileContent, StandardCharsets.UTF_8);
         } catch (IOException e) { e.printStackTrace();}
