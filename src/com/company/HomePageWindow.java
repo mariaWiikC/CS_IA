@@ -362,7 +362,6 @@ public class HomePageWindow extends JFrame implements ActionListener
         }
     }
 
-    // SEARCH RESULTS ARE WRONG!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     public void search(ActionEvent e)
     { // clear previous search results to begin search
         allSearchResults.clear();

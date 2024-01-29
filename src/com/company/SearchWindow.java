@@ -21,7 +21,7 @@ public class SearchWindow extends JFrame
     private JLabel searchT, moodT, timeT, instrumentT, themeT;
     private JCheckBox sadBox, energeticBox, happyBox, relaxedBox, morningBox, afternoonBox, eveningBox,
             guitarBox, pianoBox, vocalBox, ChristmasBox, IndependenceBox, EasterBox;
-    private boolean searching = false;
+    private boolean searching = false, deleting = false;
     protected File searchTagsFile;
     private ArrayList<String> fileContent;
     private ArrayList<ArrayList> allTags;
@@ -311,8 +311,8 @@ public class SearchWindow extends JFrame
         stringFile.append(nameTag);
         stringFile.append(" ");
         String sAfter = String.valueOf(stringFile);
-        System.out.println(sAfter);
-        editingTagTxtFile(sAfter, searchTagsFilePath);
+        deleting = false;
+        editingTagTxtFile(sAfter, deleting);
     }
 
     public void deletingStringsForTxtFile(ArrayList<String> a, String nameTag)
@@ -325,15 +325,22 @@ public class SearchWindow extends JFrame
         }
         stringFile.delete(stringFile.indexOf(nameTag), stringFile.indexOf(nameTag) + nameTag.length() + 1);
         String sAfter = String.valueOf(stringFile);
-        editingTagTxtFile(sAfter, searchTagsFilePath);
+        deleting = true;
+        editingTagTxtFile(sAfter, deleting);
     }
 
-    public void editingTagTxtFile(String sA, String searchTagsFilePath)
+    public void editingTagTxtFile(String sA, boolean deleting)
     {
         try
         {  // reading the searchTags file and updating it
             fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(searchTagsFile)), StandardCharsets.UTF_8));
-            fileContent.set(0, sA);
+            if (!deleting)
+            {
+                String sToAdd = fileContent.get(0) + sA;
+                fileContent.set(0, sToAdd);
+            }
+            else
+                fileContent.set(0, sA);
             Files.write(Path.of(String.valueOf(searchTagsFile)), fileContent, StandardCharsets.UTF_8);
         } catch (IOException e) { e.printStackTrace();}
     }
