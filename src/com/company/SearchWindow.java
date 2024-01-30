@@ -310,6 +310,7 @@ public class SearchWindow extends JFrame
         }
         stringFile.append(nameTag);
         stringFile.append(" ");
+        a.add(nameTag);
         String sAfter = String.valueOf(stringFile);
         deleting = false;
         editingTagTxtFile(sAfter, deleting);
@@ -325,6 +326,7 @@ public class SearchWindow extends JFrame
         }
         stringFile.delete(stringFile.indexOf(nameTag), stringFile.indexOf(nameTag) + nameTag.length() + 1);
         String sAfter = String.valueOf(stringFile);
+        a.remove(nameTag);
         deleting = true;
         editingTagTxtFile(sAfter, deleting);
     }
@@ -336,7 +338,7 @@ public class SearchWindow extends JFrame
             fileContent = new ArrayList<>(Files.readAllLines(Path.of(String.valueOf(searchTagsFile)), StandardCharsets.UTF_8));
             if (!deleting)
             {
-                String sToAdd = fileContent.get(0) + sA;
+                String sToAdd = sA;
                 fileContent.set(0, sToAdd);
             }
             else
